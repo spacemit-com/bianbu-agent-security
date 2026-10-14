@@ -1,0 +1,29 @@
+// bianbu-securityd 以专用系统用户 bianbu-security 运行，需要在运行期把网络策略
+// （IPAddressAllow/IPAddressDeny）热应用到 Runtime 为每个 Worker 创建的 transient
+// scope 上。polkit 对 org.freedesktop.systemd1.manage-units 的默认策略要求
+// auth_admin，而 Runtime 自带的 60-bianbu-agent-runtime.rules 只放行 Runtime 所有者
+// 进程的 start/stop 等 verb。缺少本规则时 SetNetworkPolicy 对运行中 Worker 一律失败
+// （2026-09-11 验收缺陷 D-6）。
+//
+// 只放行：subject 是 bianbu-securityd.service 内的 bianbu-security 用户，且已
+// no_new_privileges；unit 匹配 Runtime Worker scope 命名；verb 仅 set-property。
+// 不放行 service 单元、不放行 start/stop，避免 securityd 被用作提权跳板。
+polkit.addRule(function(action, subject) {
+    if (action.id !== "org.freedesktop.systemd1.manage-units") {
+        return polkit.Result.NOT_HANDLED;
+    }
+    if (subject.user !== "bianbu-security" ||
+        subject.system_unit !== "bianbu-securityd.service" ||
+        !subject.no_new_privileges) {
+        return polkit.Result.NOT_HANDLED;
+    }
+    var unit = action.lookup("unit") || "";
+    var verb = action.lookup("verb") || "";
+    if (!/^bianbu-agent-[A-Za-z0-9_.-]+\.scope$/.test(unit)) {
+        return polkit.Result.NOT_HANDLED;
+    }
+    if (verb === "set-property") {
+        return polkit.Result.YES;
+    }
+    return polkit.Result.NOT_HANDLED;
+});

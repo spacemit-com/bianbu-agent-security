@@ -1,0 +1,16 @@
+create 201
+prompt 202 {'data': {'accepted': True, 'message_id': 'm-1789126498886', 'status': 'claimed', 'run_id': 'd215911c-494e-49ed-bc46-5bb
+smoke run/completed {"status": "completed", "content": "\n\n好", "usage": {"input_tokens": 17900, "output_tokens": 102, "total_tokens": 18002, "metadata": {"events": 1}}, "error": n
+== stale instances vs live pids
+22b38484c063 running 2725611 alive ended_ns= 0
+1e51ed5791c1 running 2665040 DEAD ended_ns= 0
+1a337d894ccb running 2663960 DEAD ended_ns= 0
+fff655f0f43e running 2389566 DEAD ended_ns= 0
+== worker seccomp env
+Seccomp:	2
+Seccomp_filters:	2
+== execution status
+worker\": {\"state\": \"unknown\"}
+== mode/budget/net final
+a{sv} 4 "agent_id" s "com.bianbu.c6f40f30a6e5" "mode" s "yolo" "updated_at" s "2
+mode\": \"allow_all\"

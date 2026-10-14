@@ -1,0 +1,1242 @@
+{
+  "summary": {
+    "total": 7,
+    "passed": 6,
+    "failed": 1,
+    "error": 0,
+    "skipped": 0,
+    "duration_ms": 27200,
+    "started_at": 1789126214.6364455,
+    "finished_at": 1789126241.8367908
+  },
+  "results": [
+    {
+      "id": "YOLO-01",
+      "title": "管理员 YOLO 模式全能力放行且审计、恢复完整",
+      "requirement": "INT-PA-02",
+      "category": "permission",
+      "status": "passed",
+      "duration_ms": 1062,
+      "steps": [
+        {
+          "name": "新注册 Agent 初始模式为产品默认 yolo（initial-agent-default）",
+          "ok": true,
+          "detail": "实际 {'agent_id': 'com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984', 'mode': 'yolo', 'updated_at': '2026-09-11 11:30:14', 'updated_by': 'initial-agent-default'} —— 与 securityd 3f3deb1 声明的默认值不一致",
+          "data": null
+        },
+        {
+          "name": "管理员可切到 normal",
+          "ok": true,
+          "detail": "实际 normal",
+          "data": null
+        },
+        {
+          "name": "normal 保留原 DENY",
+          "ok": true,
+          "detail": "实际 2",
+          "data": null
+        },
+        {
+          "name": "管理面返回 normal→yolo",
+          "ok": true,
+          "detail": "实际 {'agent_id': 'com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984', 'old_mode': 'normal', 'mode': 'yolo', 'updated_at': '2026-09-11T11:30:14.677+00:00', 'updated_by': 'uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope'}",
+          "data": null
+        },
+        {
+          "name": "YOLO 放行已撤销能力",
+          "ok": true,
+          "detail": "实际 0",
+          "data": null
+        },
+        {
+          "name": "YOLO 放行未来未知能力",
+          "ok": true,
+          "detail": "实际 0",
+          "data": null
+        },
+        {
+          "name": "每次 YOLO 判权明确审计 mode=yolo",
+          "ok": true,
+          "detail": "实际 [('file.read:/tmp/denied', 'decision=ALLOW;mode=yolo'), ('future.capability.not.registered:/future/scope', 'decision=ALLOW;mode=yolo')]",
+          "data": null
+        },
+        {
+          "name": "模式转换审计含 Agent/old/new/actor/timestamp",
+          "ok": true,
+          "detail": "实际 agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984;old_mode=normal;new_mode=yolo;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:14.677+00:00",
+          "data": null
+        },
+        {
+          "name": "关闭 YOLO 恢复粒度 DENY",
+          "ok": true,
+          "detail": "实际 2",
+          "data": null
+        }
+      ],
+      "message": "",
+      "logs": [
+        "[19:30:14] securityd 在 system 总线上",
+        "[19:30:15] Agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984 normal=2 yolo=(0,0) restored=2 audit=3"
+      ],
+      "audit_delta": [
+        {
+          "seq": 810,
+          "ts": "2026-09-11T11:30:14.653+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "bind_caller",
+          "target": ":1.52879",
+          "result": "success"
+        },
+        {
+          "seq": 811,
+          "ts": "2026-09-11T11:30:14.657+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "register_agent",
+          "target": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "result": "success"
+        },
+        {
+          "seq": 812,
+          "ts": "2026-09-11T11:30:14.659+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "bind_caller",
+          "target": ":1.52879",
+          "result": "success"
+        },
+        {
+          "seq": 813,
+          "ts": "2026-09-11T11:30:14.659+00:00",
+          "agent_id": "system",
+          "op_type": "admin:register_agent",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "result": "success"
+        },
+        {
+          "seq": 814,
+          "ts": "2026-09-11T11:30:14.665+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "sync_capabilities",
+          "target": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "result": "count=1"
+        },
+        {
+          "seq": 815,
+          "ts": "2026-09-11T11:30:14.666+00:00",
+          "agent_id": "system",
+          "op_type": "admin:sync_agent_capabilities",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984;count=1",
+          "result": "success"
+        },
+        {
+          "seq": 816,
+          "ts": "2026-09-11T11:30:14.671+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984;old_mode=yolo;new_mode=normal;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:14.669+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 817,
+          "ts": "2026-09-11T11:30:14.674+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "check_permission",
+          "target": "file.read:/tmp/denied",
+          "result": "deny"
+        },
+        {
+          "seq": 818,
+          "ts": "2026-09-11T11:30:14.679+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984;old_mode=normal;new_mode=yolo;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:14.677+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 819,
+          "ts": "2026-09-11T11:30:14.681+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "check_permission",
+          "target": "file.read:/tmp/denied",
+          "result": "decision=ALLOW;mode=yolo"
+        },
+        {
+          "seq": 820,
+          "ts": "2026-09-11T11:30:14.683+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "check_permission",
+          "target": "future.capability.not.registered:/future/scope",
+          "result": "decision=ALLOW;mode=yolo"
+        },
+        {
+          "seq": 821,
+          "ts": "2026-09-11T11:30:15.693+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984;old_mode=yolo;new_mode=normal;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:15.689+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 822,
+          "ts": "2026-09-11T11:30:15.695+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "check_permission",
+          "target": "file.read:/tmp/denied",
+          "result": "deny"
+        },
+        {
+          "seq": 823,
+          "ts": "2026-09-11T11:30:15.699+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "op_type": "unregister_agent",
+          "target": "com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "result": "success"
+        },
+        {
+          "seq": 824,
+          "ts": "2026-09-11T11:30:15.700+00:00",
+          "agent_id": "system",
+          "op_type": "admin:unregister_agent",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5.testkit.yolo.ae70b984",
+          "result": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "HOOK-03",
+      "title": "工具调用触发 before_tool→securityd（审计留痕）",
+      "requirement": "INT-PA-02",
+      "category": "hook",
+      "status": "passed",
+      "duration_ms": 8277,
+      "steps": [
+        {
+          "name": "run 完成",
+          "ok": true,
+          "detail": "实际 completed error=None",
+          "data": null
+        },
+        {
+          "name": "securityd 收到 check_permission",
+          "ok": true,
+          "detail": "审计增量共 21 条，无 check_permission —— 工具调用未经判权（映射返回 None 落到 DEFAULT_ALLOW）",
+          "data": {
+            "delta": [
+              {
+                "seq": 825,
+                "ts": "2026-09-11T11:30:15.715+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+                "op_type": "bind_caller",
+                "target": ":1.52879",
+                "result": "success"
+              },
+              {
+                "seq": 826,
+                "ts": "2026-09-11T11:30:15.719+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "security_mode_change",
+                "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=yolo;new_mode=normal;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:15.718+00:00",
+                "result": "success"
+              },
+              {
+                "seq": 827,
+                "ts": "2026-09-11T11:30:15.724+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "set_token_budget",
+                "target": "conv=1000000000,day=1000000000",
+                "result": "applied"
+              },
+              {
+                "seq": 828,
+                "ts": "2026-09-11T11:30:15.725+00:00",
+                "agent_id": "system",
+                "op_type": "admin:set_token_budget",
+                "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 100000, 'limit_per_day': 500000, 'conv_used': 481838, 'day_used': 707427};new_conv=1000000000;new_day=1000000000;new_on_exceed=pause_and_notify",
+                "result": "success"
+              },
+              {
+                "seq": 829,
+                "ts": "2026-09-11T11:30:16.214+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "hook:agent_startup",
+                "target": "ALLOW",
+                "result": "dlp_startup@0.0=ALLOW"
+              },
+              {
+                "seq": 830,
+                "ts": "2026-09-11T11:30:16.428+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "hook:input",
+                "target": "ALLOW",
+                "result": "dlp_input@0.7=ALLOW"
+              },
+              {
+                "seq": 831,
+                "ts": "2026-09-11T11:30:16.437+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "hook:pre_model_call",
+                "target": "ALLOW",
+                "result": "dlp_pre_model@0.6=ALLOW"
+              },
+              {
+                "seq": 832,
+                "ts": "2026-09-11T11:30:16.445+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "quota_checked",
+                "target": "07cdd9c0-511c-4981-a208-24a955b211ac",
+                "result": "quota_checked"
+              },
+              {
+                "seq": 833,
+                "ts": "2026-09-11T11:30:16.492+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "quota_checked",
+                "target": "07cdd9c0-511c-4981-a208-24a955b211ac",
+                "result": "quota_checked"
+              },
+              {
+                "seq": 834,
+                "ts": "2026-09-11T11:30:18.468+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "token_metered",
+                "target": "01a0903b-8b23-7db1-a025-2bb2ae2a1e53",
+                "result": "18104"
+              },
+              {
+                "seq": 835,
+                "ts": "2026-09-11T11:30:18.482+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "check_permission",
+                "target": "file.read:/etc/hostname",
+                "result": "allow"
+              },
+              {
+                "seq": 836,
+                "ts": "2026-09-11T11:30:18.499+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "check_permission",
+                "target": "file.read:/etc/hostname",
+                "result": "allow"
+              },
+              {
+                "seq": 837,
+                "ts": "2026-09-11T11:30:18.502+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "hook:pre_tool_call",
+                "target": "ALLOW",
+                "result": "sec_capability@2.8=ALLOW,dlp_pre_tool@0.2=ALLOW"
+              },
+              {
+                "seq": 838,
+                "ts": "2026-09-11T11:30:18.557+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "read_file",
+                "target": "executed",
+                "result": "ok"
+              },
+              {
+                "seq": 839,
+                "ts": "2026-09-11T11:30:18.589+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "quota_checked",
+                "target": "07cdd9c0-511c-4981-a208-24a955b211ac",
+                "result": "quota_checked"
+              },
+              {
+                "seq": 840,
+                "ts": "2026-09-11T11:30:20.104+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "token_metered",
+                "target": "01a0903b-9356-7631-bd0a-915ccb63a03d",
+                "result": "18266"
+              },
+              {
+                "seq": 841,
+                "ts": "2026-09-11T11:30:20.121+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "check_permission",
+                "target": "file.read:/etc/hostname",
+                "result": "allow"
+              },
+              {
+                "seq": 842,
+                "ts": "2026-09-11T11:30:20.309+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "hook:agent_shutdown",
+                "target": "ALLOW",
+                "result": "dlp_shutdown@0.0=ALLOW"
+              },
+              {
+                "seq": 843,
+                "ts": "2026-09-11T11:30:23.966+00:00",
+                "agent_id": "com.bianbu.c6f40f30a6e5",
+                "op_type": "set_token_budget",
+                "target": "conv=100000,day=500000",
+                "result": "applied"
+              },
+              {
+                "seq": 844,
+                "ts": "2026-09-11T11:30:23.967+00:00",
+                "agent_id": "system",
+                "op_type": "admin:set_token_budget",
+                "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 1000000000, 'limit_per_day': 1000000000, 'conv_used': 518208, 'day_used': 743797};new_conv=100000;new_day=500000;new_on_exceed=pause_and_notify",
+                "result": "success"
+              }
+            ]
+          }
+        },
+        {
+          "name": "判权针对 file.read 能力",
+          "ok": true,
+          "detail": "有判权但 target 不含 file.read：['file.read:/etc/hostname', 'file.read:/etc/hostname', 'file.read:/etc/hostname']",
+          "data": null
+        },
+        {
+          "name": "normal 模式下判权结果为明确 allow（非 yolo 旁路）",
+          "ok": true,
+          "detail": "实际 ['allow', 'allow', 'allow']",
+          "data": null
+        },
+        {
+          "name": "判权早于工具执行（审计 seq 顺序）",
+          "ok": true,
+          "detail": "check seq=[835, 836] exec seq=[838]",
+          "data": null
+        }
+      ],
+      "message": "",
+      "logs": [
+        "[19:30:15] securityd 在 system 总线上",
+        "[19:30:15] 安全模式 com.bianbu.c6f40f30a6e5: yolo → normal（测试期间临时）",
+        "[19:30:15] Token 配额临时抬高（原 conv=100000 day=500000 on_exceed=pause_and_notify）",
+        "[19:30:15] POST /api/v1/sessions → 201",
+        "[19:30:15] POST /api/v1/sessions/t-340bed0da5/prompt → 202",
+        "[19:30:15] run_id=07cdd9c0-511c-4981-a208-24a955b211ac session=t-340bed0da5",
+        "[19:30:15] GET /api/v1/sessions/t-340bed0da5/events?max_messages=50 → 200",
+        "[19:30:18] GET /api/v1/sessions/t-340bed0da5/events?max_messages=50 → 200",
+        "[19:30:21] GET /api/v1/sessions/t-340bed0da5/events?max_messages=50 → 200",
+        "[19:30:21] run 终态=completed",
+        "[19:30:23] Token 配额已恢复",
+        "[19:30:23] 安全模式 com.bianbu.c6f40f30a6e5: 恢复为 yolo",
+        "[19:30:23] 审计增量 21 条，check_permission 3 条（其中 file.read 相关 3 条）",
+        "[19:30:23]   seq=835 check_permission file.read:/etc/hostname → allow",
+        "[19:30:23]   seq=836 check_permission file.read:/etc/hostname → allow",
+        "[19:30:23]   seq=841 check_permission file.read:/etc/hostname → allow"
+      ],
+      "audit_delta": [
+        {
+          "seq": 825,
+          "ts": "2026-09-11T11:30:15.715+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "bind_caller",
+          "target": ":1.52879",
+          "result": "success"
+        },
+        {
+          "seq": 826,
+          "ts": "2026-09-11T11:30:15.719+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=yolo;new_mode=normal;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:15.718+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 827,
+          "ts": "2026-09-11T11:30:15.724+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=1000000000,day=1000000000",
+          "result": "applied"
+        },
+        {
+          "seq": 828,
+          "ts": "2026-09-11T11:30:15.725+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 100000, 'limit_per_day': 500000, 'conv_used': 481838, 'day_used': 707427};new_conv=1000000000;new_day=1000000000;new_on_exceed=pause_and_notify",
+          "result": "success"
+        },
+        {
+          "seq": 829,
+          "ts": "2026-09-11T11:30:16.214+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:agent_startup",
+          "target": "ALLOW",
+          "result": "dlp_startup@0.0=ALLOW"
+        },
+        {
+          "seq": 830,
+          "ts": "2026-09-11T11:30:16.428+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:input",
+          "target": "ALLOW",
+          "result": "dlp_input@0.7=ALLOW"
+        },
+        {
+          "seq": 831,
+          "ts": "2026-09-11T11:30:16.437+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:pre_model_call",
+          "target": "ALLOW",
+          "result": "dlp_pre_model@0.6=ALLOW"
+        },
+        {
+          "seq": 832,
+          "ts": "2026-09-11T11:30:16.445+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "quota_checked",
+          "target": "07cdd9c0-511c-4981-a208-24a955b211ac",
+          "result": "quota_checked"
+        },
+        {
+          "seq": 833,
+          "ts": "2026-09-11T11:30:16.492+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "quota_checked",
+          "target": "07cdd9c0-511c-4981-a208-24a955b211ac",
+          "result": "quota_checked"
+        },
+        {
+          "seq": 834,
+          "ts": "2026-09-11T11:30:18.468+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "token_metered",
+          "target": "01a0903b-8b23-7db1-a025-2bb2ae2a1e53",
+          "result": "18104"
+        },
+        {
+          "seq": 835,
+          "ts": "2026-09-11T11:30:18.482+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "check_permission",
+          "target": "file.read:/etc/hostname",
+          "result": "allow"
+        },
+        {
+          "seq": 836,
+          "ts": "2026-09-11T11:30:18.499+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "check_permission",
+          "target": "file.read:/etc/hostname",
+          "result": "allow"
+        },
+        {
+          "seq": 837,
+          "ts": "2026-09-11T11:30:18.502+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:pre_tool_call",
+          "target": "ALLOW",
+          "result": "sec_capability@2.8=ALLOW,dlp_pre_tool@0.2=ALLOW"
+        },
+        {
+          "seq": 838,
+          "ts": "2026-09-11T11:30:18.557+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "read_file",
+          "target": "executed",
+          "result": "ok"
+        },
+        {
+          "seq": 839,
+          "ts": "2026-09-11T11:30:18.589+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "quota_checked",
+          "target": "07cdd9c0-511c-4981-a208-24a955b211ac",
+          "result": "quota_checked"
+        },
+        {
+          "seq": 840,
+          "ts": "2026-09-11T11:30:20.104+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "token_metered",
+          "target": "01a0903b-9356-7631-bd0a-915ccb63a03d",
+          "result": "18266"
+        },
+        {
+          "seq": 841,
+          "ts": "2026-09-11T11:30:20.121+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "check_permission",
+          "target": "file.read:/etc/hostname",
+          "result": "allow"
+        },
+        {
+          "seq": 842,
+          "ts": "2026-09-11T11:30:20.309+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:agent_shutdown",
+          "target": "ALLOW",
+          "result": "dlp_shutdown@0.0=ALLOW"
+        },
+        {
+          "seq": 843,
+          "ts": "2026-09-11T11:30:23.966+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=100000,day=500000",
+          "result": "applied"
+        },
+        {
+          "seq": 844,
+          "ts": "2026-09-11T11:30:23.967+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 1000000000, 'limit_per_day': 1000000000, 'conv_used': 518208, 'day_used': 743797};new_conv=100000;new_day=500000;new_on_exceed=pause_and_notify",
+          "result": "success"
+        },
+        {
+          "seq": 845,
+          "ts": "2026-09-11T11:30:23.973+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=normal;new_mode=yolo;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:23.969+00:00",
+          "result": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "DLP-04",
+      "title": "PA 大载荷走正式 UDS 与中央策略",
+      "requirement": "ARCH-01/INT-PA-11",
+      "category": "dlp",
+      "status": "failed",
+      "duration_ms": 9327,
+      "steps": [
+        {
+          "name": "中央 BLOCK 策略阻断真实 run",
+          "ok": true,
+          "detail": "实际 status=failed —— PA 可能仍在读本地策略库",
+          "data": null
+        },
+        {
+          "name": "PA 大载荷经 dlp.scan",
+          "ok": false,
+          "detail": "无 uds_dlp_scan 审计 —— PA hook 未选择正式 UDS 数据面",
+          "data": null
+        },
+        {
+          "name": "扫描载荷确实超过 4KB",
+          "ok": false,
+          "detail": "targets=[]",
+          "data": null
+        },
+        {
+          "name": ">1KB 完整载荷经 audit.batch",
+          "ok": false,
+          "detail": "无 hook_payload:input —— 仅写了 D-Bus 元数据审计",
+          "data": null
+        },
+        {
+          "name": "audit.batch 保存完整而非摘要",
+          "ok": false,
+          "detail": "result_bytes=[]",
+          "data": null
+        }
+      ],
+      "message": "PA 大载荷经 dlp.scan: 无 uds_dlp_scan 审计 —— PA hook 未选择正式 UDS 数据面; 扫描载荷确实超过 4KB: targets=[]; >1KB 完整载荷经 audit.batch: 无 hook_payload:input —— 仅写了 D-Bus 元数据审计",
+      "logs": [
+        "[19:30:24] security-webui GET /api/dlp/policies?agent=com.bianbu.c6f40f30a6e5 → 200",
+        "[19:30:24] security-webui POST /api/dlp/policy → 200",
+        "[19:30:30] securityd 在 system 总线上",
+        "[19:30:30] 安全模式 com.bianbu.c6f40f30a6e5: yolo → normal（测试期间临时）",
+        "[19:30:30] Token 配额临时抬高（原 conv=100000 day=500000 on_exceed=pause_and_notify）",
+        "[19:30:30] POST /api/v1/sessions → 201",
+        "[19:30:30] POST /api/v1/sessions/t-8baa8fe30f/prompt → 202",
+        "[19:30:30] run_id=5c3b3d93-dd7a-4915-91f9-926c1a2f8b4c session=t-8baa8fe30f",
+        "[19:30:30] GET /api/v1/sessions/t-8baa8fe30f/events?max_messages=50 → 200",
+        "[19:30:33] GET /api/v1/sessions/t-8baa8fe30f/events?max_messages=50 → 200",
+        "[19:30:33] run 终态=failed",
+        "[19:30:33] Token 配额已恢复",
+        "[19:30:33] 安全模式 com.bianbu.c6f40f30a6e5: 恢复为 yolo",
+        "[19:30:33] security-webui DELETE /api/dlp/policy → 200",
+        "[19:30:33] run=failed UDS扫描=0 完整审计=0"
+      ],
+      "audit_delta": [
+        {
+          "seq": 846,
+          "ts": "2026-09-11T11:30:30.062+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "bind_caller",
+          "target": ":1.52879",
+          "result": "success"
+        },
+        {
+          "seq": 847,
+          "ts": "2026-09-11T11:30:30.071+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=yolo;new_mode=normal;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:30.069+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 848,
+          "ts": "2026-09-11T11:30:30.077+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=1000000000,day=1000000000",
+          "result": "applied"
+        },
+        {
+          "seq": 849,
+          "ts": "2026-09-11T11:30:30.078+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 100000, 'limit_per_day': 500000, 'conv_used': 518208, 'day_used': 743797};new_conv=1000000000;new_day=1000000000;new_on_exceed=pause_and_notify",
+          "result": "success"
+        },
+        {
+          "seq": 850,
+          "ts": "2026-09-11T11:30:30.502+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:agent_startup",
+          "target": "ALLOW",
+          "result": "dlp_startup@0.0=ALLOW"
+        },
+        {
+          "seq": 851,
+          "ts": "2026-09-11T11:30:30.928+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:input",
+          "target": "BLOCK",
+          "result": "dlp_input@36.2=BLOCK"
+        },
+        {
+          "seq": 852,
+          "ts": "2026-09-11T11:30:30.980+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:pre_model_call",
+          "target": "BLOCK",
+          "result": "dlp_pre_model@35.4=BLOCK"
+        },
+        {
+          "seq": 853,
+          "ts": "2026-09-11T11:30:31.035+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "error:-",
+          "target": "on_error",
+          "result": "[bianbu-security] prompt 含受限敏感信息（phone），已拒绝调用"
+        },
+        {
+          "seq": 854,
+          "ts": "2026-09-11T11:30:33.272+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=100000,day=500000",
+          "result": "applied"
+        },
+        {
+          "seq": 855,
+          "ts": "2026-09-11T11:30:33.272+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 1000000000, 'limit_per_day': 1000000000, 'conv_used': 518208, 'day_used': 743797};new_conv=100000;new_day=500000;new_on_exceed=pause_and_notify",
+          "result": "success"
+        },
+        {
+          "seq": 856,
+          "ts": "2026-09-11T11:30:33.276+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=normal;new_mode=yolo;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:33.274+00:00",
+          "result": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "TOKEN-03",
+      "title": "normal 模式下 Token 超限 on_exceed=deny 真实拒绝 run（TOK-01 端到端）",
+      "requirement": "INT-PA-13",
+      "category": "token",
+      "status": "passed",
+      "duration_ms": 4247,
+      "steps": [
+        {
+          "name": "超限 run 被拒绝（status=failed）",
+          "ok": true,
+          "detail": "实际 failed",
+          "data": null
+        },
+        {
+          "name": "错误码 TOKEN_BUDGET_EXCEEDED",
+          "ok": true,
+          "detail": "实际 TOKEN_BUDGET_EXCEEDED: Token budget exceeded for com.bianbu.c6f40f30a6e5; action=deny; used=518208; limit=1",
+          "data": null
+        },
+        {
+          "name": "securityd 审计 quota_denied",
+          "ok": true,
+          "detail": "无 quota_denied —— 拒绝未经 securityd 留痕",
+          "data": null
+        },
+        {
+          "name": "拒绝发生在模型调用前（无 token_metered）",
+          "ok": true,
+          "detail": "仍有 0 条 token_metered —— 模型已被调用",
+          "data": null
+        },
+        {
+          "name": "原配额已恢复",
+          "ok": true,
+          "detail": "GetTokenBudget 未恢复原值",
+          "data": null
+        }
+      ],
+      "message": "",
+      "logs": [
+        "[19:30:33] securityd 在 system 总线上",
+        "[19:30:33] 安全模式 com.bianbu.c6f40f30a6e5: yolo → normal（测试期间临时）",
+        "[19:30:33] normal 下真实配额 conv=100000 day=500000 on_exceed=pause_and_notify conv_used=518208",
+        "[19:30:33] POST /api/v1/sessions → 201",
+        "[19:30:33] POST /api/v1/sessions/t-596ec0fa3d/prompt → 202",
+        "[19:30:33] run_id=ad3f1f9c-b653-46b5-bdbe-b20859aadd01 session=t-596ec0fa3d",
+        "[19:30:33] GET /api/v1/sessions/t-596ec0fa3d/events?max_messages=50 → 200",
+        "[19:30:36] GET /api/v1/sessions/t-596ec0fa3d/events?max_messages=50 → 200",
+        "[19:30:36] run 终态=failed",
+        "[19:30:37] 配额已恢复",
+        "[19:30:37] 安全模式 com.bianbu.c6f40f30a6e5: 恢复为 yolo",
+        "[19:30:37] run=failed code=TOKEN_BUDGET_EXCEEDED quota_denied=1 token_metered=0"
+      ],
+      "audit_delta": [
+        {
+          "seq": 857,
+          "ts": "2026-09-11T11:30:33.325+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "bind_caller",
+          "target": ":1.52879",
+          "result": "success"
+        },
+        {
+          "seq": 858,
+          "ts": "2026-09-11T11:30:33.330+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=yolo;new_mode=normal;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:33.328+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 859,
+          "ts": "2026-09-11T11:30:33.336+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=1,day=500000",
+          "result": "applied"
+        },
+        {
+          "seq": 860,
+          "ts": "2026-09-11T11:30:33.336+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 100000, 'limit_per_day': 500000, 'conv_used': 518208, 'day_used': 743797};new_conv=1;new_day=500000;new_on_exceed=deny",
+          "result": "success"
+        },
+        {
+          "seq": 861,
+          "ts": "2026-09-11T11:30:33.798+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:agent_startup",
+          "target": "ALLOW",
+          "result": "dlp_startup@0.0=ALLOW"
+        },
+        {
+          "seq": 862,
+          "ts": "2026-09-11T11:30:34.646+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:input",
+          "target": "ALLOW",
+          "result": "dlp_input@0.3=ALLOW"
+        },
+        {
+          "seq": 863,
+          "ts": "2026-09-11T11:30:34.656+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:pre_model_call",
+          "target": "ALLOW",
+          "result": "dlp_pre_model@0.2=ALLOW"
+        },
+        {
+          "seq": 864,
+          "ts": "2026-09-11T11:30:34.663+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "quota_denied",
+          "target": "ad3f1f9c-b653-46b5-bdbe-b20859aadd01",
+          "result": "quota_denied"
+        },
+        {
+          "seq": 865,
+          "ts": "2026-09-11T11:30:34.713+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "error:-",
+          "target": "on_error",
+          "result": "Token budget exceeded for com.bianbu.c6f40f30a6e5; action=deny; used=518208; limit=1"
+        },
+        {
+          "seq": 866,
+          "ts": "2026-09-11T11:30:37.547+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=100000,day=500000",
+          "result": "applied"
+        },
+        {
+          "seq": 867,
+          "ts": "2026-09-11T11:30:37.551+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'deny', 'limit_per_conversation': 1, 'limit_per_day': 500000, 'conv_used': 518208, 'day_used': 743797};new_conv=100000;new_day=500000;new_on_exceed=pause_and_notify",
+          "result": "success"
+        },
+        {
+          "seq": 868,
+          "ts": "2026-09-11T11:30:37.556+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=normal;new_mode=yolo;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:37.554+00:00",
+          "result": "success"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "AUDIT-01",
+      "title": "审计记录写入且含哈希链字段",
+      "requirement": "INT-PA-09",
+      "category": "audit",
+      "status": "passed",
+      "duration_ms": 1018,
+      "steps": [
+        {
+          "name": "产生了审计记录",
+          "ok": true,
+          "detail": "仅 3 条",
+          "data": null
+        },
+        {
+          "name": "记录含 result 字段",
+          "ok": true,
+          "detail": "",
+          "data": null
+        }
+      ],
+      "message": "",
+      "logs": [
+        "[19:30:37] securityd 在 system 总线上",
+        "[19:30:37] CheckPermission('file.read') → ALLOW",
+        "[19:30:37] CheckPermission('never.registered.cap') → DENY",
+        "[19:30:38] 新增 3 条",
+        "[19:30:38]   seq=869 bind_caller :1.52879 → success",
+        "[19:30:38]   seq=870 check_permission file.read: → allow",
+        "[19:30:38]   seq=871 check_permission never.registered.cap: → deny"
+      ],
+      "audit_delta": [
+        {
+          "seq": 869,
+          "ts": "2026-09-11T11:30:37.574+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "bind_caller",
+          "target": ":1.52879",
+          "result": "success"
+        },
+        {
+          "seq": 870,
+          "ts": "2026-09-11T11:30:37.576+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "check_permission",
+          "target": "file.read:",
+          "result": "allow"
+        },
+        {
+          "seq": 871,
+          "ts": "2026-09-11T11:30:37.578+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "check_permission",
+          "target": "never.registered.cap:",
+          "result": "deny"
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "AUDIT-02",
+      "title": "审计哈希链可校验（防篡改）",
+      "requirement": "INT-PA-09",
+      "category": "audit",
+      "status": "passed",
+      "duration_ms": 0,
+      "steps": [
+        {
+          "name": "取到审计记录",
+          "ok": true,
+          "detail": "仅 40 条",
+          "data": null
+        },
+        {
+          "name": "哈希链连续",
+          "ok": true,
+          "detail": "断链于 seq=[]",
+          "data": null
+        }
+      ],
+      "message": "",
+      "logs": [
+        "[19:30:38] 审计链库 /var/log/bianbu/audit/202609.db",
+        "[19:30:38] 校验最近 40 条，断链 0 处"
+      ],
+      "audit_delta": [],
+      "error": ""
+    },
+    {
+      "id": "ERR-01",
+      "title": "安全拦截的原因透传到前端（不再是「发送失败，请稍后再试」）",
+      "requirement": "INT-PA-06",
+      "category": "hook",
+      "status": "passed",
+      "duration_ms": 3249,
+      "steps": [
+        {
+          "name": "撤销生效（granted=-1）",
+          "ok": true,
+          "detail": "实际 granted=-1",
+          "data": null
+        },
+        {
+          "name": "模型确实发起了工具调用（securityd 有该能力的判权审计）",
+          "ok": true,
+          "detail": "无 check_permission —— 模型未调用工具，本项无从验证（非产品缺陷）",
+          "data": null
+        },
+        {
+          "name": "securityd 判权为 deny",
+          "ok": true,
+          "detail": "实际 ['deny']",
+          "data": null
+        },
+        {
+          "name": "被拒工具零执行（无 terminal 执行审计）",
+          "ok": true,
+          "detail": "仍有 0 条 terminal 执行审计 —— DENY 未阻止下游",
+          "data": null
+        },
+        {
+          "name": "run 因安全拦截失败",
+          "ok": true,
+          "detail": "实际 failed —— 未被拦下则本项无从验证",
+          "data": null
+        },
+        {
+          "name": "错误码为 security_denied（非泛化 run_failed）",
+          "ok": true,
+          "detail": "实际 security_denied —— 前端只能显示通用重试文案",
+          "data": null
+        },
+        {
+          "name": "消息含能力名（用户能看懂缺什么）",
+          "ok": true,
+          "detail": "实际消息：[bianbu-security] 权限被拒绝：terminal 需能力 system.execute（scope=echo），未授权或已撤销",
+          "data": null
+        },
+        {
+          "name": "消息带 [bianbu-security] 来源标识",
+          "ok": true,
+          "detail": "实际：[bianbu-security] 权限被拒绝：terminal 需能力 system.execute（scope=echo），未授权或已撤销",
+          "data": null
+        },
+        {
+          "name": "details 指出被拦的工具",
+          "ok": true,
+          "detail": "实际 tool=terminal —— 运维无法定位",
+          "data": null
+        },
+        {
+          "name": "details 指出所需能力",
+          "ok": true,
+          "detail": "实际 capability=system.execute",
+          "data": null
+        },
+        {
+          "name": "details 区分「明确拒绝」与「securityd 不可达」",
+          "ok": true,
+          "detail": "实际 degraded=False —— 二者提示文案不同（一个要授权，一个要修总线）",
+          "data": null
+        }
+      ],
+      "message": "",
+      "logs": [
+        "[19:30:38] securityd 在 system 总线上",
+        "[19:30:38] 撤销前：has=True granted=1",
+        "[19:30:38] 撤销后 granted=-1（-1=DENY）",
+        "[19:30:38] 安全模式 com.bianbu.c6f40f30a6e5: yolo → normal（测试期间临时）",
+        "[19:30:38] Token 配额临时抬高（原 conv=100000 day=500000 on_exceed=pause_and_notify）",
+        "[19:30:38] POST /api/v1/sessions → 201",
+        "[19:30:38] POST /api/v1/sessions/t-2462a9c506/prompt → 202",
+        "[19:30:38] run_id=bce7e92e-ec06-4160-bf2c-bc4543c9081f session=t-2462a9c506",
+        "[19:30:38] GET /api/v1/sessions/t-2462a9c506/events?max_messages=50 → 200",
+        "[19:30:41] GET /api/v1/sessions/t-2462a9c506/events?max_messages=50 → 200",
+        "[19:30:41] run 终态=failed",
+        "[19:30:41] Token 配额已恢复",
+        "[19:30:41] 安全模式 com.bianbu.c6f40f30a6e5: 恢复为 yolo",
+        "[19:30:41] check_permission(system.execute)=[('system.execute:echo', 'deny')] tool_executed=0",
+        "[19:30:41] run 状态=failed error.code=security_denied",
+        "[19:30:41] error.message=[bianbu-security] 权限被拒绝：terminal 需能力 system.execute（scope=echo），未授权或已撤销",
+        "[19:30:41] error.details={'tool': 'terminal', 'capability': 'system.execute', 'scope': 'echo', 'risk_level': 'L3', 'decision': 'BLOCK', 'reason': '权限被拒绝：terminal 需能力 system.execute（scope=echo），未授权或已撤销', 'degraded': False, 'terminate_run': True}",
+        "[19:30:41] 已恢复：granted=1"
+      ],
+      "audit_delta": [
+        {
+          "seq": 872,
+          "ts": "2026-09-11T11:30:38.600+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5.testkit",
+          "op_type": "bind_caller",
+          "target": ":1.52879",
+          "result": "success"
+        },
+        {
+          "seq": 873,
+          "ts": "2026-09-11T11:30:38.608+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_granted",
+          "target": "system.execute:",
+          "result": "revoke:ok"
+        },
+        {
+          "seq": 874,
+          "ts": "2026-09-11T11:30:38.608+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_capability_granted",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;capability=system.execute;scope=;old_granted=1;new_granted=-1",
+          "result": "success"
+        },
+        {
+          "seq": 875,
+          "ts": "2026-09-11T11:30:38.619+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=yolo;new_mode=normal;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:38.617+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 876,
+          "ts": "2026-09-11T11:30:38.623+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=1000000000,day=1000000000",
+          "result": "applied"
+        },
+        {
+          "seq": 877,
+          "ts": "2026-09-11T11:30:38.624+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 100000, 'limit_per_day': 500000, 'conv_used': 518208, 'day_used': 743797};new_conv=1000000000;new_day=1000000000;new_on_exceed=pause_and_notify",
+          "result": "success"
+        },
+        {
+          "seq": 878,
+          "ts": "2026-09-11T11:30:39.067+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:agent_startup",
+          "target": "ALLOW",
+          "result": "dlp_startup@0.0=ALLOW"
+        },
+        {
+          "seq": 879,
+          "ts": "2026-09-11T11:30:39.417+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:input",
+          "target": "ALLOW",
+          "result": "dlp_input@0.4=ALLOW"
+        },
+        {
+          "seq": 880,
+          "ts": "2026-09-11T11:30:39.426+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "hook:pre_model_call",
+          "target": "ALLOW",
+          "result": "dlp_pre_model@0.4=ALLOW"
+        },
+        {
+          "seq": 881,
+          "ts": "2026-09-11T11:30:39.433+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "quota_checked",
+          "target": "bce7e92e-ec06-4160-bf2c-bc4543c9081f",
+          "result": "quota_checked"
+        },
+        {
+          "seq": 882,
+          "ts": "2026-09-11T11:30:39.473+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "quota_checked",
+          "target": "bce7e92e-ec06-4160-bf2c-bc4543c9081f",
+          "result": "quota_checked"
+        },
+        {
+          "seq": 883,
+          "ts": "2026-09-11T11:30:41.537+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "token_metered",
+          "target": "01a0903b-e4e9-7a23-aad5-e4b22cb34e30",
+          "result": "18043"
+        },
+        {
+          "seq": 884,
+          "ts": "2026-09-11T11:30:41.567+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "check_permission",
+          "target": "system.execute:echo",
+          "result": "deny"
+        },
+        {
+          "seq": 885,
+          "ts": "2026-09-11T11:30:41.626+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "error:-",
+          "target": "on_error",
+          "result": "[bianbu-security] 权限被拒绝：terminal 需能力 system.execute（scope=echo），未授权或已撤销"
+        },
+        {
+          "seq": 886,
+          "ts": "2026-09-11T11:30:41.816+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_token_budget",
+          "target": "conv=100000,day=500000",
+          "result": "applied"
+        },
+        {
+          "seq": 887,
+          "ts": "2026-09-11T11:30:41.817+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_token_budget",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;old={'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': 1000000000, 'limit_per_day': 1000000000, 'conv_used': 536251, 'day_used': 761840};new_conv=100000;new_day=500000;new_on_exceed=pause_and_notify",
+          "result": "success"
+        },
+        {
+          "seq": 888,
+          "ts": "2026-09-11T11:30:41.821+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "security_mode_change",
+          "target": "agent=com.bianbu.c6f40f30a6e5;old_mode=normal;new_mode=yolo;actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;timestamp=2026-09-11T11:30:41.819+00:00",
+          "result": "success"
+        },
+        {
+          "seq": 889,
+          "ts": "2026-09-11T11:30:41.826+00:00",
+          "agent_id": "com.bianbu.c6f40f30a6e5",
+          "op_type": "set_granted",
+          "target": "system.execute:",
+          "result": "grant:ok"
+        },
+        {
+          "seq": 890,
+          "ts": "2026-09-11T11:30:41.827+00:00",
+          "agent_id": "system",
+          "op_type": "admin:set_capability_granted",
+          "target": "actor=uid=1000;pid=2723782;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-856.scope;agent=com.bianbu.c6f40f30a6e5;capability=system.execute;scope=;old_granted=-1;new_granted=1",
+          "result": "success"
+        }
+      ],
+      "error": ""
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+### reinstall round-3 packages (R-1/R-2)
+2026-09-12T01:02:12+08:00
+e291458c32659a3a32836a00c99e4cc5c76581d356bcfb00a8fd70983979cf11  /var/tmp/bnsec-cc-fix-20260911/bianbu-agent-runtime_0.1.29_riscv64.deb
+64e4a197a207560f5f383461141960df1dfe227823a49d7cc3016dcae07427a7  /var/tmp/bnsec-cc-fix-20260911/bianbu-agent-securityd_0.1.28_riscv64.deb
+
+bianbu-agent-securityd: development/demo delivery; Agent manifest and code-package signature verification is disabled
+Security binding reset: agent=com.bianbu.runtime removed=True
+registered Security Runtime manifest: agent=com.bianbu.runtime permissions=22
+active active active active
+### D-10/D-3 quick
+policy_version\": 0, \"applied_policy_version\": 0, \"pending_restart\": false
+a{sv} 1 "status_json" s "{\"status\": \"active\", \"backend\": \"ebpf-seccomp\", \"coverage\": \"deny-only\", \"events\": 2, \"chain_valid\": true, \"collectors\": 2, \"reason\": \"\"}"
+### testkit full
+2026-09-12T01:03:22+08:00
+testkit rc=1
+MCP server nosuch.server 的 mcp.json 未找到，按「远端出境」从严处理；如为本地 stdio server 请确认安装完整
+[bianbu-security] Skill 'leaky' 的文本含受限敏感信息（phone），已拒绝载入 system prompt
+已注册 37 个测试项，全部运行
+
+==============================================================
+总计 37 | 通过 36 | 失败 1 | 错误 0 | 耗时 64.3s
+报告: /var/tmp/bnsec-cc-fix-20260911/evidence/testkit-run3/report.json
+==============================================================
+
+未通过的测试项：
+  [FAILED] TOKEN-03   normal 模式下 Token 超限 on_exceed=deny 真实拒绝 run（TOK-01 端到端）
+             → 同会话首个 run 正常完成（会话起始用量为 0）: 实际 failed error={'code': 'TOKEN_BUDGET_EXCEEDED', 'message': 'Token budget exceeded for com.bianbu.c6f40f30a6e5; action=deny; used=26498
+### hook trace sample (handler policy visible in audit?)
+('hook:pre_model_call', 'dlp_pre_model@0.7=ALLOW')
+('hook:input', 'dlp_input@0.7=ALLOW')
+('hook:agent_startup', 'dlp_startup@0.2=ALLOW')
+('hook:agent_shutdown', 'dlp_shutdown@0.2=ALLOW')
+### journal
+### final state
+mode" s "yolo"
+mode\": \"learning\"
+limit_per_conversation" s "0" limit_per_day" s "0"
+2026-09-12T01:04:27+08:00

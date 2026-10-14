@@ -1,0 +1,17 @@
+hook security.demo 未签名（digest=204e6079b19cf968…）—— 当前策略 warn 放行
+MCP server nosuch.server 的 mcp.json 未找到，按「远端出境」从严处理；如为本地 stdio server 请确认安装完整
+[bianbu-security] Skill 'leaky' 的文本含受限敏感信息（phone），已拒绝载入 system prompt
+已注册 36 个测试项，全部运行
+
+==============================================================
+总计 36 | 通过 33 | 失败 3 | 错误 0 | 耗时 157.9s
+报告: /var/tmp/bnsec-cc-tester-20260911/testkit/run1/report.json
+==============================================================
+
+未通过的测试项：
+  [FAILED] HOOK-03    工具调用触发 before_tool→securityd（审计留痕）
+             → run 完成: 实际 failed error={'code': 'TOKEN_BUDGET_APPROVAL_TIMEOUT', 'message': 'approval timed out after 60s', 'details': {'approval_id': 'token-budget-017c9ce8-8e09-4a0a-b37e-92ebdfcd84; securityd 收到 check_permission: 审计增
+  [FAILED] DLP-04     PA 大载荷走正式 UDS 与中央策略
+             → PA 大载荷经 dlp.scan: 无 uds_dlp_scan 审计 —— PA hook 未选择正式 UDS 数据面; 扫描载荷确实超过 4KB: targets=[]; >1KB 完整载荷经 audit.batch: 无 hook_payload:input —— 仅写了 D-Bus 元数据审计
+  [FAILED] ERR-01     安全拦截的原因透传到前端（不再是「发送失败，请稍后再试」）
+             → 错误码为 security_denied（非泛化 run_failed）: 实际 TOKEN_BUDGET_APPROVAL_TIMEOUT —— 前端只能显示通用重试文案; 消息含能力名（用户能看懂缺什么）: 实际消息：approval timed out after 60s; 消息带 [bianbu-security] 来源标识: 实际：approval timed out after 60s

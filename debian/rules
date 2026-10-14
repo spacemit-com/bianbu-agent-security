@@ -1,0 +1,110 @@
+#!/usr/bin/make -f
+
+export PYTHONDONTWRITEBYTECODE = 1
+export UV_NO_PROGRESS = 1
+
+PACKAGE := bianbu-agent-securityd
+INSTALL_ROOT := /usr/lib/bianbu-securityd
+SOURCE_ROOT := $(CURDIR)/impl/bianbu-securityd
+BUILD_ROOT := $(CURDIR)/debian/.bianbu-agent-securityd-build
+BUILD_VENV := $(BUILD_ROOT)/venv
+PACKAGE_ROOT := $(CURDIR)/debian/$(PACKAGE)
+# Demo delivery is the default for the current development package.  Product
+# builds set DEB_DEMO=0 and therefore omit both development drop-ins.
+DEB_DEMO ?= 1
+PYTHON := /usr/bin/python3.14
+UV := python3 -m uv
+LOCKFILE := $(SOURCE_ROOT)/requirements-lock.txt
+RUNTIME_LOCK := $(BUILD_ROOT)/requirements-runtime.txt
+
+.PHONY: %
+%:
+	dh $@
+
+override_dh_auto_clean:
+	rm -rf "$(BUILD_ROOT)"
+	dh_auto_clean
+
+override_dh_auto_build:
+	if ! $(UV) --version 2>/dev/null | grep -Eq '^uv 0\.11\.'; then \
+		python3 -m pip install 'uv>=0.11,<0.12' \
+			--index-url https://nexus.bianbu.xyz/repository/pypi/simple \
+			--trusted-host nexus.bianbu.xyz --break-system-packages --prefer-binary; \
+	fi
+	mkdir -p "$(BUILD_ROOT)"
+	$(UV) venv --clear --relocatable --system-site-packages \
+		--python "$(PYTHON)" "$(BUILD_VENV)"
+	grep -Ev "^(pytest|langgraph|dbus-python|PyGObject|cryptography)==" "$(LOCKFILE)" > "$(RUNTIME_LOCK)"
+	$(UV) pip install --python "$(BUILD_VENV)/bin/python" \
+		-r "$(RUNTIME_LOCK)"
+	$(UV) pip install --python "$(BUILD_VENV)/bin/python" \
+		--no-deps "$(SOURCE_ROOT)"
+	find "$(BUILD_VENV)" -type d -name __pycache__ -prune -exec rm -rf '{}' +
+	rm -f "$(BUILD_VENV)/.gitignore" "$(BUILD_VENV)/.lock" \
+		"$(BUILD_VENV)/CACHEDIR.TAG"
+	rm -f "$(BUILD_VENV)/bin/activate" "$(BUILD_VENV)/bin/activate."* \
+		"$(BUILD_VENV)/bin/deactivate.bat" "$(BUILD_VENV)/bin/activate_this.py"
+	PYTHONNOUSERSITE=1 PYTHONPATH="$(SOURCE_ROOT)" \
+		"$(BUILD_VENV)/bin/python" -c \
+		'import cryptography, dbus, gi, flask, flask_socketio, gunicorn; print("securityd build imports OK")'
+
+override_dh_auto_test:
+	PYTHONNOUSERSITE=1 PYTHONPATH="$(SOURCE_ROOT)" \
+		"$(BUILD_VENV)/bin/python" -m py_compile \
+		$$(find "$(SOURCE_ROOT)" -type f -name '*.py' \
+			-not -path '*/tests/*' -print)
+	PYTHONNOUSERSITE=1 PYTHONPATH="$(SOURCE_ROOT)" \
+		"$(BUILD_VENV)/bin/python" "$(SOURCE_ROOT)/deploy/verify_install_assets.py"
+
+override_dh_auto_install:
+	install -d "$(PACKAGE_ROOT)$(INSTALL_ROOT)"
+	cp -a "$(BUILD_VENV)" "$(PACKAGE_ROOT)$(INSTALL_ROOT)/venv"
+	cp -a "$(SOURCE_ROOT)/securityd" "$(PACKAGE_ROOT)$(INSTALL_ROOT)/"
+	cp -a "$(SOURCE_ROOT)/client" "$(PACKAGE_ROOT)$(INSTALL_ROOT)/"
+	cp -a "$(SOURCE_ROOT)/cli" "$(PACKAGE_ROOT)$(INSTALL_ROOT)/"
+	cp -a "$(SOURCE_ROOT)/runtime" "$(PACKAGE_ROOT)$(INSTALL_ROOT)/"
+	cp -a "$(SOURCE_ROOT)/webui" "$(PACKAGE_ROOT)$(INSTALL_ROOT)/"
+	cp -a "$(SOURCE_ROOT)/hermes_plugin" "$(PACKAGE_ROOT)$(INSTALL_ROOT)/"
+	install -d "$(PACKAGE_ROOT)$(INSTALL_ROOT)/data"
+	cp -a "$(SOURCE_ROOT)/data/." "$(PACKAGE_ROOT)$(INSTALL_ROOT)/data/"
+	install -d "$(PACKAGE_ROOT)$(INSTALL_ROOT)/deploy"
+	cp -a "$(SOURCE_ROOT)/deploy/." "$(PACKAGE_ROOT)$(INSTALL_ROOT)/deploy/"
+	install -d "$(PACKAGE_ROOT)/usr/share/doc/$(PACKAGE)"
+	install -m 0644 "$(SOURCE_ROOT)/README.md" "$(PACKAGE_ROOT)/usr/share/doc/$(PACKAGE)/README.Debian"
+	install -m 0644 "$(SOURCE_ROOT)/requirements-lock.txt" "$(PACKAGE_ROOT)/usr/share/doc/$(PACKAGE)/requirements-lock.txt"
+	install -m 0644 "$(SOURCE_ROOT)/THIRD_PARTY_LICENSES.md" "$(PACKAGE_ROOT)/usr/share/doc/$(PACKAGE)/THIRD_PARTY_LICENSES.md"
+	install -d "$(PACKAGE_ROOT)/usr/bin"
+	printf '%s\n' '#!/bin/sh' 'exec $(INSTALL_ROOT)/venv/bin/python -m securityd.service "$$@"' > "$(PACKAGE_ROOT)/usr/bin/bianbu-securityd"
+	chmod 0755 "$(PACKAGE_ROOT)/usr/bin/bianbu-securityd"
+	printf '%s\n' '#!/bin/sh' 'exec $(INSTALL_ROOT)/venv/bin/python -m cli.bncli "$$@"' > "$(PACKAGE_ROOT)/usr/bin/bncli"
+	chmod 0755 "$(PACKAGE_ROOT)/usr/bin/bncli"
+	install -d "$(PACKAGE_ROOT)/lib/systemd/system"
+	cp "$(SOURCE_ROOT)/deploy/bianbu-syscall-observer.service" "$(PACKAGE_ROOT)/lib/systemd/system/bianbu-syscall-observer.service"
+	cp "$(SOURCE_ROOT)/deploy/bianbu-securityd.service" "$(PACKAGE_ROOT)/lib/systemd/system/bianbu-securityd.service"
+	cp "$(SOURCE_ROOT)/deploy/bianbu-security-webui.service" "$(PACKAGE_ROOT)/lib/systemd/system/bianbu-security-webui.service"
+	if [ "$(DEB_DEMO)" = 1 ]; then \
+		install -D -m 0644 "$(CURDIR)/debian/bianbu-securityd-demo.conf" \
+			"$(PACKAGE_ROOT)/lib/systemd/system/bianbu-securityd.service.d/10-development-demo.conf"; \
+		install -D -m 0644 "$(CURDIR)/debian/bianbu-security-webui-demo.conf" \
+			"$(PACKAGE_ROOT)/lib/systemd/system/bianbu-security-webui.service.d/10-development-demo.conf"; \
+	else \
+		rm -f "$(PACKAGE_ROOT)/lib/systemd/system/bianbu-securityd.service.d/10-development-demo.conf" \
+			"$(PACKAGE_ROOT)/lib/systemd/system/bianbu-security-webui.service.d/10-development-demo.conf"; \
+	fi
+	install -D -m 0644 "$(SOURCE_ROOT)/deploy/bianbu-securityd.tmpfiles" "$(PACKAGE_ROOT)/usr/lib/tmpfiles.d/bianbu-agent-securityd.conf"
+	install -d "$(PACKAGE_ROOT)/usr/share/dbus-1/system-services"
+	cp "$(SOURCE_ROOT)/deploy/io.bianbu.Security.service" "$(PACKAGE_ROOT)/usr/share/dbus-1/system-services/io.bianbu.Security.service"
+	install -D -m 0644 "$(SOURCE_ROOT)/deploy/io.bianbu.Security.conf" "$(PACKAGE_ROOT)/etc/dbus-1/system.d/io.bianbu.Security.conf"
+	install -D -m 0644 "$(SOURCE_ROOT)/deploy/io.bianbu.security.policy" "$(PACKAGE_ROOT)/usr/share/polkit-1/actions/io.bianbu.security.policy"
+	install -D -m 0644 "$(SOURCE_ROOT)/deploy/io.bianbu.securityd.rules" "$(PACKAGE_ROOT)/usr/share/polkit-1/rules.d/61-bianbu-securityd.rules"
+	install -D -m 0644 "$(SOURCE_ROOT)/data/io.bianbu.Security.xml" "$(PACKAGE_ROOT)/usr/share/dbus-1/interfaces/io.bianbu.Security.xml"
+	install -D -m 0644 "$(SOURCE_ROOT)/deploy/webui.env.example" "$(PACKAGE_ROOT)/usr/share/doc/$(PACKAGE)/webui.env.example"
+
+override_dh_installsystemd:
+	dh_installsystemd --name=bianbu-syscall-observer --no-enable --no-start
+	dh_installsystemd --name=bianbu-securityd --no-enable --no-start
+	dh_installsystemd --name=bianbu-security-webui --no-enable --no-start
+
+override_dh_dwz:
+
+override_dh_strip:

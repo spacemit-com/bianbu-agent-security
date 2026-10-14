@@ -1,0 +1,45 @@
+### P0-01 versions
+2026-09-11T19:10:43+08:00
+Linux bianbu-spacemitk3deb1 6.18.3-generic #1.0.8.4 SMP PREEMPT_DYNAMIC Mon Sep  7 19:41:36 CST 2026 riscv64 GNU/Linux
+ii  bianbu-agent-runtime   0.1.27       riscv64      local web console and runtime for Bianbu Agent
+ii  bianbu-agent-securityd 0.1.28       riscv64      Bianbu AgentOS security daemon
+Python 3.14.4
+bubblewrap 0.11.1
+systemd 259 (259-1ubuntu3bb8)
+D-Bus Message Bus Daemon 1.16.2
+### services
+active
+active
+active
+active
+active
+active
+### ports
+LISTEN 0      2048       127.0.0.1:8788       0.0.0.0:*                                              
+LISTEN 0      5            0.0.0.0:8787       0.0.0.0:*    users:(("python3",pid=93935,fd=3))        
+LISTEN 0      2048         0.0.0.0:9899       0.0.0.0:*    users:(("python",pid=2664857,fd=7))       
+### uds
+srw-rw---- bianbu-security:bianbu-security /run/bianbu/securityd.sock
+### dbus name owner
+PID=2664787
+PIDFD=yes
+PPID=1
+UID=999
+EUID=999
+SUID=999
+FSUID=999
+Comm=python
+CommandLine=/usr/lib/bianbu-securityd/venv/bin/python -m securityd.service
+Unit=bianbu-securityd.service
+UserUnit=n/a
+AuditLoginUID=n/a
+### method count
+52
+### runtime interface
+.AbortStart method ss
+.CommitStart method ssxsa{sv}
+.GetRuntimeState method s
+.GetSandboxPolicy method s
+.ListRuntimeInstances method s
+.PrepareStart method sa{sv}
+.RevokeAgent method ss

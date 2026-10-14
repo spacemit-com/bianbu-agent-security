@@ -1,0 +1,30 @@
+### post-fix probes
+2026-09-11T23:14:45+08:00
+== D-1: UDS PermissionDenied count in securityd journal since install (should be 0 for dlp/audit handlers)
+0
+== D-1: uds_dlp_scan / uds_audit_batch audit rows since install
+('build_seccomp_profile', 1)
+('uds_audit_batch', 2)
+('uds_dlp_scan', 25)
+== SC-01 via real run (yolo): deny syscall + audit event capture
+TOOL {"call_id": "call_682032446b46422e98685760", "name": "terminal", "result": "{\"output\": \"finit_module -1 1 Operation not permitted\\nSeccomp 2\\n\", \"exit_code\": 0, \"status\": \"completed\"}", "status": "success", "round": 1}
+RUN run/completed
+== syscall audit events after deny
+a{sv} 1 "events_json" s "[]"
+
+a{sv} 1 "status_json" s "{\"status\": \"degraded\", \"backend\": \"ebpf-seccomp\", \"coverage\": \"deny-only(logged-instances-only)\", \"events\": 1, \"chain_valid\": true, \"collectors\": 2, \"unlogged_instances\": [\"com.bianbu.c6f40f30a6e5-aa16cbb58ff0464591114a36d9350831\"], \"reason\": \"1 runn
+
+== kernel spool lines
+1
+{"event_id": "kernel-8ba7588b-323f-4831-a5ad-0b8db27f6d6c-213212850211802-3-2876852", "time": 1789139701.9831865, "monotonic_ns": 213212850211802, "boot_id": "8ba7588b-323f-4831-a5ad-0b8db27f6d6c", "pid": 2876852, "cgroup_id": 1204638, "number": 273, "code": 327680, "arch": "riscv64"}
+== D-2 normal-mode two consecutive runs without quota HITL
+a{sv} 5 "agent_id" s "com.bianbu.c6f40f30a6e5" "old_mode" s 
+run 0 run/completed approvals 0 null
+run 1 run/completed approvals 0 null
+a{sv} 5 "agent_id" s "com.bianbu.c6f40f30a6e5" "old_mode" s 
+== quota audit rows in last 3 min
+('quota_checked', 'bypassed:mode=yolo', 8)
+('quota_checked', 'quota_checked', 11)
+== final state
+a{sv} 4 "agent_id" s "com.bianbu.c6f40f30a6e5" "mode" s "yolo" "updated_at" s "2
+mode\": \"allow_all\"

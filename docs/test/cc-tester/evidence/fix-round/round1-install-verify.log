@@ -1,0 +1,67 @@
+### install fixed packages
+2026-09-11T23:12:04+08:00
+-rw-r--r-- 1 bianbu bianbu 18589598 Sep 11 23:11 /var/tmp/bnsec-cc-fix-20260911/bianbu-agent-runtime_0.1.27_riscv64.deb
+-rw-r--r-- 1 bianbu bianbu  1026450 Sep 11 23:10 /var/tmp/bnsec-cc-fix-20260911/bianbu-agent-securityd_0.1.28_riscv64.deb
+
+(正在读取数据库 ... 系统当前共安装有 431549 个文件和目录。)
+准备解压 .../bianbu-agent-securityd_0.1.28_riscv64.deb  ...
+正在解压 bianbu-agent-securityd (0.1.28) 并覆盖 (0.1.28) ...
+准备解压 .../bianbu-agent-runtime_0.1.27_riscv64.deb  ...
+正在解压 bianbu-agent-runtime (0.1.27) 并覆盖 (0.1.27) ...
+正在设置 bianbu-agent-securityd (0.1.28) ...
+bianbu-agent-securityd: development/demo delivery; Agent manifest and code-package signature verification is disabled
+正在设置 bianbu-agent-runtime (0.1.27) ...
+Security binding reset: agent=com.bianbu.runtime removed=True
+registered Security Runtime manifest: agent=com.bianbu.runtime permissions=22
+正在处理用于 dbus (1.16.2-2ubuntu4) 的触发器 ...
+正在处理用于 libc-bin (2.43-2ubuntu2bb2) 的触发器 ...
+正在处理用于 desktop-file-utils (0.28-1build1) 的触发器 ...
+正在处理用于 hicolor-icon-theme (0.18-2build1) 的触发器 ...
+### states
+active
+active
+active
+active
+ii  bianbu-agent-runtime   0.1.27       riscv64      local web console and runtime for Bianbu Agent
+ii  bianbu-agent-securityd 0.1.28       riscv64      Bianbu AgentOS security daemon
+### polkit rule installed
+-rw-r--r-- 1 root root 1467 Sep 11 11:48 /usr/share/polkit-1/rules.d/61-bianbu-securityd.rules
+### new dbus methods
+.GetTokenBudgetV2               method sa{sv}       a{sv}        -
+.StopInstance         method sss       a{sv}        -
+### plugin uds identity installed
+/usr/share/bianbu-agent-runtime/default-profile/plugins/bianbu.security/lib/uds_transport.py:2
+/home/bianbu/.bianbu-agent/plugins/bianbu.security/lib/uds_transport.py:2
+### worker 2874989
+Seccomp:	2
+Seccomp_filters:	3
+BIANBU_SECCOMP_AUDIT_FILTER=/run/bianbu/sandbox/com.bianbu.runtime/seccomp.bpf
+BIANBU_WORKER_INSTANCE_ID=com.bianbu.c6f40f30a6e5-aa16cbb58ff0464591114a36d9350831
+BIANBU_WORKER_BACKEND=host-process
+### D-9 reap: instance states after restart
+('4a36d9350831', 'running', 2874989)
+('22b38484c063', 'lost', 2725611)
+('1e51ed5791c1', 'lost', 2665040)
+('1a337d894ccb', 'lost', 2663960)
+('fff655f0f43e', 'lost', 2389566)
+### D-4 worker view / D-10 seccomp version / D-3 audit status
+a{sv} 1 "status_json" s "{"agent_id": "com.bianbu.c6f40f30a6e5", "control": {"state": "running"}, "securityd": {"state": "running"}, "worker": {"state": "running", "instances": 1, "instance_id": "com.bianbu.c6f40f30a6e5-aa16cbb58ff0464591114a36d9350831", "lease_id": "fde0bb379f50468ab011b8c133406221", "pid": 2874989, "cgroup_path": "/system.slice/bianbu-agent-com.bianbu.runtime-4a36d9350831.scope", "backend": "host-process", "started_at": 1789139570}, "seccomp": {"status": "pending_restart", "arch": "riscv64", "mandatory": ["reboot", "swapon", "swapoff", "kexec_load", "kexec_file_load", "init_module", "finit_module", "delete_module", "mount", "umount2", "pivot_root", "perf_event_open"], "global_additions": [], "agent_additions": [], "effective": ["reboot", "swapon", "swapoff", "kexec_load", "kexec_file_load", "init_module", "finit_module", "delete_module", "mount", "umount2", "pivot_root", "perf_event_open"], "policy_version": 2, "applied_policy_version": 0, "pending_restart": true}, "audit": {"status": "degraded", "backend": "ebpf-seccomp", "coverage": "deny-only(logged-instances-only)", "events": 0, "chain_valid": true, "collectors": 2, "unlogged_instances": ["com.bianbu.c6f40f30a6e5-aa16cbb58ff0464591114a36d9350831"], "reason": "1 running instance(s) load seccomp without SECCOMP_FILTER_FLAG_LOG; their denials are enforced but not audited"}}"
+
+### lease policy seccomp_profile (host)
+host {'path': '/run/bianbu/sandbox/com.bianbu.runtime/seccomp.bpf', 'policy_version': 2}
+### D-8 unregistered agent
+a{sv} 1 "json" s "{\"agent_id\": \"com.bianbu.does.not.exist\", \"registered\": false, \"manifest\": null, \"capabilities\": [], \"token_budget\": null, \"network\": null}"
+### D-2 GetTokenBudgetV2
+a{sv} 8 "agent_id" s "com.bianbu.c6f40f30a6e5" "unit" s "token" "on_exceed" s "pause_and_notify" "limit_per_conversation" s "0" "limit_per_day" s "0" "conv_used" s "0" "day_used" s "833834" "session_id" s "cc-fix-s1"
+### D-6 network deny_all hot apply
+b true
+IPAddressAllow=
+IPAddressDeny=::/0 0.0.0.0/0
+mode\": \"deny_all\"
+### restore allow_all
+b true
+IPAddressAllow=
+IPAddressDeny=
+### securityd journal errors since restart
+      1 runtime: 4 个 running 实例的进程已不存在，已标记 lost
+2026-09-11T23:13:18+08:00

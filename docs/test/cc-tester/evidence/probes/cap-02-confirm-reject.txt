@@ -1,0 +1,34 @@
+### CAP-02 CONFIRM (reject) on dangling approval from interrupted probe
+2026-09-11T19:27:36+08:00
+run/event | {"kind": "usage", "payload": {"prompt_tokens": 18017, "completion_tokens": 77}}
+tool/call.started | {"call_id": "call_01a09036af3e7012b93eb430", "name": "terminal", "arguments": {"command": "echo BNSEC-CONFIRM"}, "round": 1}
+approval/requested | {"approval_id": "40af0a007ac50e5d618382f3260456b3", "actions": [{"name": "terminal", "arguments": {"command": "echo BNSEC-CONFIRM"}, "tool_metadata": {"source_path": "/home/bianbu/.bianbu-agent/tools/terminal/tool.py", "version": "0.1.27", "content_digest": "8074440cab08171b19262b165b5ea8552f7453cb6c82d88ddc09943573ef4d5f", "module_name": "_bianbu_agent_tool_terminal_41b81acb8de6b9f15decdf9bc3ff3519639e608f1ad4525e0071994141e69723_8074440cab08171b19262b165b5ea8552f7453cb6c82d88ddc09943573ef4d5f.
+approval_id=40af0a007ac50e5d618382f3260456b3
+== session row
+{'id': 'cc-confirm-reject-1789125894', 'pending_interaction': 'approval', 'active_run_id': 'e15ab7c9-efcc-4584-93a5-e326aa998502'}
+== POST reject
+{"data":{"accepted":true}} http=200
+== duplicate POST
+{"error":{"code":"session_control_conflict","message":"Pending Run action was not found","details":{}}} http=409
+== events after reject
+tool/call.started | {"call_id": "call_01a09036af3e7012b93eb430", "name": "terminal", "arguments": {"command": "echo BNSEC-CONFIRM"}, "round": 1}
+approval/requested | {"approval_id": "40af0a007ac50e5d618382f3260456b3", "actions": [{"name": "terminal", "arguments": {"command": "echo BNSEC-CONFIRM"}, "tool_metadata": {"source_path": "/home/bianbu/.bianbu-agent/tools/terminal/tool.py", "version": "0.1.27", "content_digest": "8074440cab08171b19262b165b5ea8552f7453cb6c82d88ddc09943573ef4d5f", "module_name": "_bianbu_agent_tool_terminal_41b81acb8de6b9f15decdf9bc3ff35
+approval/resolved | {"approval_id": "40af0a007ac50e5d618382f3260456b3", "decision": "reject"}
+tool/call.completed | {"call_id": "call_01a09036af3e7012b93eb430", "name": "terminal", "result": "cc-tester", "status": "error", "round": null}
+run/completed | {"status": "completed", "content": "\n\nBNSEC-CONFIRM", "usage": {"input_tokens": 36129, "output_tokens": 85, "total_tokens": 36214, "metadata": {"events": 2}}, "error": null, "result": {"request_id": "e15ab7c9-efcc-4584-93a5-e326aa998502", "status": "completed", "content": "\n\nBNSEC-CONFIRM", "usage": {"input_tokens": 36129, "output_tokens": 85, "total_tokens": 36214, "metadata": {"events": 2}},
+== audit for this run window
+(756, '2026-09-11T11:24:54.966+00:00', 'security_mode_change', 'agent=com.bianbu.c6f40f30a6e5;old_mode=yolo;new_mode=normal;', 'success')
+(757, '2026-09-11T11:24:54.974+00:00', 'set_token_budget', 'conv=1000000000,day=1000000000', 'applied')
+(759, '2026-09-11T11:24:55.413+00:00', 'hook:agent_startup', 'ALLOW', 'dlp_startup@0.0=ALLOW')
+(760, '2026-09-11T11:24:55.623+00:00', 'hook:input', 'ALLOW', 'dlp_input@0.4=ALLOW')
+(761, '2026-09-11T11:24:55.634+00:00', 'hook:pre_model_call', 'ALLOW', 'dlp_pre_model@0.4=ALLOW')
+(762, '2026-09-11T11:24:55.641+00:00', 'quota_checked', 'e15ab7c9-efcc-4584-93a5-e326aa998502', 'quota_checked')
+(763, '2026-09-11T11:24:55.823+00:00', 'quota_checked', 'e15ab7c9-efcc-4584-93a5-e326aa998502', 'quota_checked')
+(764, '2026-09-11T11:24:58.464+00:00', 'token_metered', '01a09036-a688-7112-82d3-c8f67471c2a8', '18094')
+(765, '2026-09-11T11:24:58.478+00:00', 'check_permission', 'system.execute:echo', 'confirm')
+(766, '2026-09-11T11:27:36.639+00:00', 'quota_checked', 'e15ab7c9-efcc-4584-93a5-e326aa998502', 'quota_checked')
+(767, '2026-09-11T11:27:36.662+00:00', 'check_permission', 'system.execute:echo', 'confirm')
+(768, '2026-09-11T11:27:36.691+00:00', 'quota_checked', 'e15ab7c9-efcc-4584-93a5-e326aa998502', 'quota_checked')
+(769, '2026-09-11T11:27:39.022+00:00', 'token_metered', '01a09039-1aeb-7b60-a312-197063ba1f1b', '18120')
+(770, '2026-09-11T11:27:39.040+00:00', 'check_permission', 'system.execute:echo', 'confirm')
+(771, '2026-09-11T11:27:39.351+00:00', 'hook:agent_shutdown', 'ALLOW', 'dlp_shutdown@0.0=ALLOW')

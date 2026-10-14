@@ -1,0 +1,184 @@
+[
+  {
+    "mode": "normal",
+    "action": "mask",
+    "run": {
+      "request_id": "ee93880b-7ffa-4cc9-bc75-eb75091f804b",
+      "status": "completed",
+      "content": "Accepted.",
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 2,
+        "total_tokens": 4,
+        "metadata": {
+          "events": 1
+        }
+      },
+      "error": null,
+      "metadata": {
+        "bianbu.security": {}
+      },
+      "result": {
+        "request_id": "ee93880b-7ffa-4cc9-bc75-eb75091f804b",
+        "status": "completed",
+        "content": "Accepted.",
+        "usage": {
+          "input_tokens": 2,
+          "output_tokens": 2,
+          "total_tokens": 4,
+          "metadata": {
+            "events": 1
+          }
+        },
+        "error": null,
+        "metadata": {
+          "bianbu.security": {}
+        }
+      },
+      "run_id": "ee93880b-7ffa-4cc9-bc75-eb75091f804b",
+      "session_id": "t-8e626f78f2"
+    },
+    "requests": [
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-d5b326819378\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.53b3e1cef29f\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Synthetic history: [PII-phone-001]",
+          "role": "user"
+        },
+        {
+          "content": "Accepted.",
+          "role": "assistant"
+        },
+        {
+          "content": "Continue.",
+          "role": "user"
+        }
+      ]
+    ]
+  },
+  {
+    "mode": "normal",
+    "action": "block",
+    "run": {
+      "request_id": "a9f4a66e-5b56-48b9-8638-3fe39db5e9d4",
+      "status": "failed",
+      "content": "",
+      "usage": null,
+      "error": {
+        "code": "run_failed",
+        "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+        "details": {}
+      },
+      "metadata": {},
+      "result": {
+        "request_id": "a9f4a66e-5b56-48b9-8638-3fe39db5e9d4",
+        "status": "failed",
+        "content": "",
+        "usage": null,
+        "error": {
+          "code": "run_failed",
+          "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+          "details": {}
+        },
+        "metadata": {}
+      },
+      "run_id": "a9f4a66e-5b56-48b9-8638-3fe39db5e9d4",
+      "session_id": "t-8e626f78f2"
+    },
+    "requests": []
+  },
+  {
+    "mode": "yolo",
+    "action": "mask",
+    "run": {
+      "request_id": "f2d8397d-95e1-44f9-a24e-098645af942e",
+      "status": "completed",
+      "content": "Accepted.",
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 2,
+        "total_tokens": 4,
+        "metadata": {
+          "events": 1
+        }
+      },
+      "error": null,
+      "metadata": {
+        "bianbu.security": {}
+      },
+      "result": {
+        "request_id": "f2d8397d-95e1-44f9-a24e-098645af942e",
+        "status": "completed",
+        "content": "Accepted.",
+        "usage": {
+          "input_tokens": 2,
+          "output_tokens": 2,
+          "total_tokens": 4,
+          "metadata": {
+            "events": 1
+          }
+        },
+        "error": null,
+        "metadata": {
+          "bianbu.security": {}
+        }
+      },
+      "run_id": "f2d8397d-95e1-44f9-a24e-098645af942e",
+      "session_id": "t-34f23aca71"
+    },
+    "requests": [
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-d5b326819378\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.53b3e1cef29f\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Synthetic history: [PII-phone-001]",
+          "role": "user"
+        },
+        {
+          "content": "Accepted.",
+          "role": "assistant"
+        },
+        {
+          "content": "Continue.",
+          "role": "user"
+        }
+      ]
+    ]
+  },
+  {
+    "mode": "yolo",
+    "action": "block",
+    "run": {
+      "request_id": "f5a37f0f-8827-43b8-af59-5b8dc394baf2",
+      "status": "failed",
+      "content": "",
+      "usage": null,
+      "error": {
+        "code": "run_failed",
+        "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+        "details": {}
+      },
+      "metadata": {},
+      "result": {
+        "request_id": "f5a37f0f-8827-43b8-af59-5b8dc394baf2",
+        "status": "failed",
+        "content": "",
+        "usage": null,
+        "error": {
+          "code": "run_failed",
+          "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+          "details": {}
+        },
+        "metadata": {}
+      },
+      "run_id": "f5a37f0f-8827-43b8-af59-5b8dc394baf2",
+      "session_id": "t-34f23aca71"
+    },
+    "requests": []
+  }
+]

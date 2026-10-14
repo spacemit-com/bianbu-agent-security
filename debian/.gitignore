@@ -1,0 +1,10 @@
+.bianbu-agent-securityd-build/
+.debhelper/
+bianbu-agent-securityd/
+*.substvars
+debhelper-build-stamp
+files
+*.deb
+*.buildinfo
+*.changes
+*.debhelper*

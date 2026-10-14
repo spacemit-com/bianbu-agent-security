@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD polkit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/polkit-1/policyconfig.dtd">
+<policyconfig>
+  <action id="io.bianbu.security.manage">
+    <description>管理 Bianbu Security 策略</description>
+    <message>需要管理员身份才能修改 Agent 安全策略</message>
+    <defaults>
+      <allow_any>no</allow_any><allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+  <action id="io.bianbu.security.confirm">
+    <description>响应 Bianbu Security 确认请求</description>
+    <message>需要当前桌面用户确认敏感操作</message>
+    <defaults>
+      <allow_any>no</allow_any><allow_inactive>no</allow_inactive>
+      <allow_active>auth_self_keep</allow_active>
+    </defaults>
+  </action>
+</policyconfig>

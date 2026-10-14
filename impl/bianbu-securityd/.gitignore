@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/fixtures/test-security-agent/
+tests/fixtures/no-sig-agent/
+tests/fixtures/no-manifest/
+*.db
+*.db-wal
+*.db-shm
+
+# build artifacts
+/build/
+*.egg-info/
+*.swp

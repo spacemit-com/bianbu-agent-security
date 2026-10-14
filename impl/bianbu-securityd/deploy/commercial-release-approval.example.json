@@ -1,0 +1,19 @@
+{
+  "format": "bianbu-security-release-approval-v1",
+  "approved": true,
+  "source_revision": "REPLACE_WITH_RELEASE_COMMIT",
+  "release_tag": "REPLACE_WITH_RELEASE_TAG",
+  "change_request": "REPLACE_WITH_CHANGE_REQUEST_ID",
+  "approvers": [
+    "REPLACE_WITH_SECURITY_APPROVER",
+    "REPLACE_WITH_QA_APPROVER"
+  ],
+  "issued_at": "REPLACE_WITH_RFC3339_UTC",
+  "evidence_sha256": {
+    "security_summary": "REPLACE_WITH_64_HEX_SHA256",
+    "soak_report": "REPLACE_WITH_64_HEX_SHA256",
+    "ca_evidence": "REPLACE_WITH_64_HEX_SHA256",
+    "desktop_evidence": "REPLACE_WITH_64_HEX_SHA256",
+    "pentest_evidence": "REPLACE_WITH_64_HEX_SHA256"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "format": "bianbu-security-desktop-evidence-v1",
+  "status": "passed",
+  "environment": "production",
+  "issued_at": "REPLACE_WITH_RFC3339_UTC",
+  "issuer": "REPLACE_WITH_DESKTOP_QA_TEAM",
+  "seat": "REPLACE_WITH_REAL_SEAT",
+  "session_id": "REPLACE_WITH_REAL_SESSION_ID",
+  "cases": {
+    "allow": true,
+    "deny": true,
+    "expired": true,
+    "replay": true
+  },
+  "artifacts": [
+    {
+      "path": "REPLACE_WITH_POLKIT_TEST_LOG",
+      "sha256": "REPLACE_WITH_64_HEX_SHA256"
+    }
+  ]
+}

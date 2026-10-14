@@ -1,0 +1,123 @@
+### SC-02 syscall policy / SC-03 audit status / NET-01 network policy / TOK-01 budget
+2026-09-11T19:11:26+08:00
+== GetSyscallAuditStatus
+a{sv} 1 "status_json" s "{\"status\": \"active\", \"backend\": \"ebpf-seccomp\", \"coverage\": \"deny-only\", \"events\": 0, \"chain_valid\": true, \"collectors\": 1, \"reason\": \"\"}"
+== GetSyscallPolicy PA riscv64
+a{sv} 1 "policy_json" s "{\"arch\": \"riscv64\", \"mandatory\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"init_module\", \"finit_module\", \"delete_module\", \"mount\", \"umount2\", \"pivot_root\", \"perf_event_open\"], \"global_additions\": [], \"agent_additions\": [], \"effective\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"init_module\", \"finit_module\", \"delete_module\", \"mount\", \"umount2\", \"pivot_root\", \"perf_event_open\"], \"policy_version\": 0, \"applied_policy_version\": 0, \"pending_restart\": false}"
+
+== try delete mandatory via SetAgentSyscallPolicy with only non-mandatory additions (should keep baseline)
+a{sv} 1 "policy_json" s "{\"arch\": \"riscv64\", \"mandatory\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"init_module\", \"finit_module\", \"delete_module\", \"mount\", \"umount2\", \"pivot_root\", \"perf_event_open\"], \"global_additions\": [], \"agent_additions\": [\"bpf\"], \"effective\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"init_module\", \"finit_module\", \"delete_module\", \"mount\", \"umount2\", \"pivot_root\", \"perf_event_open\", \"bpf\"], \"policy_version\": 1, \"applied_policy_version\": 0, \"pending_restart\
+
+== unknown syscall name rejected?
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 642, in SetAgentSyscallPolicy
+    return _dbus_result({"policy_json": __import__("json").dumps(self.engine.set_agent_syscall_policy(str(agent_id), str(arch), [str(x) for x in additions], str(caller.uid)), ensure_ascii=False)})
+                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/bianbu-securityd/securityd/engine.py", line 400, in set_agent_syscall_policy
+    result = self.syscall_policy.set_agent(str(agent_id), str(arch), additions, actor)
+  File "/usr/lib/bianbu-securityd/securityd/syscall_policy.py", line 97, in set_agent
+    return self._set("agent", str(agent_id), arch, additions, updated_by)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/bianbu-securityd/securityd/syscall_policy.py", line 83, in _set
+    additions = self._validate(arch, additions)
+  File "/usr/lib/bianbu-securityd/securityd/syscall_policy.py", line 69, in _validate
+    raise SyscallPolicyError(f"UnknownSyscall: {n}")
+securityd.syscall_policy.SyscallPolicyError: UnknownSyscall: not_a_syscall
+
+== wrong arch rejected?
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 642, in SetAgentSyscallPolicy
+    return _dbus_result({"policy_json": __import__("json").dumps(self.engine.set_agent_syscall_policy(str(agent_id), str(arch), [str(x) for x in additions], str(caller.uid)), ensure_ascii=False)})
+                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/bianbu-securityd/securityd/engine.py", line 400, in set_agent_syscall_policy
+    result = self.syscall_policy.set_agent(str(agent_id), str(arch), additions, actor)
+  File "/usr/lib/bianbu-securityd/securityd/syscall_policy.py", line 97, in set_agent
+    return self._set("agent", str(agent_id), arch, additions, updated_by)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/bianbu-securityd/securityd/syscall_policy.py", line 83, in _set
+    additions = self._validate(arch, additions)
+  File "/usr/lib/bianbu-securityd/securityd/syscall_policy.py", line 64, in _validate
+    self._arch(arch)
+    ~~~~~~~~~~^^^^^^
+  File "/usr/lib/bianbu-securityd/securityd/syscall_policy.py", line 61, in _arch
+    raise SyscallPolicyError(f"UnsupportedArch: {arch}")
+securityd.syscall_policy.SyscallPolicyError: UnsupportedArch: sparc
+
+== reset agent policy
+a{sv} 1 "policy_json" s "{\"arch\": \"riscv64\", \"mandatory\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"init_module\", \"finit_module\", \"delete_module\", \"mount\", \"umount2\", \"pivot_root\", \"perf_event_open\"], \"global_additions\": [], \"agent_additions\": [], \"effective\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"in
+
+== execution status after reset
+a{sv} 1 "status_json" s "{\"agent_id\": \"com.bianbu.c6f40f30a6e5\", \"control\": {\"state\": \"running\"}, \"securityd\": {\"state\": \"running\"}, \"worker\": {\"state\": \"unknown\"}, \"seccomp\": {\"status\": \"pending_restart\", \"arch\": \"riscv64\", \"mandatory\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"init_module\", \"finit_module\", \"delete_module\", \"mount\", \"umount2\", \"pivot_root\", \"perf_event_open\"], \"global_additions\": [], \"agent_additions\": [], \"effective\": [\"reboot\", \"swapon\", \"swapoff\", \"kexec_load\", \"kexec_file_load\", \"init_module\", \"finit_module\", \"delete_module\", \"mount\", \"umount2\", \"pivot_root\", \"perf_event_open\"], \"policy_version\": 2, \"applied_policy_version\": 0, \"pending_restart\": true}, \"audit\": {\"status\": \"active\", \"backend\": \"ebpf-seccomp\", \"coverage\": \"deny-only\", \"
+
+== kernel observer spool
+total 8
+drwxr-xr-x  2 root root  100 Sep 11 19:11 .
+drwxr-xr-x 44 root root 1100 Sep 11 19:11 ..
+-rw-r--r--  1 root root    0 Sep 11 11:35 events.jsonl
+-rw-r--r--  1 root root   97 Sep 11 19:11 status.json
+-rw-r--r--  1 root root   14 Sep 11 18:03 traceable-functions
+{"status": "active", "backend": "ebpf-seccomp", "pid": 2662696, "updated_at": 1789125086.5953398}
+== syscall audit events (runtime api)
+[]
+== network policy
+a{sv} 1 "json" s "{\"agent_id\": \"com.bianbu.c6f40f30a6e5\", \"mode\": \"allow_all\", \"domains\": [], \"rules_path\": \"/run/bianbu/sandbox/com.bianbu.c6f40f30a6e5/netfilter.rules\", \"exists\": false, \"version\": 1, \"enforcement\": {\"agent_id\": \"com.bianbu.c6f40f30a6e5\", \"mode\": \"systemd\", \"enforced\": true, \"backends\": [\"nft\", \"iptables\"], \"reason\": \"\"}, \"apply\": {\"requested\": true, \"active_instances\": 1, \"applied_instances\": 1, \"failed_instances\": 0, \"effective\": true, \"restart_required\": false, \"restart_required_instances\": 0}}"
+
+== network learning status
+a{sv} 1 "json" s "{\"agent_id\": \"com.bianbu.c6f40f30a6e5\", \"state\": \"inactive\", \"reason\": \"\", \"active_instances\": 0, \"reported_instances\": 0, \"updated_at\": 0.0}"
+
+== invalid network mode rejected?
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 767, in SetNetworkPolicy
+    ok = self.engine.set_network_policy(str(agent_id), [str(d) for d in domains], str(mode))
+  File "/usr/lib/bianbu-securityd/securityd/engine.py", line 541, in set_network_policy
+    configured = self.registry.set_network_policy(agent_id, domains, mode)
+  File "/usr/lib/bianbu-securityd/securityd/capability_registry.py", line 570, in set_network_policy
+    raise ValueError(f"unsupported network policy mode: {mode}")
+ValueError: unsupported network policy mode: bogus_mode
+
+== token budget
+a{sv} 7 "agent_id" s "com.bianbu.c6f40f30a6e5" "unit" s "token" "on_exceed" s "pause_and_notify" "limit_per_conversation" s "100000" "limit_per_day" s "500000" "conv_used" s "225176" "day_used" s "450765"
+== invalid on_exceed rejected?
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 891, in SetTokenBudget
+    ok = self.engine.set_token_budget(
+        str(agent_id), int(limit_conv), int(limit_day), str(on_exceed))
+  File "/usr/lib/bianbu-securityd/securityd/engine.py", line 336, in set_token_budget
+    self.tokens.set_budget(agent_id, limit_conv, limit_day, on_exceed)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/bianbu-securityd/securityd/token_meter.py", line 71, in set_budget
+    raise ValueError("on_exceed must be pause_and_notify or deny")
+ValueError: on_exceed must be pause_and_notify or deny
+
+== dlp invalid action rejected?
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 916, in SetDLPPolicy
+    DLPPolicyStore().set_policy(aid, pt, DLPAction(act))
+                                         ~~~~~~~~~^^^^^
+  File "/usr/lib/python3.14/enum.py", line 708, in __call__
+    return cls.__new__(cls, value)
+           ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/usr/lib/python3.14/enum.py", line 1193, in __new__
+    raise ve_exc
+ValueError: 'nuke' is not a valid DLPAction
+== dlp invalid pii type rejected?
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 915, in SetDLPPolicy
+    raise ValueError("非法 pii_type")
+ValueError: 非法 pii_type
+== unknown agent
+a{sv} 1 "json" s "{\"agent_id\": \"com.bianbu.does.not.exist\", \"manifest\": null, \"capabilities\": [], \"token_budget\": {\"agent_id\": \"com.bianbu.does.not.exist\", \"unit\": \"token\", \"on_exceed\": \"pause_and_notify\", \"limit_per_conversation\": 100000, \"limit_per_day\": 500000, \"conv_us
+== L3/L4 confirm=trusted rejected (PERM-03 contract via SetCapabilityGranted on unknown cap)
+b false

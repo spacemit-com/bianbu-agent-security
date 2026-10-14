@@ -1,0 +1,108 @@
+[19:28:09] ### CAP-02 CONFIRM -> HITL approvals (normal mode)
+[19:28:09] system.execute before: {'capability': 'system.execute', 'domain': 'execute', 'risk_level': 'L4', 'confirm': 'always', 'granted': '1'}
+[19:28:09] mode -> normal
+[19:28:09] real budget: {'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': '100000', 'limit_per_day': '500000', 'conv_used': '409886', 'day_used': '635475'}
+[19:28:09] -- decision=reject
+[19:28:09] run_id=75069b41-59e1-4c19-87f0-6231d7d6cd57 session=cc-confirm-reject-1789126089
+[19:28:21]    approval requested: {"approval_id": "19ffab52ce7526f6a5d2ef8b6183253d", "actions": [{"name": "terminal", "arguments": {"command": "echo BNSEC-CONFIRM"}, "tool_metadata": {"source_path": "/home/bianbu/.bianbu-agent/tools/terminal/tool.py", "version": "0.1.27", "content_digest": "8074440cab08171b19262b165b5ea8552f7453cb6c82d88ddc09943573ef4d5f", "module_name": "_bianbu_agent_tool_terminal_41b81acb8de6b9f15decdf9bc3ff3519639e608f1ad4525e0071994141e69723_8074440cab08171b19262b165b5ea8552f7453cb6c82d88ddc09943573ef4d5f.
+[19:28:21]    session list row: {"status": null, "pending_interaction": "approval", "active_run_id": "75069b41-59e1-4c19-87f0-6231d7d6cd57", "waiting": true}
+[19:28:21]    POST approvals -> 200 {'data': {'accepted': True}}
+[19:28:21]    duplicate POST -> 409 (expect 409)
+[19:28:40]    terminal: {"type": "run/completed", "status": "completed", "error": null, "content": "\n\n\n\n终端工具的 `result` 字段返回的内容为：`cc-tester`"}
+[19:28:40]    approval seen: True
+[19:28:42]    audit seq=778 hook:agent_startup ALLOW -> dlp_startup@0.0=ALLOW
+[19:28:42]    audit seq=779 hook:input ALLOW -> dlp_input@0.5=ALLOW
+[19:28:42]    audit seq=780 hook:pre_model_call ALLOW -> dlp_pre_model@0.5=ALLOW
+[19:28:42]    audit seq=781 quota_checked 75069b41-59e1-4c19-87f0-6231d7d6cd57 -> quota_checked
+[19:28:42]    audit seq=782 quota_checked 75069b41-59e1-4c19-87f0-6231d7d6cd57 -> quota_checked
+[19:28:42]    audit seq=783 token_metered 01a09039-9eba-7b91-b4dd-8acbed8a4612 -> 17266
+[19:28:42]    audit seq=784 check_permission system.execute:echo -> confirm
+[19:28:42]    audit seq=785 quota_checked 75069b41-59e1-4c19-87f0-6231d7d6cd57 -> quota_checked
+[19:28:42]    audit seq=786 check_permission system.execute:echo -> confirm
+[19:28:42]    audit seq=787 quota_checked 75069b41-59e1-4c19-87f0-6231d7d6cd57 -> quota_checked
+[19:28:42]    audit seq=788 token_metered 01a09039-cb94-77e0-ae31-ca2efeec734d -> 18306
+[19:28:42]    audit seq=789 check_permission system.execute:echo -> confirm
+[19:28:42]    audit seq=790 hook:agent_shutdown ALLOW -> dlp_shutdown@0.0=ALLOW
+[19:28:42] -- decision=approve
+[19:28:42] run_id=e277fb41-4cdb-44db-85f4-ed4c0029651f session=cc-confirm-approve-1789126122
+[19:28:48]    approval requested: {"approval_id": "c12bb45a33796be6ab325fc076345fa8", "actions": [{"name": "terminal", "arguments": {"command": "echo BNSEC-CONFIRM"}, "tool_metadata": {"source_path": "/home/bianbu/.bianbu-agent/tools/terminal/tool.py", "version": "0.1.27", "content_digest": "8074440cab08171b19262b165b5ea8552f7453cb6c82d88ddc09943573ef4d5f", "module_name": "_bianbu_agent_tool_terminal_41b81acb8de6b9f15decdf9bc3ff3519639e608f1ad4525e0071994141e69723_8074440cab08171b19262b165b5ea8552f7453cb6c82d88ddc09943573ef4d5f.
+[19:28:48]    session list row: {"status": null, "pending_interaction": "approval", "active_run_id": "e277fb41-4cdb-44db-85f4-ed4c0029651f", "waiting": true}
+[19:28:48]    POST approvals -> 200 {'data': {'accepted': True}}
+[19:28:48]    duplicate POST -> 409 (expect 409)
+[19:28:51]    terminal: {"type": "run/completed", "status": "completed", "error": null, "content": "\n\n\n\nBNSEC-CONFIRM"}
+[19:28:51]    approval seen: True
+[19:28:53]    audit seq=791 hook:agent_startup ALLOW -> dlp_startup@0.0=ALLOW
+[19:28:53]    audit seq=792 hook:input ALLOW -> dlp_input@0.4=ALLOW
+[19:28:53]    audit seq=793 hook:pre_model_call ALLOW -> dlp_pre_model@0.4=ALLOW
+[19:28:53]    audit seq=794 quota_checked e277fb41-4cdb-44db-85f4-ed4c0029651f -> quota_checked
+[19:28:53]    audit seq=795 quota_checked e277fb41-4cdb-44db-85f4-ed4c0029651f -> quota_checked
+[19:28:53]    audit seq=796 token_metered 01a0903a-1d74-7010-88ca-d99671664138 -> 18155
+[19:28:53]    audit seq=797 check_permission system.execute:echo -> confirm
+[19:28:53]    audit seq=798 quota_checked e277fb41-4cdb-44db-85f4-ed4c0029651f -> quota_checked
+[19:28:53]    audit seq=799 check_permission system.execute:echo -> confirm
+[19:28:53]    audit seq=800 check_permission system.execute:echo -> confirm
+[19:28:53]    audit seq=801 hook:pre_tool_call CONFIRM -> sec_capability@2.9=CONFIRM,dlp_pre_tool@0.2=ALLOW
+[19:28:53]    audit seq=802 terminal executed -> ok
+[19:28:53]    audit seq=803 quota_checked e277fb41-4cdb-44db-85f4-ed4c0029651f -> quota_checked
+[19:28:53]    audit seq=804 token_metered 01a0903a-339a-7551-a2e0-cd9affd94217 -> 18225
+[19:28:53]    audit seq=805 check_permission system.execute:echo -> confirm
+[19:28:53]    audit seq=806 hook:agent_shutdown ALLOW -> dlp_shutdown@0.0=ALLOW
+[19:28:53] budget restored 100000 500000
+[19:28:53] mode -> yolo
+[19:28:53] system.execute after: {'capability': 'system.execute', 'domain': 'execute', 'risk_level': 'L4', 'confirm': 'always', 'granted': '1'}
+[19:28:53] ### NET-01 network policy deny_all on running Worker
+[19:28:53] policy before: {"mode": "allow_all", "domains": [], "apply": {"requested": true, "active_instances": 1, "applied_instances": 1, "failed_instances": 0, "effective": true, "restart_required": false, "restart_required_instances": 0}, "enforcement": {"agent_id": "com.bianbu.c6f40f30a6e5", "mode": "systemd", "enforced": true, "backends": ["nft", "iptables"], "reason": ""}}
+[19:28:53] scope unit: bianbu-agent-com.bianbu.runtime-1e51ed5791c1.scope
+Traceback (most recent call last):
+  File "/var/tmp/bnsec-cc-tester-20260911/probes/cc_probes.py", line 96, in <module>
+    ok = iface.SetNetworkPolicy(AGENT, dbus.Array([], signature="s"), "deny_all"); log("SetNetworkPolicy deny_all ->", bool(ok)); time.sleep(3)
+  File "/usr/lib/python3/dist-packages/dbus/proxies.py", line 141, in __call__
+    return self._connection.call_blocking(self._named_service,
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                                          self._object_path,
+                                          ^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                                          args,
+                                          ^^^^^
+                                          **keywords)
+                                          ^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/dbus/connection.py", line 696, in call_blocking
+    reply_message = self.send_message_with_reply_and_block(
+        message, timeout)
+dbus.exceptions.DBusException: org.freedesktop.DBus.Python.securityd.errors.PermissionDenied: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 767, in SetNetworkPolicy
+    ok = self.engine.set_network_policy(str(agent_id), [str(d) for d in domains], str(mode))
+  File "/usr/lib/bianbu-securityd/securityd/engine.py", line 601, in set_network_policy
+    raise PermissionDenied(str(result.get("reason", "网络策略热更新失败")))
+securityd.errors.PermissionDenied: Command '['systemctl', 'set-property', '--runtime', 'bianbu-agent-com.bianbu.runtime-1e51ed5791c1.scope', 'IPAddressDeny=any']' returned non-zero exit status 1.
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/var/tmp/bnsec-cc-tester-20260911/probes/cc_probes.py", line 105, in <module>
+    ok = iface.SetNetworkPolicy(AGENT, dbus.Array([str(d) for d in np0.get("domains", [])], signature="s"), str(np0.get("mode", "allow_all"))); log("restored network policy ->", bool(ok), np0.get("mode")); time.sleep(3)
+  File "/usr/lib/python3/dist-packages/dbus/proxies.py", line 141, in __call__
+    return self._connection.call_blocking(self._named_service,
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+                                          self._object_path,
+                                          ^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+                                          args,
+                                          ^^^^^
+                                          **keywords)
+                                          ^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/dbus/connection.py", line 696, in call_blocking
+    reply_message = self.send_message_with_reply_and_block(
+        message, timeout)
+dbus.exceptions.DBusException: org.freedesktop.DBus.Python.securityd.errors.PermissionDenied: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 767, in SetNetworkPolicy
+    ok = self.engine.set_network_policy(str(agent_id), [str(d) for d in domains], str(mode))
+  File "/usr/lib/bianbu-securityd/securityd/engine.py", line 601, in set_network_policy
+    raise PermissionDenied(str(result.get("reason", "网络策略热更新失败")))
+securityd.errors.PermissionDenied: Command '['systemctl', 'set-property', '--runtime', 'bianbu-agent-com.bianbu.runtime-1e51ed5791c1.scope', 'IPAddressDeny=', 'IPAddressAllow=']' returned non-zero exit status 1.
+

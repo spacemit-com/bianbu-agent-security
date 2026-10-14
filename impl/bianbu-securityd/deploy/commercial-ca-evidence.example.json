@@ -1,0 +1,20 @@
+{
+  "format": "bianbu-security-ca-evidence-v1",
+  "status": "passed",
+  "environment": "production",
+  "issued_at": "REPLACE_WITH_RFC3339_UTC",
+  "issuer": "REPLACE_WITH_PKI_TEAM",
+  "root_fingerprint_sha256": "REPLACE_WITH_64_HEX_SHA256",
+  "tests": {
+    "install": true,
+    "rotation": true,
+    "revocation": true,
+    "recovery": true
+  },
+  "artifacts": [
+    {
+      "path": "REPLACE_WITH_CA_TEST_LOG",
+      "sha256": "REPLACE_WITH_64_HEX_SHA256"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Keep the Security IPC socket and generated sandbox policy visible to the
+# Runtime control plane. The socket itself is created with mode 0660 by Python.
+d /run/bianbu 0770 bianbu-security bianbu-security -
+d /run/bianbu/sandbox 0755 bianbu-security bianbu-security -

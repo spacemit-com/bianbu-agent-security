@@ -1,0 +1,39 @@
+### API-02 Security WebUI (8788, production token) & Runtime status
+2026-09-11T19:17:04+08:00
+== health
+{"ok":true,"securityd":"connected"}
+
+== unauthenticated agents -> expect 401/403
+200
+== auth
+{"auth_disabled":true,"ok":true}
+
+== agents
+{"agents":[{"agent_id":"bianbu-agent-default","capability_count":"1","granted_count":"0","installed_at":"None","name":"None","status":"None","version":"None"},{"agent_id":"bianbu-agent-default.testkit","capability_count":"5","granted_count":"4","installed_at":"None","name":"None","status":"None","version":"None"},{"agent_id":"com.bianbu.c6f40f30a6e5","capability_count":"31","granted_count":"31","installed_at":"2026-09-11 03:35:41","name":"BibitEdgeAssistant","status":"active","version":"1.0.0"},{"agent_id":"com.bianbu.c6f40f30a6e5.testkit","capability_count":"11","granted_count":"4","installed_at":"None","name":"None","status":"None","version":"None"},{"agent_id":"com.bianbu.runtime","capabi
+== security-execution-status
+{"agent_id":"com.bianbu.c6f40f30a6e5","audit":{"backend":"ebpf-seccomp","chain_valid":true,"collectors":1,"coverage":"deny-only","events":0,"reason":"","status":"active"},"control":{"state":"running"},"seccomp":{"agent_additions":[],"applied_policy_version":0,"arch":"riscv64","effective":["reboot","swapon","swapoff","kexec_load","kexec_file_load","init_module","finit_module","delete_module","mount","umount2","pivot_root","perf_event_open"],"global_additions":[],"mandatory":["reboot","swapon","swapoff","kexec_load","kexec_file_load","init_module","finit_module","delete_module","mount","umount2","pivot_root","perf_event_open"],"pending_restart":true,"policy_version":2,"status":"pending_restart"},"securityd":{"state":"running"},"worker":{"state":"unknown"}}
+
+== security-mode
+{"agent_id":"com.bianbu.c6f40f30a6e5","mode":"normal","updated_at":"2026-09-11T11:16:58.013+00:00","updated_by":"uid=1000;pid=2714057;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-824.scope"}
+
+== syscall-policy
+{"agent_additions":[],"applied_policy_version":0,"arch":"riscv64","effective":["reboot","swapon","swapoff","kexec_load","kexec_file_load","init_module","finit_module","delete_module","mount","umount2","pivot_root","perf_event_open"],"global_additions":[],"mandatory":["reboot","swapon","swapoff","kexec_load","kexec_file_load","init_module","finit_module","delete_module","mount","umount2","pivot_roo
+== network
+{"agent_id":"com.bianbu.c6f40f30a6e5","apply":{"active_instances":1,"applied_instances":1,"effective":true,"failed_instances":0,"requested":true,"restart_required":false,"restart_required_instances":0},"domains":[],"enforcement":{"agent_id":"com.bianbu.c6f40f30a6e5","backends":["nft","iptables"],"enforced":true,"mode":"systemd","reason":""},"exists":false,"mode":"allow_all","rules_path":"/run/bianbu/sandbox/com.bianbu.c6f40f30a6e5/netfilter.rules","version":1}
+
+== dlp matrix
+{"actions":["allow","audit_only","mask","block"],"agent_id":"com.bianbu.c6f40f30a6e5","rows":[{"action":"audit_only","explicit":false,"pii_type":"name","risk_level":"L1","source":"inherited"},{"action":"audit_only","explicit":false,"pii_type":"phone","risk_level":"L2","source":"inherited"},{"action":"mask","explicit":false,"pii_type":"id_card","risk_level":"L3","source":"inherited"},{"action":"audit_only","explicit":false,"pii_type":"email","risk_level":"L2","source":"inherited"},{"action":"mask","explicit":false,"pii_type":"bank_card","risk_level":"L3","source":"inherited"},{"action":"audit_o
+== audit (last 3)
+{"chain_anchor":"f75ffb99bfe9ca1743eae2206330b89b7ce7a800d36a262147b30092332adb5f","filtered":false,"intact":true,"records":[{"agent_id":"com.bianbu.c6f40f30a6e5","hash":"347bf423154a2d2666a933948ed2f1b1dabae4d49ade60c1cb4ca6ee606f15cc","op_type":"register_agent","prev_hash":"b5cd3da839ec187db63a720e75fe95a6459f1a93188d8dfc5468d9254ed723b5","result":"success","seq":4,"target":"com.bianbu.c6f40f30a6e5","ts":"2026-09-11T03:35:41.504+00:00"},{"agent_id":"com.bianbu.c6f40f30a6e5","hash":"f96766ef87b5579164599d704c4a56b101ca44f17b044d615e0191bc12d8e678","op_type":"bind_caller","prev_hash":"347bf423154a2d2666a933948ed2f1b1dabae4d49ade60c1cb4ca6ee606f15cc","result":"success","seq":5,"target":":1.52564","ts":"2026-09-11T03:35:41.507+00:00"},{"agent_id":"com.bianbu.c6f40f30a6e5","hash":"0072beab0facurl: (23) Failure writing output to destination, passed 16384 returned 4096
+
+== 8787 legacy process (agentforce) identity
+200 text/html; charset=utf-8
+  93935 bianbu   /usr/lib/hermes-agent/venv/bin/python3 /opt/bianbu-agentforce/server.py
+== Runtime /api/v1/runtime/status
+{"data":{"status":"AGENT_READY","role":"control","control_ready":true,"agent_ready":true,"instance_id":null,"pid":null,"effective_mode":null,"backend":null,"sandboxed":false,"generation_id":null,"worker_state":"running","security_pending":{},"seccomp":{},"audit":{}}}
+== Runtime security-api invoke: agents.security-mode.get.v1
+{"protocolVersion":1,"requestId":"cc-1","ok":true,"result":{"agent_id":"com.bianbu.c6f40f30a6e5","mode":"normal","updated_at":"2026-09-11T11:16:58.013+00:00","updated_by":"uid=1000;pid=2714057;exe=/usr/bin/python3.14;cgroup=0::/user.slice/user-1000.slice/session-824.scope"}}
+== Runtime security-api invoke: syscall-audit.status.v1
+{"protocolVersion":1,"requestId":"cc-2","ok":true,"result":{"status":"active","backend":"ebpf-seccomp","coverage":"deny-only","events":0,"chain_valid":true,"collectors":1,"reason":""}}
+== Runtime security-api invoke: unknown op -> incompatible
+{"protocolVersion":1,"requestId":"cc-3","ok":false,"error":{"code":"incompatible","message":"'unknown security operation: nope.v1'","retryable":false}}

@@ -1,0 +1,47 @@
+[Unit]
+Description=Bianbu Security WebUI (authenticated management console)
+Documentation=file:///usr/share/doc/bianbu-securityd/webui/README.md
+After=dbus.service
+Wants=dbus.service
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/bianbu-securityd/venv/bin/python -m webui.production
+WorkingDirectory=/usr/lib/bianbu-securityd
+Environment=PYTHONPATH=/usr/lib/bianbu-securityd:/usr/lib/bianbu-securityd/client
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONNOUSERSITE=1
+Environment=BIANBU_ETC=/etc/bianbu
+Environment=BIANBU_RUN=/run/bianbu
+Environment=BIANBU_LOG=/var/log/bianbu
+Environment=BIANBU_SEC_UDS=/run/bianbu/securityd.sock
+Environment=BIANBU_WEBUI_PORT=8787
+# On-loopback browsers transparently exchange the configured token for an
+# HttpOnly session; remote browsers continue to use manual token login.
+Environment=BIANBU_WEBUI_LOCAL_AUTO_AUTH=1
+EnvironmentFile=-/etc/bianbu/webui.env
+User=bianbu-security
+Group=bianbu-security
+SupplementaryGroups=bianbu-admin
+Restart=always
+RestartSec=2s
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+# WebUI connects to the shared securityd socket and does not write this tree.
+ReadWritePaths=/etc/bianbu /run/bianbu /var/log/bianbu
+ReadOnlyPaths=/run/bianbu
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

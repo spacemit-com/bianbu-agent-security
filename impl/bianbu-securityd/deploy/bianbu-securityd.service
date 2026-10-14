@@ -1,0 +1,84 @@
+[Unit]
+# systemd unit —— 装到 /etc/systemd/system/bianbu-securityd.service
+# 系统总线常驻形态。会话总线调试用 `python3 -m securityd.service --session`，
+# 不走这个 unit（V-02：会话总线随登录会话生死，不适合作为系统服务）。
+Description=Bianbu Next Security Daemon (io.bianbu.Security)
+Documentation=https://gitlab.dc.com/duancheng/bnagent-securityd
+After=dbus.service
+Requires=dbus.service
+
+[Service]
+Type=simple
+# BusName 只对 Type=dbus 有意义；这里用 simple + 显式 RequestName，
+# 因为 dbus-python 的 BusName 是在 main() 里同步取的，起来即占名。
+ExecStart=/usr/lib/bianbu-securityd/venv/bin/python -m securityd.service
+WorkingDirectory=/usr/lib/bianbu-securityd
+Environment=PYTHONPATH=/usr/lib/bianbu-securityd:/usr/lib/bianbu-securityd/client
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONNOUSERSITE=1
+Environment=BIANBU_ETC=/etc/bianbu
+Environment=BIANBU_RUN=/run/bianbu
+Environment=BIANBU_LOG=/var/log/bianbu
+Environment=BIANBU_SEC_UDS=/run/bianbu/securityd.sock
+Environment=BIANBU_RUNTIME_GROUP=bianbu-security
+Environment=BIANBU_AGENTS_HOME=/var/lib/bianbu/agents
+# 生产服务默认拒绝未签名/非信任根代码；开发/测试请使用独立会话服务并显式覆盖。
+Environment=BIANBU_SECURITY_CODESIGN=enforce
+Environment=BIANBU_SECURITY_CODESIGN_KEYS=/etc/bianbu/codesign-keys
+
+# 以专用用户跑，不用 root。该用户需属 bianbu-security 组（policy 里允许 own 总线名）。
+User=bianbu-security
+Group=bianbu-security
+SupplementaryGroups=bianbu-admin bianbu
+
+Restart=on-failure
+RestartSec=2s
+TimeoutStopSec=15s
+# 安全控制面是所有 Agent 工具调用的同步门禁；在不独占 CPU/I/O 的前提下
+# 提高调度权重，降低 K3 混合负载与冷唤醒场景的 P99 尾延迟。
+Nice=-10
+CPUWeight=1000
+IOWeight=1000
+
+# ── 加固 ──
+# securityd 自己是安全组件，被攻破等于判权全失效，所以自身也要收紧。
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+# /run/bianbu is a host-shared IPC and policy-data tree. Keep /usr, /boot and
+# /etc read-only, but do not let systemd create a private bind mount for /run;
+# Runtime workers must read the seccomp policy generated here.
+ProtectSystem=full
+ProtectHome=yes
+# Runtime CommitStart verifies namespace separation of the authenticated PA
+# process. The dedicated UID otherwise cannot read /proc/<pid>/ns/* for a
+# sandboxed peer. Grant only the capability needed for this read-only kernel
+# identity check; no process-control API is exposed to callers.
+CapabilityBoundingSet=CAP_SYS_PTRACE
+AmbientCapabilities=CAP_SYS_PTRACE
+ProtectProc=ptraceable
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+
+# 需要写的目录（/run/bianbu 由 tmpfiles.d 创建并保持宿主机共享）
+#   /etc/bianbu  能力注册表、策略、密钥（config.ETC_DIR / KEYS_DIR）
+#   /run/bianbu  沙箱运行时状态、UDS socket（config.RUN_DIR / SANDBOX_RUN_DIR）
+#   /var/log/bianbu  审计链（config.LOG_DIR / AUDIT_DIR）
+ReadWritePaths=/etc/bianbu /run/bianbu /var/log/bianbu /var/lib/bianbu/agents
+StateDirectory=bianbu/agents
+StateDirectoryMode=0750
+LogsDirectory=bianbu
+LogsDirectoryMode=0750
+
+# 审计链的完整性依赖文件不被篡改；密钥目录更严
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

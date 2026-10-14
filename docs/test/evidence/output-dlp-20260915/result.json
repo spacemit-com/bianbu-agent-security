@@ -1,0 +1,1175 @@
+[
+  {
+    "mode": "normal",
+    "action": "mask",
+    "run": {
+      "request_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+      "status": "completed",
+      "content": "[PII-phone-001]",
+      "usage": {
+        "input_tokens": 4,
+        "output_tokens": 4,
+        "total_tokens": 8,
+        "metadata": {
+          "events": 1
+        }
+      },
+      "error": null,
+      "metadata": {
+        "bianbu.security": {}
+      },
+      "result": {
+        "request_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "status": "completed",
+        "content": "[PII-phone-001]",
+        "usage": {
+          "input_tokens": 4,
+          "output_tokens": 4,
+          "total_tokens": 8,
+          "metadata": {
+            "events": 1
+          }
+        },
+        "error": null,
+        "metadata": {
+          "bianbu.security": {}
+        }
+      },
+      "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+      "session_id": "t-7c89b3e156"
+    },
+    "events": [
+      {
+        "seq": 2,
+        "type": "user/message",
+        "time": 1789476858.39003,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "message_id": "m-34e6dfb6a570495ca3727fab23ddc7b8",
+          "content": "Reply with the fixed synthetic test value.",
+          "attachments": [],
+          "thread_id": "ca244346-41c7-47d4-ab3f-2f73baf3ae0b",
+          "request": {
+            "prompt": "Reply with the fixed synthetic test value.",
+            "idempotency_key": "session-input:m-34e6dfb6a570495ca3727fab23ddc7b8",
+            "idempotency_fingerprint": "m-34e6dfb6a570495ca3727fab23ddc7b8",
+            "agent_id": "com.bianbu.05126c4dace9",
+            "account_id": "bianbu",
+            "metadata": {},
+            "generation_id": 0,
+            "thread_id": "ca244346-41c7-47d4-ab3f-2f73baf3ae0b",
+            "input_messages": [
+              {
+                "message_id": "m-34e6dfb6a570495ca3727fab23ddc7b8",
+                "content": "Reply with the fixed synthetic test value.",
+                "attachments": [],
+                "skill_ids": [],
+                "created_at": 1789476858.3652995
+              }
+            ],
+            "skill_ids": []
+          }
+        }
+      },
+      {
+        "seq": 3,
+        "type": "run/progress",
+        "time": 1789476858.3998694,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "phase": "starting_agent"
+        }
+      },
+      {
+        "seq": 4,
+        "type": "run/progress",
+        "time": 1789476873.4590156,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "phase": "preparing_request",
+          "generation_id": 1
+        }
+      },
+      {
+        "seq": 5,
+        "type": "hook/invoked",
+        "time": 1789476874.7896154,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "9427259a6c3046b08231238cbf01ad1c",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run"
+        }
+      },
+      {
+        "seq": 6,
+        "type": "hook/result",
+        "time": 1789476877.0583956,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "9427259a6c3046b08231238cbf01ad1c",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run",
+          "status": "completed",
+          "duration_ms": 511.54519998817705,
+          "metadata": {
+            "securityd": {
+              "stage": "before_run",
+              "agent_id": "com.bianbu.05126c4dace9",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 7,
+        "type": "request/context",
+        "time": 1789476877.0588126,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "reason": "initial",
+          "agent_id": "com.bianbu.05126c4dace9",
+          "provider": "custom:tool-dlp-5b18c12ee3f1",
+          "model": "kernel-probe",
+          "system_prompt": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-5b18c12ee3f1\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.05126c4dace9\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions."
+        }
+      },
+      {
+        "seq": 8,
+        "type": "hook/invoked",
+        "time": 1789476877.249474,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "db7bdce832134d80bca985e1885d7f64",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context"
+        }
+      },
+      {
+        "seq": 9,
+        "type": "hook/result",
+        "time": 1789476877.7432163,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "db7bdce832134d80bca985e1885d7f64",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context",
+          "status": "completed",
+          "duration_ms": 493.3732830104418,
+          "metadata": {
+            "securityd": {
+              "stage": "input",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 10,
+        "type": "hook/invoked",
+        "time": 1789476877.743432,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "ad9b1f10f6e14a8ba570ef4a62ceb6ee",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model"
+        }
+      },
+      {
+        "seq": 11,
+        "type": "hook/result",
+        "time": 1789476878.2562342,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "ad9b1f10f6e14a8ba570ef4a62ceb6ee",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model",
+          "status": "completed",
+          "duration_ms": 497.9482910130173,
+          "metadata": {
+            "securityd": {
+              "stage": "pre_model_call",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 12,
+        "type": "assistant/text.delta",
+        "time": 1789476878.7072306,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "text": "[PII-phone-001]"
+        }
+      },
+      {
+        "seq": 13,
+        "type": "run/event",
+        "time": 1789476878.7076588,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "kind": "usage",
+          "payload": {
+            "prompt_tokens": 4,
+            "completion_tokens": 4
+          }
+        }
+      },
+      {
+        "seq": 14,
+        "type": "hook/invoked",
+        "time": 1789476878.8028703,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "11aedec564c44336b893e037e087ed04",
+          "hook_id": "bianbu.security/security.after_model",
+          "plugin_id": "bianbu.security",
+          "point": "after_model"
+        }
+      },
+      {
+        "seq": 15,
+        "type": "hook/result",
+        "time": 1789476879.1782632,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "11aedec564c44336b893e037e087ed04",
+          "hook_id": "bianbu.security/security.after_model",
+          "plugin_id": "bianbu.security",
+          "point": "after_model",
+          "status": "completed",
+          "duration_ms": 444.58075700094923
+        }
+      },
+      {
+        "seq": 16,
+        "type": "hook/invoked",
+        "time": 1789476879.1784785,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "395a72e56cfa4b0c8c47aae5d7f371b3",
+          "hook_id": "bianbu.security/security.after_run",
+          "plugin_id": "bianbu.security",
+          "point": "after_run"
+        }
+      },
+      {
+        "seq": 17,
+        "type": "hook/result",
+        "time": 1789476879.8499699,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "invocation_id": "395a72e56cfa4b0c8c47aae5d7f371b3",
+          "hook_id": "bianbu.security/security.after_run",
+          "plugin_id": "bianbu.security",
+          "point": "after_run",
+          "status": "completed",
+          "duration_ms": 672.1969179925509,
+          "metadata": {
+            "securityd": {
+              "stage": "output",
+              "pii_cleared": 0
+            }
+          }
+        }
+      },
+      {
+        "seq": 18,
+        "type": "run/completed",
+        "time": 1789476879.8504236,
+        "run_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+        "data": {
+          "status": "completed",
+          "content": "[PII-phone-001]",
+          "usage": {
+            "input_tokens": 4,
+            "output_tokens": 4,
+            "total_tokens": 8,
+            "metadata": {
+              "events": 1
+            }
+          },
+          "error": null,
+          "result": {
+            "request_id": "5d3c43b7-2d75-4167-b360-9b6795c958fd",
+            "status": "completed",
+            "content": "[PII-phone-001]",
+            "usage": {
+              "input_tokens": 4,
+              "output_tokens": 4,
+              "total_tokens": 8,
+              "metadata": {
+                "events": 1
+              }
+            },
+            "error": null,
+            "metadata": {
+              "bianbu.security": {}
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "mode": "normal",
+    "action": "block",
+    "run": {
+      "request_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+      "status": "failed",
+      "content": "",
+      "usage": null,
+      "error": {
+        "code": "security_denied",
+        "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+        "details": {
+          "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+          "stage": "pre_model_call",
+          "tool": "",
+          "decision": "BLOCK",
+          "terminate_run": true,
+          "degraded": false
+        }
+      },
+      "metadata": {},
+      "result": {
+        "request_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "status": "failed",
+        "content": "",
+        "usage": null,
+        "error": {
+          "code": "security_denied",
+          "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+          "details": {
+            "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+            "stage": "pre_model_call",
+            "tool": "",
+            "decision": "BLOCK",
+            "terminate_run": true,
+            "degraded": false
+          }
+        },
+        "metadata": {}
+      },
+      "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+      "session_id": "t-d7b3b094b3"
+    },
+    "events": [
+      {
+        "seq": 2,
+        "type": "user/message",
+        "time": 1789476882.8114204,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "message_id": "m-8ef63d81b99c48c5ac7bcfa057e7f03e",
+          "content": "Reply with the fixed synthetic test value.",
+          "attachments": [],
+          "thread_id": "11ddf812-1151-4109-bfcd-4ef68571498f",
+          "request": {
+            "prompt": "Reply with the fixed synthetic test value.",
+            "idempotency_key": "session-input:m-8ef63d81b99c48c5ac7bcfa057e7f03e",
+            "idempotency_fingerprint": "m-8ef63d81b99c48c5ac7bcfa057e7f03e",
+            "agent_id": "com.bianbu.05126c4dace9",
+            "account_id": "bianbu",
+            "metadata": {},
+            "generation_id": 1,
+            "thread_id": "11ddf812-1151-4109-bfcd-4ef68571498f",
+            "input_messages": [
+              {
+                "message_id": "m-8ef63d81b99c48c5ac7bcfa057e7f03e",
+                "content": "Reply with the fixed synthetic test value.",
+                "attachments": [],
+                "skill_ids": [],
+                "created_at": 1789476882.8067853
+              }
+            ],
+            "skill_ids": []
+          }
+        }
+      },
+      {
+        "seq": 3,
+        "type": "hook/invoked",
+        "time": 1789476884.049112,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "50b75d11816e4641a62c9bfaac3c06af",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run"
+        }
+      },
+      {
+        "seq": 4,
+        "type": "hook/result",
+        "time": 1789476884.617887,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "50b75d11816e4641a62c9bfaac3c06af",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run",
+          "status": "completed",
+          "duration_ms": 501.307997998083,
+          "metadata": {
+            "securityd": {
+              "stage": "before_run",
+              "agent_id": "com.bianbu.05126c4dace9",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 5,
+        "type": "request/context",
+        "time": 1789476884.6183488,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "reason": "initial",
+          "agent_id": "com.bianbu.05126c4dace9",
+          "provider": "custom:tool-dlp-5b18c12ee3f1",
+          "model": "kernel-probe",
+          "system_prompt": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-5b18c12ee3f1\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.05126c4dace9\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions."
+        }
+      },
+      {
+        "seq": 6,
+        "type": "hook/invoked",
+        "time": 1789476884.718118,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "f2aca7983bcb42e8a5f46593547de61d",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context"
+        }
+      },
+      {
+        "seq": 7,
+        "type": "hook/result",
+        "time": 1789476885.3144789,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "f2aca7983bcb42e8a5f46593547de61d",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context",
+          "status": "completed",
+          "duration_ms": 692.3215220158454,
+          "metadata": {
+            "securityd": {
+              "stage": "input",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 8,
+        "type": "hook/invoked",
+        "time": 1789476885.314692,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "dd8496de281f44cbb94be57c837983da",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model"
+        }
+      },
+      {
+        "seq": 9,
+        "type": "hook/result",
+        "time": 1789476885.8510165,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "dd8496de281f44cbb94be57c837983da",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model",
+          "status": "completed",
+          "duration_ms": 522.364957985701,
+          "metadata": {
+            "securityd": {
+              "stage": "pre_model_call",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 10,
+        "type": "hook/invoked",
+        "time": 1789476885.9538155,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "29af3f194e2c4aaca1a9cfb19ff01fcd",
+          "hook_id": "bianbu.security/security.on_error",
+          "plugin_id": "bianbu.security",
+          "point": "on_error"
+        }
+      },
+      {
+        "seq": 11,
+        "type": "hook/result",
+        "time": 1789476886.6314266,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "invocation_id": "29af3f194e2c4aaca1a9cfb19ff01fcd",
+          "hook_id": "bianbu.security/security.on_error",
+          "plugin_id": "bianbu.security",
+          "point": "on_error",
+          "status": "completed",
+          "duration_ms": 672.0614189980552
+        }
+      },
+      {
+        "seq": 12,
+        "type": "run/event",
+        "time": 1789476886.729048,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "kind": "error",
+          "payload": {
+            "code": "security_denied",
+            "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+            "details": {
+              "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+              "stage": "pre_model_call",
+              "tool": "",
+              "decision": "BLOCK",
+              "terminate_run": true,
+              "degraded": false
+            }
+          }
+        }
+      },
+      {
+        "seq": 13,
+        "type": "run/failed",
+        "time": 1789476886.7293715,
+        "run_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+        "data": {
+          "status": "failed",
+          "content": "",
+          "usage": null,
+          "error": {
+            "code": "security_denied",
+            "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+            "details": {
+              "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+              "stage": "pre_model_call",
+              "tool": "",
+              "decision": "BLOCK",
+              "terminate_run": true,
+              "degraded": false
+            }
+          },
+          "result": {
+            "request_id": "a90c8adc-c8d0-4a97-877f-aceb8c35c95e",
+            "status": "failed",
+            "content": "",
+            "usage": null,
+            "error": {
+              "code": "security_denied",
+              "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+              "details": {
+                "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+                "stage": "pre_model_call",
+                "tool": "",
+                "decision": "BLOCK",
+                "terminate_run": true,
+                "degraded": false
+              }
+            },
+            "metadata": {}
+          }
+        }
+      }
+    ]
+  },
+  {
+    "mode": "yolo",
+    "action": "mask",
+    "run": {
+      "request_id": "d900b19e-923b-41c6-807a-2292339a970d",
+      "status": "completed",
+      "content": "[PII-phone-001]",
+      "usage": {
+        "input_tokens": 4,
+        "output_tokens": 4,
+        "total_tokens": 8,
+        "metadata": {
+          "events": 1
+        }
+      },
+      "error": null,
+      "metadata": {
+        "bianbu.security": {}
+      },
+      "result": {
+        "request_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "status": "completed",
+        "content": "[PII-phone-001]",
+        "usage": {
+          "input_tokens": 4,
+          "output_tokens": 4,
+          "total_tokens": 8,
+          "metadata": {
+            "events": 1
+          }
+        },
+        "error": null,
+        "metadata": {
+          "bianbu.security": {}
+        }
+      },
+      "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+      "session_id": "t-a17b81b59d"
+    },
+    "events": [
+      {
+        "seq": 2,
+        "type": "user/message",
+        "time": 1789476889.2034614,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "message_id": "m-bc44e6b0f47a4d508329231125cbed40",
+          "content": "Reply with the fixed synthetic test value.",
+          "attachments": [],
+          "thread_id": "1b8526f5-8578-4e0b-a44d-63915e09c937",
+          "request": {
+            "prompt": "Reply with the fixed synthetic test value.",
+            "idempotency_key": "session-input:m-bc44e6b0f47a4d508329231125cbed40",
+            "idempotency_fingerprint": "m-bc44e6b0f47a4d508329231125cbed40",
+            "agent_id": "com.bianbu.05126c4dace9",
+            "account_id": "bianbu",
+            "metadata": {},
+            "generation_id": 1,
+            "thread_id": "1b8526f5-8578-4e0b-a44d-63915e09c937",
+            "input_messages": [
+              {
+                "message_id": "m-bc44e6b0f47a4d508329231125cbed40",
+                "content": "Reply with the fixed synthetic test value.",
+                "attachments": [],
+                "skill_ids": [],
+                "created_at": 1789476889.1986294
+              }
+            ],
+            "skill_ids": []
+          }
+        }
+      },
+      {
+        "seq": 3,
+        "type": "hook/invoked",
+        "time": 1789476890.4352922,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "cd0a1f3301b9489b8952f82e0ddbb9f1",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run"
+        }
+      },
+      {
+        "seq": 4,
+        "type": "hook/result",
+        "time": 1789476890.9996521,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "cd0a1f3301b9489b8952f82e0ddbb9f1",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run",
+          "status": "completed",
+          "duration_ms": 503.5022629890591,
+          "metadata": {
+            "securityd": {
+              "stage": "before_run",
+              "agent_id": "com.bianbu.05126c4dace9",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 5,
+        "type": "request/context",
+        "time": 1789476891.0000868,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "reason": "initial",
+          "agent_id": "com.bianbu.05126c4dace9",
+          "provider": "custom:tool-dlp-5b18c12ee3f1",
+          "model": "kernel-probe",
+          "system_prompt": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-5b18c12ee3f1\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.05126c4dace9\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions."
+        }
+      },
+      {
+        "seq": 6,
+        "type": "hook/invoked",
+        "time": 1789476891.0992653,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "be063480613540199425b82cd651270b",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context"
+        }
+      },
+      {
+        "seq": 7,
+        "type": "hook/result",
+        "time": 1789476891.6739063,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "be063480613540199425b82cd651270b",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context",
+          "status": "completed",
+          "duration_ms": 670.1329119969159,
+          "metadata": {
+            "securityd": {
+              "stage": "input",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 8,
+        "type": "hook/invoked",
+        "time": 1789476891.6741204,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "e7dc88fb02c54646a641b4f9e1d7f233",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model"
+        }
+      },
+      {
+        "seq": 9,
+        "type": "hook/result",
+        "time": 1789476892.1846673,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "e7dc88fb02c54646a641b4f9e1d7f233",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model",
+          "status": "completed",
+          "duration_ms": 497.62396499863826,
+          "metadata": {
+            "securityd": {
+              "stage": "pre_model_call",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 10,
+        "type": "assistant/text.delta",
+        "time": 1789476892.283315,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "text": "[PII-phone-001]"
+        }
+      },
+      {
+        "seq": 11,
+        "type": "run/event",
+        "time": 1789476892.283484,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "kind": "usage",
+          "payload": {
+            "prompt_tokens": 4,
+            "completion_tokens": 4
+          }
+        }
+      },
+      {
+        "seq": 12,
+        "type": "hook/invoked",
+        "time": 1789476892.380206,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "a0cb007c119847298a9e6f979f7cca6a",
+          "hook_id": "bianbu.security/security.after_model",
+          "plugin_id": "bianbu.security",
+          "point": "after_model"
+        }
+      },
+      {
+        "seq": 13,
+        "type": "hook/result",
+        "time": 1789476892.9570918,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "a0cb007c119847298a9e6f979f7cca6a",
+          "hook_id": "bianbu.security/security.after_model",
+          "plugin_id": "bianbu.security",
+          "point": "after_model",
+          "status": "completed",
+          "duration_ms": 656.9194240146317
+        }
+      },
+      {
+        "seq": 14,
+        "type": "hook/invoked",
+        "time": 1789476892.9573107,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "b54bb29d7668499b9883c8a3f04c2503",
+          "hook_id": "bianbu.security/security.after_run",
+          "plugin_id": "bianbu.security",
+          "point": "after_run"
+        }
+      },
+      {
+        "seq": 15,
+        "type": "hook/result",
+        "time": 1789476893.4402556,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "invocation_id": "b54bb29d7668499b9883c8a3f04c2503",
+          "hook_id": "bianbu.security/security.after_run",
+          "plugin_id": "bianbu.security",
+          "point": "after_run",
+          "status": "completed",
+          "duration_ms": 483.85004900046624,
+          "metadata": {
+            "securityd": {
+              "stage": "output",
+              "pii_cleared": 0
+            }
+          }
+        }
+      },
+      {
+        "seq": 16,
+        "type": "run/completed",
+        "time": 1789476893.440696,
+        "run_id": "d900b19e-923b-41c6-807a-2292339a970d",
+        "data": {
+          "status": "completed",
+          "content": "[PII-phone-001]",
+          "usage": {
+            "input_tokens": 4,
+            "output_tokens": 4,
+            "total_tokens": 8,
+            "metadata": {
+              "events": 1
+            }
+          },
+          "error": null,
+          "result": {
+            "request_id": "d900b19e-923b-41c6-807a-2292339a970d",
+            "status": "completed",
+            "content": "[PII-phone-001]",
+            "usage": {
+              "input_tokens": 4,
+              "output_tokens": 4,
+              "total_tokens": 8,
+              "metadata": {
+                "events": 1
+              }
+            },
+            "error": null,
+            "metadata": {
+              "bianbu.security": {}
+            }
+          }
+        }
+      }
+    ]
+  },
+  {
+    "mode": "yolo",
+    "action": "block",
+    "run": {
+      "request_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+      "status": "failed",
+      "content": "",
+      "usage": null,
+      "error": {
+        "code": "security_denied",
+        "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+        "details": {
+          "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+          "stage": "pre_model_call",
+          "tool": "",
+          "decision": "BLOCK",
+          "terminate_run": true,
+          "degraded": false
+        }
+      },
+      "metadata": {},
+      "result": {
+        "request_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "status": "failed",
+        "content": "",
+        "usage": null,
+        "error": {
+          "code": "security_denied",
+          "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+          "details": {
+            "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+            "stage": "pre_model_call",
+            "tool": "",
+            "decision": "BLOCK",
+            "terminate_run": true,
+            "degraded": false
+          }
+        },
+        "metadata": {}
+      },
+      "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+      "session_id": "t-1e0ed2980b"
+    },
+    "events": [
+      {
+        "seq": 2,
+        "type": "user/message",
+        "time": 1789476895.7216656,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "message_id": "m-32dcd670fa3949969a7b9cbb53198022",
+          "content": "Reply with the fixed synthetic test value.",
+          "attachments": [],
+          "thread_id": "ccaf3bc3-86f2-4b51-a9a0-09b5759b4a45",
+          "request": {
+            "prompt": "Reply with the fixed synthetic test value.",
+            "idempotency_key": "session-input:m-32dcd670fa3949969a7b9cbb53198022",
+            "idempotency_fingerprint": "m-32dcd670fa3949969a7b9cbb53198022",
+            "agent_id": "com.bianbu.05126c4dace9",
+            "account_id": "bianbu",
+            "metadata": {},
+            "generation_id": 1,
+            "thread_id": "ccaf3bc3-86f2-4b51-a9a0-09b5759b4a45",
+            "input_messages": [
+              {
+                "message_id": "m-32dcd670fa3949969a7b9cbb53198022",
+                "content": "Reply with the fixed synthetic test value.",
+                "attachments": [],
+                "skill_ids": [],
+                "created_at": 1789476895.7164876
+              }
+            ],
+            "skill_ids": []
+          }
+        }
+      },
+      {
+        "seq": 3,
+        "type": "hook/invoked",
+        "time": 1789476896.9099176,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "57aba4f756fc4052813eb850190a3ada",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run"
+        }
+      },
+      {
+        "seq": 4,
+        "type": "hook/result",
+        "time": 1789476897.4641066,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "57aba4f756fc4052813eb850190a3ada",
+          "hook_id": "bianbu.security/security.before_run",
+          "plugin_id": "bianbu.security",
+          "point": "before_run",
+          "status": "completed",
+          "duration_ms": 493.06804401567206,
+          "metadata": {
+            "securityd": {
+              "stage": "before_run",
+              "agent_id": "com.bianbu.05126c4dace9",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 5,
+        "type": "request/context",
+        "time": 1789476897.464565,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "reason": "initial",
+          "agent_id": "com.bianbu.05126c4dace9",
+          "provider": "custom:tool-dlp-5b18c12ee3f1",
+          "model": "kernel-probe",
+          "system_prompt": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-5b18c12ee3f1\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.05126c4dace9\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions."
+        }
+      },
+      {
+        "seq": 6,
+        "type": "hook/invoked",
+        "time": 1789476897.5728958,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "bc73db84a7ab4665830e03258426fea5",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context"
+        }
+      },
+      {
+        "seq": 7,
+        "type": "hook/result",
+        "time": 1789476898.144039,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "bc73db84a7ab4665830e03258426fea5",
+          "hook_id": "bianbu.security/security.after_context",
+          "plugin_id": "bianbu.security",
+          "point": "after_context",
+          "status": "completed",
+          "duration_ms": 675.7831769937184,
+          "metadata": {
+            "securityd": {
+              "stage": "input",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 8,
+        "type": "hook/invoked",
+        "time": 1789476898.1442409,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "09493938e61740ffb6644904d579569e",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model"
+        }
+      },
+      {
+        "seq": 9,
+        "type": "hook/result",
+        "time": 1789476898.6488929,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "09493938e61740ffb6644904d579569e",
+          "hook_id": "bianbu.security/security.before_model",
+          "plugin_id": "bianbu.security",
+          "point": "before_model",
+          "status": "completed",
+          "duration_ms": 493.6523140058853,
+          "metadata": {
+            "securityd": {
+              "stage": "pre_model_call",
+              "decision": "ALLOW"
+            }
+          }
+        }
+      },
+      {
+        "seq": 10,
+        "type": "hook/invoked",
+        "time": 1789476898.7651024,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "0a16e854dcf54f12a059ab831a0d3ec7",
+          "hook_id": "bianbu.security/security.on_error",
+          "plugin_id": "bianbu.security",
+          "point": "on_error"
+        }
+      },
+      {
+        "seq": 11,
+        "type": "hook/result",
+        "time": 1789476899.4314227,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "invocation_id": "0a16e854dcf54f12a059ab831a0d3ec7",
+          "hook_id": "bianbu.security/security.on_error",
+          "plugin_id": "bianbu.security",
+          "point": "on_error",
+          "status": "completed",
+          "duration_ms": 668.1413519836497
+        }
+      },
+      {
+        "seq": 12,
+        "type": "run/event",
+        "time": 1789476899.5299957,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "kind": "error",
+          "payload": {
+            "code": "security_denied",
+            "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+            "details": {
+              "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+              "stage": "pre_model_call",
+              "tool": "",
+              "decision": "BLOCK",
+              "terminate_run": true,
+              "degraded": false
+            }
+          }
+        }
+      },
+      {
+        "seq": 13,
+        "type": "run/failed",
+        "time": 1789476899.5302312,
+        "run_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+        "data": {
+          "status": "failed",
+          "content": "",
+          "usage": null,
+          "error": {
+            "code": "security_denied",
+            "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+            "details": {
+              "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+              "stage": "pre_model_call",
+              "tool": "",
+              "decision": "BLOCK",
+              "terminate_run": true,
+              "degraded": false
+            }
+          },
+          "result": {
+            "request_id": "22ccc527-8f1e-4e19-8f28-e7b5ab8e546a",
+            "status": "failed",
+            "content": "",
+            "usage": null,
+            "error": {
+              "code": "security_denied",
+              "message": "[bianbu-security] 模型数据含受限敏感信息，已按 DLP 策略拦截",
+              "details": {
+                "reason": "模型数据含受限敏感信息，已按 DLP 策略拦截",
+                "stage": "pre_model_call",
+                "tool": "",
+                "decision": "BLOCK",
+                "terminate_run": true,
+                "degraded": false
+              }
+            },
+            "metadata": {}
+          }
+        }
+      }
+    ]
+  }
+]

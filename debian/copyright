@@ -1,0 +1,14 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: bianbu-agent-securityd
+Upstream-Contact: Decheng Liu <decheng.liu@spacemit.com>
+Source: https://gitlab.dc.com/bianbu/ai/bianbu-agent-security
+
+Files: *
+Copyright: 2026 SpaceMIT
+License: proprietary
+ All rights reserved. Redistribution requires permission from SpaceMIT.
+
+Files: debian/*
+Copyright: 2026 SpaceMIT
+License: proprietary
+ All rights reserved. Redistribution requires permission from SpaceMIT.

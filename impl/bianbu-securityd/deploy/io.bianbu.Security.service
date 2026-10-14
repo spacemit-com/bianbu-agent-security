@@ -1,0 +1,10 @@
+[D-BUS Service]
+# D-Bus 按需激活 —— 装到 /usr/share/dbus-1/system-services/io.bianbu.Security.service
+#
+# 有了它，客户端首次调用 io.bianbu.Security 时 dbus-daemon 会自动拉起服务，
+# 不必依赖开机自启。SystemdService 让激活走 systemd（拿到 unit 里的加固配置），
+# 而不是 dbus-daemon 直接 fork Exec —— 后者不受 ProtectSystem 等约束。
+Name=io.bianbu.Security
+Exec=/usr/lib/bianbu-securityd/venv/bin/python -m securityd.service
+User=bianbu-security
+SystemdService=bianbu-securityd.service

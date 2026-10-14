@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bianbu-securityd"
+version = "1.0.0"
+description = "Bianbu AgentOS 安全子系统守护进程（AgentSecurityD / io.bianbu.Security）"
+requires-python = ">=3.11"
+dependencies = [
+    "cryptography>=50.0.0",
+    "dbus-python>=1.2",
+    "PyGObject>=3.40",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "langgraph>=1.2,<1.3"]
+webui = [
+    "flask>=3.0",
+    "flask-socketio>=5.3",
+    "gunicorn>=23,<27",
+    "simple-websocket>=1.1,<2",
+]
+
+[project.scripts]
+bianbu-securityd = "securityd.service:main"
+bncli = "cli.bncli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["securityd*", "client*", "cli*", "webui*", "hermes_plugin*", "runtime*"]
+
+[tool.setuptools.package-data]
+webui = ["static/*", "README.md"]
+securityd = ["data/*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["__pycache__/*", "*.pyc", "*.pyo"]
+
+[tool.setuptools.data-files]
+"share/bianbu-securityd/data" = ["data/io.bianbu.Security.xml", "data/io.bianbu.Security.conf", "data/io.bianbu.Runtime.xml"]
+"share/bianbu-securityd/deploy" = ["deploy/io.bianbu.Security.conf", "deploy/io.bianbu.Security.service", "deploy/io.bianbu.Runtime.conf", "deploy/io.bianbu.Runtime.service", "deploy/bianbu-securityd.service", "deploy/bianbu-agent-runtimed.service", "deploy/bianbu-security-webui.service", "deploy/webui.env.example", "deploy/io.bianbu.security.policy", "deploy/agent-runtimed-security-integration.md", "deploy/runtime_production_probe.py", "deploy/verify_all.sh", "deploy/security_release_gate.py", "deploy/commercial_acceptance_gate.py", "deploy/commercial-ca-evidence.example.json", "deploy/commercial-desktop-evidence.example.json", "deploy/commercial-pentest-evidence.example.json", "deploy/commercial-release-approval.example.json", "deploy/commercial_soak.py", "deploy/start_commercial_soak.sh", "deploy/install.sh", "deploy/rollback.sh", "deploy/verify_install_assets.py", "deploy/generate_sbom.py", "deploy/migrate_db.py", "deploy/release_gate.py", "deploy/dependency_audit.py", "deploy/generate_release_manifest.py"]
+"share/bianbu-securityd" = ["requirements-lock.txt", "THIRD_PARTY_LICENSES.md"]
+"share/bianbu-securityd/webui" = ["webui/README.md", "webui/run.sh", "webui/run-system-bus.sh", "webui/re-run.sh"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "e2e: 端到端测试（需真实 D-Bus 服务）",
+]

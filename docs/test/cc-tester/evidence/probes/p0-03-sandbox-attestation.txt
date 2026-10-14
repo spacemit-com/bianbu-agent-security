@@ -1,0 +1,103 @@
+### P0-03 worker attestation (host-process backend)
+2026-09-11T19:10:53+08:00
+== worker pid 2665040
+0::/system.slice/bianbu-agent-com.bianbu.runtime-1e51ed5791c1.scope
+Uid:	1000	1000	1000	1000
+Gid:	1000	1000	1000	1000
+NSpid:	2665040
+CapEff:	0000000000000000
+CapBnd:	000001ffffffffff
+NoNewPrivs:	1
+Seccomp:	2
+Seccomp_filters:	2
+BIANBU_WORKER_EFFECTIVE_MODE=host
+BIANBU_RUNTIME_SECURITY=required
+BIANBU_WORKER_LEASE_ID=5d22c17f9871459aa579c098f4cc0a16
+BIANBU_WORKER_INSTANCE_ID=com.bianbu.c6f40f30a6e5-60da742702894898be101e51ed5791c1
+BIANBU_RUNTIME_MODE=production
+BIANBU_WORKER_AGENT_ID=com.bianbu.c6f40f30a6e5
+BIANBU_WORKER_BACKEND=host-process
+BIANBU_SANDBOX_ACTIVE=0
+ 
+cgroup cgroup:[4026531835]
+ipc ipc:[4026531839]
+mnt mnt:[4026532742]
+net net:[4026531833]
+pid pid:[4026531836]
+pid_for_children pid:[4026531836]
+time time:[4026531834]
+time_for_children time:[4026531834]
+user user:[4026531837]
+uts uts:[4026531838]
+== worker pid 2709805
+0::/user.slice/user-1000.slice/session-811.scope
+Uid:	1000	1000	1000	1000
+Gid:	1000	1000	1000	1000
+NSpid:	2709805
+CapEff:	0000000000000000
+CapBnd:	000001ffffffffff
+NoNewPrivs:	0
+Seccomp:	0
+Seccomp_filters:	0
+ 
+cgroup cgroup:[4026531835]
+ipc ipc:[4026531839]
+mnt mnt:[4026531832]
+net net:[4026531833]
+pid pid:[4026531836]
+pid_for_children pid:[4026531836]
+time time:[4026531834]
+time_for_children time:[4026531834]
+user user:[4026531837]
+uts uts:[4026531838]
+== control (runtime) pid
+2664857
+0::/system.slice/system-bianbu\x2dagent\x2druntime.slice/bianbu-agent-runtime@bianbu.service
+ 
+cgroup cgroup:[4026531835]
+ipc ipc:[4026531839]
+mnt mnt:[4026532742]
+net net:[4026531833]
+pid pid:[4026531836]
+pid_for_children pid:[4026531836]
+time time:[4026531834]
+time_for_children time:[4026531834]
+user user:[4026531837]
+uts uts:[4026531838]
+== transient scope unit
+UNIT                                               LOAD   ACTIVE SUB     DESCRIPTION
+bianbu-agent-com.bianbu.runtime-1e51ed5791c1.scope loaded active running [systemd-run] /usr/bin/bianbu-agent-runtime --role agent-worker --config /home/bianbu/.bianbu-agent/config.yaml worker
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+        ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+        SUB    → The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+ActiveState=inactive
+ControlGroup=
+MemoryMax=infinity
+TasksMax=37971
+IPAddressAllow=
+IPAddressDeny=
+ProtectHome=no
+ProtectSystem=no
+NoNewPrivileges=no
+== runtime status api
+{"data":{"status":"AGENT_READY","role":"control","control_ready":true,"agent_ready":true,"instance_id":null,"pid":null,"effective_mode":null,"backend":null,"sandboxed":false,"generation_id":null,"worker_state":"running","security_pending":{},"seccomp":{},"audit":{}}}
+== securityd runtime state
+Call failed: caller 无权代表 agent com.bianbu.runtime
+
+Call failed: caller 无权代表 agent com.bianbu.runtime
+
+== config requested_mode
+17:      requested_mode: host
+33:      requested_mode: auto
+ActiveState=active
+Slice=system.slice
+ControlGroup=/system.slice/bianbu-agent-com.bianbu.runtime-1e51ed5791c1.scope
+Delegate=no
+MemoryMax=2147483648
+TasksMax=256
+IPAddressAllow=
+IPAddressDeny=

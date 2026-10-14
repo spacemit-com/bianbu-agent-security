@@ -1,0 +1,300 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="io.bianbu.Security">
+    <!-- FR-SEC-01 -->
+    <method name="VerifyManifest">
+      <arg name="agent_pkg_path" type="s" direction="in"/>
+      <arg name="valid" type="b" direction="out"/>
+      <arg name="reason" type="s" direction="out"/>
+      <arg name="perms" type="aa{sv}" direction="out"/>
+    </method>
+    <method name="VerifyCodePackage">
+      <arg name="pkg_path" type="s" direction="in"/>
+      <arg name="kind" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="VerifyCodeDigest">
+      <arg name="digest" type="s" direction="in"/>
+      <arg name="signature" type="s" direction="in"/>
+      <arg name="kind" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <!-- FR-SEC-02 -->
+    <method name="RegisterCapabilities">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="perms" type="aa{sv}" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <!-- Logical Agent lifecycle.  These calls register identity metadata and
+         replace the current capability declaration without requiring a
+         signed package manifest. -->
+    <method name="RegisterAgent">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="metadata" type="a{sv}" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="UnregisterAgent">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="removed" type="b" direction="out"/>
+    </method>
+    <method name="SyncAgentCapabilities">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="capabilities" type="aa{sv}" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="BindAgent">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <method name="BindAgentV2">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="context" type="a{sv}" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <!-- Explicit package-upgrade recovery; admin/root only. -->
+    <method name="ResetAgentBinding">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="reason" type="s" direction="in"/>
+      <arg name="removed" type="b" direction="out"/>
+    </method>
+    <!-- decision: 0=allow 1=ask 2=deny。第二个参数为工具名；scope 已废弃，恒传空串。 -->
+    <method name="CheckPermission">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="tool" type="s" direction="in"/>
+      <arg name="scope" type="s" direction="in"/>
+      <arg name="decision" type="i" direction="out"/>
+    </method>
+    <method name="CheckPermissionV2">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="tool" type="s" direction="in"/>
+      <arg name="scope" type="s" direction="in"/>
+      <arg name="context" type="a{sv}" direction="in"/>
+      <arg name="decision" type="i" direction="out"/>
+    </method>
+    <method name="GrantSessionTrustV2">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="tool" type="s" direction="in"/>
+      <arg name="scope" type="s" direction="in"/>
+      <arg name="context" type="a{sv}" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <!-- FR-SEC-03 -->
+    <method name="RequestConfirm">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="capability" type="s" direction="in"/>
+      <arg name="detail" type="s" direction="in"/>
+      <arg name="approved" type="b" direction="out"/>
+    </method>
+    <method name="RequestConfirmV2">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="capability" type="s" direction="in"/>
+      <arg name="detail" type="s" direction="in"/>
+      <arg name="context" type="a{sv}" direction="in"/>
+      <arg name="approved" type="b" direction="out"/>
+    </method>
+    <!-- GUI/确认前端回传用户决定，唤醒等待中的 RequestConfirm -->
+    <method name="RespondConfirm">
+      <arg name="request_id" type="s" direction="in"/>
+      <arg name="approved" type="b" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <method name="RevokePermission">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="capability" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <!-- FR-SBX-03/04/05 -->
+    <method name="BuildSandboxPolicy">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="seccomp_path" type="s" direction="out"/>
+      <arg name="netfilter_rules" type="s" direction="out"/>
+    </method>
+    <method name="GetSyscallCatalog"><arg name="arch" type="s" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="GetSyscallPolicy"><arg name="agent_id" type="s" direction="in"/><arg name="arch" type="s" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="SetGlobalSyscallPolicy"><arg name="arch" type="s" direction="in"/><arg name="additions" type="as" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="SetAgentSyscallPolicy"><arg name="agent_id" type="s" direction="in"/><arg name="arch" type="s" direction="in"/><arg name="additions" type="as" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="ResetAgentSyscallPolicy"><arg name="agent_id" type="s" direction="in"/><arg name="arch" type="s" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="GetSecurityExecutionStatus"><arg name="agent_id" type="s" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="RecordSyscallInterception"><arg name="agent_id" type="s" direction="in"/><arg name="pid" type="i" direction="in"/><arg name="arch" type="s" direction="in"/><arg name="syscall" type="s" direction="in"/><arg name="number" type="i" direction="in"/><arg name="backend" type="s" direction="in"/><arg name="policy_version" type="i" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="RecordSyscallInterceptionV2"><arg name="agent_id" type="s" direction="in"/><arg name="instance_id" type="s" direction="in"/><arg name="lease_id" type="s" direction="in"/><arg name="pid" type="i" direction="in"/><arg name="cgroup_id" type="x" direction="in"/><arg name="arch" type="s" direction="in"/><arg name="syscall" type="s" direction="in"/><arg name="number" type="i" direction="in"/><arg name="backend" type="s" direction="in"/><arg name="policy_version" type="i" direction="in"/><arg name="event_id" type="s" direction="in"/><arg name="worker_agent_id" type="s" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="GetSyscallAuditEvents"><arg name="agent_id" type="s" direction="in"/><arg name="instance_id" type="s" direction="in"/><arg name="limit" type="i" direction="in"/><arg name="cursor" type="i" direction="in"/><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="GetSyscallAuditStatus"><arg name="result" type="a{sv}" direction="out"/></method>
+    <method name="RecordNetworkLearningEvent">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="instance_id" type="s" direction="in"/>
+      <arg name="lease_id" type="s" direction="in"/>
+      <arg name="pid" type="x" direction="in"/>
+      <arg name="event" type="a{sv}" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <method name="ReportNetworkLearningCollector">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="instance_id" type="s" direction="in"/>
+      <arg name="lease_id" type="s" direction="in"/>
+      <arg name="pid" type="x" direction="in"/>
+      <arg name="state" type="s" direction="in"/>
+      <arg name="reason" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <method name="GetNetworkLearningEvents">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="limit" type="i" direction="in"/>
+      <arg name="cursor" type="i" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="GetNetworkLearningStatus">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="ClearNetworkLearningEvents">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <!-- FR-SEC-06 -->
+    <method name="AuditLog">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="op_type" type="s" direction="in"/>
+      <arg name="target" type="s" direction="in"/>
+      <arg name="result" type="s" direction="in"/>
+      <arg name="seq" type="x" direction="out"/>
+    </method>
+    <method name="QueryAudit">
+      <arg name="query_json" type="s" direction="in"/>
+      <arg name="page_json" type="s" direction="out"/>
+    </method>
+    <method name="ExportAudit">
+      <arg name="filter_json" type="s" direction="in"/>
+      <arg name="format" type="s" direction="in"/>
+      <arg name="export_path" type="s" direction="out"/>
+    </method>
+    <method name="VerifyAuditChain">
+      <arg name="export_path" type="s" direction="in"/>
+      <arg name="intact" type="b" direction="out"/>
+    </method>
+    <!-- FR-SEC-07 -->
+    <method name="SetNetworkPolicy">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="domains" type="as" direction="in"/>
+      <arg name="mode" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <method name="GetCapabilities">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="perms" type="aa{sv}" direction="out"/>
+    </method>
+    <method name="SuspendAgent">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="reason" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <!-- WebUI 配置支撑 -->
+    <method name="InstallPackage">
+      <arg name="pkg_path" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="ListAgents">
+      <arg name="agents" type="aa{sv}" direction="out"/>
+    </method>
+    <!-- policy: allow | ask | deny -->
+    <method name="SetCapabilityPolicy">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="tool" type="s" direction="in"/>
+      <arg name="policy" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <!-- 安全权限设置：group= read | write | custom；value 为 JSON 字符串
+         （read/write 为路径数组，custom 为对象）。 -->
+    <method name="GetPermissionSettings">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="settings" type="a{sv}" direction="out"/>
+    </method>
+    <method name="SetPermissionGroup">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="group" type="s" direction="in"/>
+      <arg name="value" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="GetSecurityPermissions">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="settings" type="a{sv}" direction="out"/>
+    </method>
+    <method name="GetAgentSecurityMode">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="SetAgentSecurityMode">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="mode" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="GetAgentInfo">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="info" type="a{sv}" direction="out"/>
+    </method>
+    <method name="GetNetworkPolicy">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="policy" type="a{sv}" direction="out"/>
+    </method>
+    <!-- 信号 -->
+    <signal name="SecurityAlert">
+      <arg name="agent_id" type="s"/>
+      <arg name="type" type="s"/>
+      <arg name="detail" type="s"/>
+    </signal>
+    <signal name="ConfirmRequest">
+      <arg name="agent_id" type="s"/>
+      <arg name="capability" type="s"/>
+      <arg name="detail" type="s"/>
+      <arg name="request_id" type="s"/>
+    </signal>
+    <signal name="ConfirmResponse">
+      <arg name="request_id" type="s"/>
+      <arg name="approved" type="b"/>
+    </signal>
+  </interface>
+  <interface name="io.bianbu.Security.Runtime">
+    <!-- PA bianbu-agent-runtime execution lease/control boundary. -->
+    <method name="PrepareStart">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="request" type="a{sv}" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="GetSandboxPolicy">
+      <arg name="lease_id" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="CommitStart">
+      <arg name="lease_id" type="s" direction="in"/>
+      <arg name="instance_id" type="s" direction="in"/>
+      <arg name="pid" type="x" direction="in"/>
+      <arg name="cgroup_path" type="s" direction="in"/>
+      <arg name="attestation" type="a{sv}" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="AbortStart">
+      <arg name="lease_id" type="s" direction="in"/>
+      <arg name="reason" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <method name="StopInstance">
+      <arg name="lease_id" type="s" direction="in"/>
+      <arg name="instance_id" type="s" direction="in"/>
+      <arg name="reason" type="s" direction="in"/>
+      <arg name="result" type="a{sv}" direction="out"/>
+    </method>
+    <method name="RevokeAgent">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="reason" type="s" direction="in"/>
+      <arg name="ok" type="b" direction="out"/>
+    </method>
+    <method name="GetRuntimeState">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="state" type="a{sv}" direction="out"/>
+    </method>
+    <method name="ListRuntimeInstances">
+      <arg name="agent_id" type="s" direction="in"/>
+      <arg name="instances" type="aa{sv}" direction="out"/>
+    </method>
+  </interface>
+</node>

@@ -1,0 +1,46 @@
+### RT-04 caller binding / impersonation
+2026-09-11T19:11:09+08:00
+== D-Bus: unprivileged shell process claims PA agent
+Call failed: caller 无权代表 agent com.bianbu.c6f40f30a6e5
+== D-Bus: claims runtime identity
+Call failed: caller 无权代表 agent com.bianbu.runtime
+== D-Bus: MeterTokens as PA agent
+Call failed: caller 无权代表 agent com.bianbu.c6f40f30a6e5
+== D-Bus: GetCapabilities (agent-or-admin, caller in bianbu-security group)
+aa{sv} 31 5 "capability" s "agent.delegate" "domain" s "execute" "risk_level" s "L3" "confirm" s "always" "granted" s "1" 5 "capability" s "calendar.read" "domain" s "data" "risk_level" s "L1" "confir
+== D-Bus Runtime: CommitStart with forged lease
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 152, in CommitStart
+    agent_id = self._lease_agent(str(lease_id))
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 124, in _lease_agent
+    raise RuntimeEngineError("lease 不存在")
+runtime.engine.RuntimeEngineError: lease 不存在
+== D-Bus Runtime: AbortStart forged
+Call failed: Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/dbus/service.py", line 712, in _message_cb
+    retval = candidate_method(self, *args, **keywords)
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 176, in AbortStart
+    agent_id = self._lease_agent(str(lease_id))
+  File "/usr/lib/bianbu-securityd/securityd/service.py", line 124, in _lease_agent
+    raise RuntimeEngineError("lease 不存在")
+runtime.engine.RuntimeEngineError: lease 不存在
+== UDS: forged worker lease from shell (SO_PEERCRED pid != lease pid)
+ping -> {'pong': True, 'peer_uid': 1000, 'peer_pid': 2710028, 'ok': True, '_request_id': '7573c56d63f4421b8f6eca52f6547c15'}
+permission.check w/ forged lease -> {'ok': False, 'error': 'PermissionDenied: Worker 未通过已提交 Runtime lease 身份校验', '_request_id': '9db86f1dcdf946ba86c18a6833637675'}
+permission.check no lease as PA agent -> {'ok': False, 'error': 'PermissionDenied: UDS caller 无权代表 agent com.bianbu.c6f40f30a6e5', '_request_id': '94990a64ff9746a59653d4d2fe3a31f3'}
+dlp.scan as PA agent -> {'ok': False, 'error': 'PermissionDenied: UDS caller 无权代表 agent com.bianbu.c6f40f30a6e5', '_request_id': '9d0d9e2c16ca499db6d7340551a40528'}
+token.meter as PA agent -> {'ok': False, 'error': 'PermissionDenied: UDS caller 无权代表 agent com.bianbu.c6f40f30a6e5', '_request_id': '01780f572f564612baca18d9f6ddfc1b'}
+worker.identity -> {'ok': False, 'error': 'PermissionDenied: Worker 未通过已提交 Runtime lease 身份校验', '_request_id': '8554be0db4084cc2b2e0b090ea4fef92'}
+== securityd journal (last 20 lines related)
+    raise PermissionDenied("Worker 未通过已提交 Runtime lease 身份校验")
+securityd.errors.PermissionDenied: Worker 未通过已提交 Runtime lease 身份校验
+    raise PermissionDenied(f"UDS caller 无权代表 agent {agent_id}")
+securityd.errors.PermissionDenied: UDS caller 无权代表 agent com.bianbu.c6f40f30a6e5
+    raise PermissionDenied(f"UDS caller 无权代表 agent {agent_id}")
+securityd.errors.PermissionDenied: UDS caller 无权代表 agent com.bianbu.c6f40f30a6e5
+    raise PermissionDenied(f"UDS caller 无权代表 agent {agent_id}")
+securityd.errors.PermissionDenied: UDS caller 无权代表 agent com.bianbu.c6f40f30a6e5
+    raise PermissionDenied("Worker 未通过已提交 Runtime lease 身份校验")
+securityd.errors.PermissionDenied: Worker 未通过已提交 Runtime lease 身份校验

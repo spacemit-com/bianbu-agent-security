@@ -1,0 +1,3 @@
+Tests: package-smoke
+Depends: @
+Restrictions: isolation-machine, superficial

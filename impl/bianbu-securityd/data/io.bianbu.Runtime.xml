@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-Bus Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="io.bianbu.Runtime">
+    <method name="Register"><arg name="agent_id" type="s" direction="in"/><arg name="name" type="s" direction="in"/><arg name="metadata" type="a{sv}" direction="in"/><arg name="ok" type="b" direction="out"/></method>
+    <method name="Start"><arg name="agent_id" type="s" direction="in"/><arg name="status" type="s" direction="out"/></method>
+    <method name="Pause"><arg name="agent_id" type="s" direction="in"/><arg name="snapshot" type="b" direction="in"/><arg name="status" type="s" direction="out"/></method>
+    <method name="Resume"><arg name="agent_id" type="s" direction="in"/><arg name="status" type="s" direction="out"/></method>
+    <method name="Stop"><arg name="agent_id" type="s" direction="in"/><arg name="status" type="s" direction="out"/></method>
+    <method name="Terminate"><arg name="agent_id" type="s" direction="in"/><arg name="status" type="s" direction="out"/></method>
+    <method name="Checkpoint"><arg name="agent_id" type="s" direction="in"/><arg name="checkpoint_id" type="s" direction="out"/></method>
+    <method name="Restore"><arg name="agent_id" type="s" direction="in"/><arg name="checkpoint_id" type="s" direction="in"/><arg name="status" type="s" direction="out"/></method>
+    <method name="ListCheckpoints"><arg name="agent_id" type="s" direction="in"/><arg name="checkpoints" type="aa{sv}" direction="out"/></method>
+    <method name="GetResourceStats"><arg name="agent_id" type="s" direction="in"/><arg name="stats" type="a{sv}" direction="out"/></method>
+    <method name="ExportResourceHistory"><arg name="agent_id" type="s" direction="in"/><arg name="format" type="s" direction="in"/><arg name="path" type="s" direction="out"/></method>
+    <method name="List"><arg name="agents" type="aa{sv}" direction="out"/></method>
+    <method name="SendMessage"><arg name="from" type="s" direction="in"/><arg name="to" type="s" direction="in"/><arg name="payload" type="s" direction="in"/><arg name="ok" type="b" direction="out"/></method>
+    <method name="CanCall"><arg name="agent_id" type="s" direction="in"/><arg name="session_id" type="s" direction="in"/><arg name="operation" type="s" direction="in"/><arg name="allowed" type="b" direction="out"/></method>
+    <signal name="StateChanged"><arg name="agent_id" type="s"/><arg name="old" type="s"/><arg name="new" type="s"/></signal>
+    <signal name="ResourceExceeded"><arg name="agent_id" type="s"/><arg name="resource" type="s"/><arg name="value" type="x"/></signal>
+  </interface>
+</node>

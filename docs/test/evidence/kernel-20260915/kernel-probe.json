@@ -1,0 +1,460 @@
+{
+  "model": "deterministic local fixture",
+  "command": "python3 -c 'import ctypes,json,os; c=ctypes.CDLL(None,use_errno=True); r=c.syscall(273,-1,0,0); print(json.dumps(dict(probe=\"BNSEC_INVALID_FD\",ret=r,errno=ctypes.get_errno(),pid=os.getpid())))'",
+  "agent_id": "com.bianbu.16c9164a238b",
+  "provider_id": "custom:kernel-probe-fed403d1cd11",
+  "run": {
+    "request_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+    "status": "completed",
+    "content": "Kernel probe finished.",
+    "usage": {
+      "input_tokens": 4,
+      "output_tokens": 4,
+      "total_tokens": 8,
+      "metadata": {
+        "events": 2
+      }
+    },
+    "error": null,
+    "metadata": {
+      "bianbu.security": {}
+    },
+    "result": {
+      "request_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "status": "completed",
+      "content": "Kernel probe finished.",
+      "usage": {
+        "input_tokens": 4,
+        "output_tokens": 4,
+        "total_tokens": 8,
+        "metadata": {
+          "events": 2
+        }
+      },
+      "error": null,
+      "metadata": {
+        "bianbu.security": {}
+      }
+    },
+    "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+    "session_id": "t-02c6659401"
+  },
+  "events": [
+    {
+      "seq": 2,
+      "type": "user/message",
+      "time": 1789474108.175482,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "message_id": "m-180754f5c2024fc7b27524562bb64ac1",
+        "content": "Execute the fixed acceptance probe.",
+        "attachments": [],
+        "thread_id": "24c82157-131c-4066-b118-a18aff82ede3",
+        "request": {
+          "prompt": "Execute the fixed acceptance probe.",
+          "idempotency_key": "session-input:m-180754f5c2024fc7b27524562bb64ac1",
+          "idempotency_fingerprint": "m-180754f5c2024fc7b27524562bb64ac1",
+          "agent_id": "com.bianbu.16c9164a238b",
+          "account_id": "bianbu",
+          "metadata": {},
+          "generation_id": 0,
+          "thread_id": "24c82157-131c-4066-b118-a18aff82ede3",
+          "input_messages": [
+            {
+              "message_id": "m-180754f5c2024fc7b27524562bb64ac1",
+              "content": "Execute the fixed acceptance probe.",
+              "attachments": [],
+              "skill_ids": [],
+              "created_at": 1789474108.1052153
+            }
+          ],
+          "skill_ids": []
+        }
+      }
+    },
+    {
+      "seq": 3,
+      "type": "run/progress",
+      "time": 1789474108.258831,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "phase": "starting_agent"
+      }
+    },
+    {
+      "seq": 4,
+      "type": "run/progress",
+      "time": 1789474125.5442479,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "phase": "preparing_request",
+        "generation_id": 1
+      }
+    },
+    {
+      "seq": 5,
+      "type": "hook/invoked",
+      "time": 1789474126.9660554,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "11cb30d397c14cb3a80cbb8e1fe77af6",
+        "hook_id": "bianbu.security/security.before_run",
+        "plugin_id": "bianbu.security",
+        "point": "before_run"
+      }
+    },
+    {
+      "seq": 6,
+      "type": "hook/result",
+      "time": 1789474129.8556583,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "11cb30d397c14cb3a80cbb8e1fe77af6",
+        "hook_id": "bianbu.security/security.before_run",
+        "plugin_id": "bianbu.security",
+        "point": "before_run",
+        "status": "completed",
+        "duration_ms": 647.0799159724265,
+        "metadata": {
+          "securityd": {
+            "stage": "before_run",
+            "agent_id": "com.bianbu.16c9164a238b",
+            "decision": "ALLOW"
+          }
+        }
+      }
+    },
+    {
+      "seq": 7,
+      "type": "request/context",
+      "time": 1789474129.8559058,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "reason": "initial",
+        "agent_id": "com.bianbu.16c9164a238b",
+        "provider": "custom:kernel-probe-fed403d1cd11",
+        "model": "kernel-probe",
+        "system_prompt": "## Agent Profile\n\nName: Kernel invalid-fd acceptance\nModel: kernel-probe\nModel provider ID: custom:kernel-probe-fed403d1cd11\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.16c9164a238b\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions."
+      }
+    },
+    {
+      "seq": 8,
+      "type": "hook/invoked",
+      "time": 1789474130.0872037,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "f0945f7f903043a5a8c5d5a082198db0",
+        "hook_id": "bianbu.security/security.after_context",
+        "plugin_id": "bianbu.security",
+        "point": "after_context"
+      }
+    },
+    {
+      "seq": 9,
+      "type": "hook/result",
+      "time": 1789474130.7142391,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "f0945f7f903043a5a8c5d5a082198db0",
+        "hook_id": "bianbu.security/security.after_context",
+        "plugin_id": "bianbu.security",
+        "point": "after_context",
+        "status": "completed",
+        "duration_ms": 626.3979320065118,
+        "metadata": {
+          "securityd": {
+            "stage": "input",
+            "decision": "ALLOW"
+          }
+        }
+      }
+    },
+    {
+      "seq": 10,
+      "type": "hook/invoked",
+      "time": 1789474130.8271532,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "5866049f5a0447919ca58de20f8a1a15",
+        "hook_id": "bianbu.security/security.before_model",
+        "plugin_id": "bianbu.security",
+        "point": "before_model"
+      }
+    },
+    {
+      "seq": 11,
+      "type": "hook/result",
+      "time": 1789474131.5600348,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "5866049f5a0447919ca58de20f8a1a15",
+        "hook_id": "bianbu.security/security.before_model",
+        "plugin_id": "bianbu.security",
+        "point": "before_model",
+        "status": "completed",
+        "duration_ms": 830.2670750126708,
+        "metadata": {
+          "securityd": {
+            "stage": "pre_model_call",
+            "decision": "ALLOW"
+          }
+        }
+      }
+    },
+    {
+      "seq": 12,
+      "type": "run/event",
+      "time": 1789474131.8262951,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "kind": "usage",
+        "payload": {
+          "prompt_tokens": 2,
+          "completion_tokens": 2
+        }
+      }
+    },
+    {
+      "seq": 13,
+      "type": "assistant/message.end",
+      "time": 1789474131.9151473,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "has_tool_calls": true
+      }
+    },
+    {
+      "seq": 14,
+      "type": "tool/call.started",
+      "time": 1789474131.9153445,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "call_id": "call_kernel_probe",
+        "name": "terminal",
+        "arguments": {
+          "command": "python3 -c 'import ctypes,json,os; c=ctypes.CDLL(None,use_errno=True); r=c.syscall(273,-1,0,0); print(json.dumps(dict(probe=\"BNSEC_INVALID_FD\",ret=r,errno=ctypes.get_errno(),pid=os.getpid())))'"
+        },
+        "round": 1
+      }
+    },
+    {
+      "seq": 15,
+      "type": "hook/invoked",
+      "time": 1789474132.0085576,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "0f981d040bc64a96a98efb745b02d864",
+        "hook_id": "bianbu.security/security.before_tool",
+        "plugin_id": "bianbu.security",
+        "point": "before_tool"
+      }
+    },
+    {
+      "seq": 16,
+      "type": "hook/result",
+      "time": 1789474132.8166037,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "0f981d040bc64a96a98efb745b02d864",
+        "hook_id": "bianbu.security/security.before_tool",
+        "plugin_id": "bianbu.security",
+        "point": "before_tool",
+        "status": "completed",
+        "duration_ms": 926.756614993792,
+        "metadata": {
+          "securityd": {
+            "decision": "ALLOW",
+            "capability": "system.execute",
+            "scope": "<shell>",
+            "agent_id": "com.bianbu.16c9164a238b",
+            "tool": "terminal"
+          }
+        }
+      }
+    },
+    {
+      "seq": 17,
+      "type": "hook/invoked",
+      "time": 1789474132.9706898,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "0213ce192841405889df27ea1069e115",
+        "hook_id": "bianbu.security/security.after_tool",
+        "plugin_id": "bianbu.security",
+        "point": "after_tool"
+      }
+    },
+    {
+      "seq": 18,
+      "type": "hook/result",
+      "time": 1789474133.5884256,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "0213ce192841405889df27ea1069e115",
+        "hook_id": "bianbu.security/security.after_tool",
+        "plugin_id": "bianbu.security",
+        "point": "after_tool",
+        "status": "completed",
+        "duration_ms": 621.0041459999047
+      }
+    },
+    {
+      "seq": 19,
+      "type": "tool/call.completed",
+      "time": 1789474133.693549,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "call_id": "call_kernel_probe",
+        "name": "terminal",
+        "result": "{\"output\": \"{\\\"probe\\\": \\\"BNSEC_INVALID_FD\\\", \\\"ret\\\": -1, \\\"errno\\\": 1, \\\"pid\\\": 29}\\n\", \"exit_code\": 0, \"status\": \"completed\"}",
+        "status": "success",
+        "round": 1
+      }
+    },
+    {
+      "seq": 20,
+      "type": "assistant/text.delta",
+      "time": 1789474133.7854254,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "text": "Kernel probe finished."
+      }
+    },
+    {
+      "seq": 21,
+      "type": "run/event",
+      "time": 1789474133.7856064,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "kind": "usage",
+        "payload": {
+          "prompt_tokens": 2,
+          "completion_tokens": 2
+        }
+      }
+    },
+    {
+      "seq": 22,
+      "type": "hook/invoked",
+      "time": 1789474133.7857287,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "f22da49d603e46c5b564d75c8ec980c5",
+        "hook_id": "bianbu.security/security.after_model",
+        "plugin_id": "bianbu.security",
+        "point": "after_model"
+      }
+    },
+    {
+      "seq": 23,
+      "type": "hook/result",
+      "time": 1789474134.4965913,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "f22da49d603e46c5b564d75c8ec980c5",
+        "hook_id": "bianbu.security/security.after_model",
+        "plugin_id": "bianbu.security",
+        "point": "after_model",
+        "status": "completed",
+        "duration_ms": 755.8896639966406
+      }
+    },
+    {
+      "seq": 24,
+      "type": "hook/invoked",
+      "time": 1789474134.496823,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "c1e1028ab6c34b0dbcaf2c63f743c42f",
+        "hook_id": "bianbu.security/security.after_run",
+        "plugin_id": "bianbu.security",
+        "point": "after_run"
+      }
+    },
+    {
+      "seq": 25,
+      "type": "hook/result",
+      "time": 1789474135.142987,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "invocation_id": "c1e1028ab6c34b0dbcaf2c63f743c42f",
+        "hook_id": "bianbu.security/security.after_run",
+        "plugin_id": "bianbu.security",
+        "point": "after_run",
+        "status": "completed",
+        "duration_ms": 646.6381710197311,
+        "metadata": {
+          "securityd": {
+            "stage": "output",
+            "pii_cleared": 0
+          }
+        }
+      }
+    },
+    {
+      "seq": 26,
+      "type": "run/completed",
+      "time": 1789474135.253804,
+      "run_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+      "data": {
+        "status": "completed",
+        "content": "Kernel probe finished.",
+        "usage": {
+          "input_tokens": 4,
+          "output_tokens": 4,
+          "total_tokens": 8,
+          "metadata": {
+            "events": 2
+          }
+        },
+        "error": null,
+        "result": {
+          "request_id": "04397e1f-73b6-4009-a67b-a050cbaf408f",
+          "status": "completed",
+          "content": "Kernel probe finished.",
+          "usage": {
+            "input_tokens": 4,
+            "output_tokens": 4,
+            "total_tokens": 8,
+            "metadata": {
+              "events": 2
+            }
+          },
+          "error": null,
+          "metadata": {
+            "bianbu.security": {}
+          }
+        }
+      }
+    }
+  ],
+  "syscall_result": {
+    "probe": "BNSEC_INVALID_FD",
+    "ret": -1,
+    "errno": 1,
+    "pid": 29
+  },
+  "kernel_events": [
+    {
+      "seq": 6,
+      "ts": "2026-09-15T12:08:52.988+00:00",
+      "event_id": "kernel-9a944beb-6d32-4c66-ab28-13d2cf9a298c-181748656389149-0-2152235",
+      "agent_id": "com.bianbu.runtime",
+      "worker_agent_id": "com.bianbu.16c9164a238b",
+      "instance_id": "com.bianbu.16c9164a238b-a091a29f390143bfa5a8f73921f170a8",
+      "lease_id": "4195384fb6144f589529e57c6a90a116",
+      "pid": 2152235,
+      "cgroup_id": 7736596,
+      "arch": "riscv64",
+      "syscall": "finit_module",
+      "number": 273,
+      "action": "deny",
+      "backend": "ebpf-seccomp",
+      "policy_version": 0,
+      "prev_hash": "9439ffd0398743a998259f1892194e169a6d942f4395123bfcc82248a72d2a8c",
+      "hash": "15e214bb16e433e44d21890717b5470cd52275bb8c210ffe5e0f90593aa1b41a"
+    }
+  ],
+  "pid_namespaces": "syscall_result.pid is sandbox PID; kernel_events.pid is host PID",
+  "passed": true
+}

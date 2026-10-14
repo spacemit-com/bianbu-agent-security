@@ -1,0 +1,58 @@
+bianbu-agent-securityd for Debian/Ubuntu
+========================================
+
+This package installs the Bianbu AgentOS security daemon and its D-Bus
+contract. The reference Runtime service is not installed by this package;
+the Runtime package owns that service.
+
+This release is a development/demo delivery. The Debian package installs a
+systemd drop-in that overrides the production unit with:
+
+    BIANBU_SECURITY_CODESIGN=off
+
+No code-signing public key is required, no key package is built, and the
+daemon starts normally without a trust root. Agent manifests and
+Agent/Runtime/Hook/Tool/Skill code packages do not require signature files or
+public keys in this mode. Manifest structure, capability checks, Runtime
+identity/lease/digest checks, DLP, audit and sandbox functionality remain
+enabled.
+
+The implementation is retained. The base service unit still declares the
+product setting:
+
+    BIANBU_SECURITY_CODESIGN=enforce
+
+and securityd continues to support trusted keys and revocation under:
+
+    /etc/bianbu/codesign-keys/
+
+For a product release, remove the packaged
+`10-development-demo.conf` drop-in, provision an approved Ed25519 public key,
+and run the existing strict release and commercial acceptance gates. Never
+ship the private signing key to a target device.
+
+The WebUI unit is enabled and started automatically after installation, and is
+enabled for subsequent boots.
+This development/demo package also installs a WebUI systemd drop-in that sets:
+
+    BIANBU_WEBUI_DEMO=1
+
+The demo WebUI therefore starts without `BIANBU_WEBUI_TOKEN` and does not
+enforce Bearer authentication.  The WebUI authentication, roles and CSRF
+implementation are still present in the package.  The product package must
+omit `bianbu-security-webui.service.d/10-development-demo.conf`; without that
+drop-in, `/etc/bianbu/webui.env` must contain a high-entropy production token
+before the service can start.
+
+The demo drop-in removes inherited admin/viewer token variables while retaining
+other `/etc/bianbu/webui.env` settings (port, TLS and shell policy).  Demo
+uses the unit defaults (`127.0.0.1:8787`) when those settings are absent;
+configure the environment file for a product build.
+
+Configure `/etc/bianbu/webui.env` for production before enabling the product
+unit.  Even in demo mode, non-loopback WebUI listeners still require TLS (or
+the explicit insecure-remote test switch).
+
+The current build defaults to demo mode.  To build a product package, set
+`DEB_DEMO=0` when invoking `dpkg-buildpackage`; both development drop-ins are
+then omitted, so the base units and the production WebUI token policy apply.

@@ -1,0 +1,27 @@
+{
+  "before": {
+    "pid": 705793,
+    "fds": 27,
+    "dlp_fds": 0
+  },
+  "worker_pid": 708107,
+  "probe": "existing committed lease, diagnostic child in worker cgroup",
+  "identity": {
+    "authorized": true,
+    "agent_id": "com.bianbu.278200e1617c",
+    "pid": 708772,
+    "cgroup": "0::/system.slice/bianbu-agent-com.bianbu.runtime-008b816fd61f.scope",
+    "ok": true
+  },
+  "requests": 1000,
+  "seconds": 11.008,
+  "dlp.scan": "passed",
+  "token.budget": "passed",
+  "security.mode": "passed",
+  "invalid_lease": "denied",
+  "after": {
+    "pid": 705793,
+    "fds": 27,
+    "dlp_fds": 0
+  }
+}

@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+if [ "$1" = purge ]; then
+    echo "bianbu-agent-securityd: preserving /etc/bianbu and audit data; remove manually if required" >&2
+fi
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+fi
+exit 0

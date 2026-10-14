@@ -1,0 +1,146 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+       background: #f5f6f8; color: #222; font-size: 14px;
+       display: flex; flex-direction: column; min-height: 100vh; }
+.login-overlay { position: fixed; inset: 0; z-index: 1000; display: flex;
+                 align-items: center; justify-content: center;
+                 background: rgba(15, 23, 42, .72); }
+.login-overlay[hidden] { display: none; }
+.login-card { width: min(92vw, 390px); padding: 24px; border-radius: 10px;
+              background: #fff; box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+.login-card h2 { margin-bottom: 8px; font-size: 18px; }
+.login-hint { margin-bottom: 16px; color: #64748b; font-size: 13px; }
+.login-card label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
+.login-card input { width: 100%; margin-bottom: 12px; padding: 9px 10px;
+                    border: 1px solid #cbd5e1; border-radius: 5px; font-size: 14px; }
+.login-card button { width: 100%; padding: 9px 13px; }
+.login-error { margin-top: 10px; color: #b91c1c; font-size: 13px; }
+.capability-picker-label { align-items: flex-start !important; }
+.capability-picker { position: relative; display: inline-block; width: 220px; }
+.capability-picker #cap-name { width: 100%; }
+.cap-options { position: absolute; z-index: 20; top: calc(100% + 3px); left: 0; right: 0;
+               max-height: 240px; overflow-y: auto; padding: 3px 0;
+               background: #fff; border: 1px solid #94a3b8; border-radius: 5px;
+               box-shadow: 0 5px 14px rgba(15,23,42,.2); }
+.cap-options[hidden] { display: none; }
+.cap-option { padding: 7px 9px; cursor: pointer; font-size: 13px; }
+.cap-option:hover, .cap-option.active { background: #dbeafe; color: #1e3a8a; }
+.cap-options-empty { padding: 7px 9px; color: #64748b; font-size: 12px; }
+header { background: #1f2937; color: #fff; padding: 12px 20px;
+         display: flex; align-items: center; justify-content: space-between; }
+header h1 { font-size: 17px; font-weight: 600; }
+.conn { font-size: 12px; padding: 3px 10px; border-radius: 10px; background: #374151; }
+.conn.ok { background: #059669; } .conn.bad { background: #dc2626; }
+
+nav { display: flex; gap: 1px; background: #d1d5db; padding: 0 16px; flex-wrap: wrap; }
+nav button { border: none; background: #e5e7eb; padding: 9px 14px; cursor: pointer;
+             font-size: 13px; border-bottom: 3px solid transparent; color: #374151; }
+nav button:hover { background: #f3f4f6; color: #111; }
+nav button.active { border-bottom-color: #2563eb; color: #2563eb; font-weight: 600;
+                    background: #f5f6f8; }
+
+main { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+.tab { display: none; }
+.tab.active { display: block; }
+/* 终端 tab 激活时填满剩余视口高度 */
+#tab-terminal.active { flex: 1; display: flex; flex-direction: column; padding-bottom: 0; }
+.bar { display: flex; align-items: center; gap: 10px; margin: 14px 0 8px;
+       flex-wrap: wrap; }
+.bar h2 { font-size: 15px; } .bar h3 { font-size: 13px; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 14px 0; }
+
+table { width: 100%; border-collapse: collapse; background: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,.08); border-radius: 6px; overflow: hidden; margin-bottom:12px; }
+th, td { text-align: left; padding: 8px 11px; border-bottom: 1px solid #eee; }
+th { background: #f9fafb; font-weight: 600; font-size: 12px; color: #555; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f9fafb; }
+
+button { background: #2563eb; color: #fff; border: none; padding: 6px 13px;
+         border-radius: 5px; cursor: pointer; font-size: 13px; white-space: nowrap; }
+button:hover { background: #1d4ed8; }
+button.ghost { background: #e5e7eb; color: #333; }
+button.danger { background: #dc2626; }
+button.ok { background: #059669; }
+button.warn { background: #d97706; }
+
+select, input[type=text], input[type=number], textarea {
+  padding: 5px 9px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 13px; }
+textarea { width: 100%; resize: vertical; }
+
+.form-row { display: flex; gap: 8px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+.form-row label { display: flex; align-items: center; gap: 5px; font-size: 13px; }
+
+pre { background: #1e293b; color: #e2e8f0; padding: 10px 12px; border-radius: 6px;
+      margin-top: 8px; white-space: pre-wrap; font-size: 12px; font-family: monospace;
+      max-height: 220px; overflow: auto; }
+pre:empty { display: none; }
+
+.code-box { background: #1e293b; color: #a5f3fc; padding: 10px 12px; border-radius: 6px;
+            margin: 8px 0; font-size: 12px; font-family: monospace; white-space: pre-wrap;
+            min-height: 60px; max-height: 280px; overflow: auto; }
+.result-box { padding: 8px 12px; border-radius: 6px; margin: 6px 0; font-weight: 600;
+              font-size: 14px; background: #f1f5f9; min-height: 32px; }
+.result-box.allow { background:#d1fae5; color:#065f46; }
+.result-box.confirm { background:#fef3c7; color:#92400e; }
+.result-box.deny   { background:#fee2e2; color:#991b1b; }
+
+.badge { padding: 2px 7px; border-radius: 9px; font-size: 11px; font-weight: 600; }
+.risk-L1 { background:#d1fae5; color:#065f46; }
+.risk-L2 { background:#fef3c7; color:#92400e; }
+.risk-L3 { background:#fed7aa; color:#9a3412; }
+.risk-L4 { background:#fecaca; color:#991b1b; }
+.g1  { color:#059669; font-weight:600; }
+.g0  { color:#d97706; }
+.g-1 { color:#dc2626; text-decoration:line-through; }
+
+.alert-item { padding: 8px 12px; border-radius: 5px; margin-bottom: 6px;
+              border-left: 4px solid #dc2626; background: #fff1f2; font-size: 13px; }
+.alert-item .ts { font-size: 11px; color: #888; }
+
+.confirm-item { padding: 10px 14px; border-radius: 6px; margin-bottom: 8px;
+                border-left: 4px solid #d97706; background: #fffbeb; }
+.confirm-item h4 { margin-bottom: 4px; font-size: 13px; }
+.confirm-item .detail { font-size: 12px; color: #555; margin-bottom: 8px; }
+.confirm-item .btns { display: flex; gap: 8px; }
+
+.dim { color: #9ca3af; font-size: 13px; }
+
+#terminal-container { border-radius: 6px; overflow: hidden;
+                      background: #000; flex: 1; min-height: 0; padding: 4px; }
+
+.sbx-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.sbx-meta span { font-size: 12px; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; }
+
+/* 沙箱能力演示卡片 */
+.probe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+              gap: 12px; margin: 10px 0; }
+.probe-card { background: #fff; border-radius: 8px; padding: 12px 14px;
+              box-shadow: 0 1px 3px rgba(0,0,0,.08); border-left: 4px solid #94a3b8;
+              cursor: pointer; transition: box-shadow .15s; }
+.probe-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,.14); }
+.probe-card.pass { border-left-color: #059669; }
+.probe-card.run  { border-left-color: #2563eb; }
+.probe-card .cat { font-size: 11px; color: #64748b; text-transform: uppercase;
+                   letter-spacing: .5px; }
+.probe-card h4 { font-size: 14px; margin: 3px 0 5px; }
+.probe-card .desc { font-size: 12px; color: #555; line-height: 1.5; margin-bottom: 8px; }
+.probe-card .status { font-size: 12px; font-weight: 600; }
+.probe-card .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.probe-card .cmp > div { font-size: 11px; font-family: monospace; padding: 6px 8px;
+                         border-radius: 4px; white-space: pre-wrap; word-break: break-all;
+                         max-height: 110px; overflow: auto; }
+.probe-card .box-sbx  { background: #ecfdf5; border: 1px solid #a7f3d0; }
+.probe-card .box-host { background: #fef2f2; border: 1px solid #fecaca; }
+.probe-card .cmp-label { font-size: 10px; color: #666; font-weight: 600; margin-bottom: 2px; }
+details summary { list-style: revert; }
+
+/* 安全模式卡片（能力管理页） */
+.mode-card { display:flex; align-items:center; justify-content:space-between; gap:12px;
+             background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #2563eb;
+             border-radius:8px; padding:12px 14px; margin:10px 0; }
+.mode-card.is-yolo { border-left-color:#dc2626; background:#fff1f2; }
+.mode-card h4 { font-size:14px; margin:0 0 4px; }
+.mode-card p { margin:0; }
+.mode-card__action { flex-shrink:0; }

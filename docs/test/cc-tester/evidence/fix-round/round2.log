@@ -1,0 +1,48 @@
+### build
+2026-09-11T23:23:28+08:00
+security-build rc=0
+runtime-build rc=0
+-rw-r--r-- 1 bianbu bianbu 18589600 Sep 11 23:25 /var/tmp/bnsec-cc-fix-20260911/bianbu-agent-runtime_0.1.27_riscv64.deb
+-rw-r--r-- 1 bianbu bianbu  1026744 Sep 11 23:23 /var/tmp/bnsec-cc-fix-20260911/bianbu-agent-securityd_0.1.28_riscv64.deb
+### install
+2026-09-11T23:25:25+08:00
+
+bianbu-agent-securityd: development/demo delivery; Agent manifest and code-package signature verification is disabled
+Security binding reset: agent=com.bianbu.runtime removed=True
+registered Security Runtime manifest: agent=com.bianbu.runtime permissions=22
+active
+active
+active
+active
+### D-10 seccomp version after restart (expect applied==policy, pending_restart=false)
+policy_version\": 2, \"applied_policy_version\": 2, \"pending_restart\": false
+### D-3 attestation kernel_seccomp_log + audit status (expect active)
+('81055e02b1ea', 'running', '{"backend": "host-process", "container_id": "", "kernel_seccomp_log": "True", "network_properties": "[]", "pid": "2891603", "sandboxed": "False", "systemd_scope": "system", "unit": "bianbu-agent-com.bianbu.runtime-81055e02b1ea.scope"}')
+a{sv} 1 "status_json" s "{\"status\": \"active\", \"backend\": \"ebpf-seccomp\", \"coverage\": \"deny-only\", \"events\": 1, \"chain_valid\": true, \"collectors\": 2, \"reason\": \"\"}"
+### testkit full
+2026-09-11T23:26:35+08:00
+testkit rc=0
+hook security.demo 未签名（digest=204e6079b19cf968…）—— 当前策略 warn 放行
+MCP server nosuch.server 的 mcp.json 未找到，按「远端出境」从严处理；如为本地 stdio server 请确认安装完整
+[bianbu-security] Skill 'leaky' 的文本含受限敏感信息（phone），已拒绝载入 system prompt
+已注册 37 个测试项，全部运行
+
+==============================================================
+总计 37 | 通过 37 | 失败 0 | 错误 0 | 耗时 57.6s
+报告: /var/tmp/bnsec-cc-fix-20260911/evidence/testkit-run2/report.json
+==============================================================
+### SC-01 real run + audit event lookup by logical agent
+2026-09-11T23:27:33+08:00
+TOOL {"call_id": "call_2bafa8d7a7aa456fa87856ec", "name": "terminal", "result": "{\"output\": \"finit_module -1 1 Operation not permitted\\n\", \"exit_code\": 0, \"status\": \"completed\"}", "status": "suc
+RUN run/completed
+a{sv} 1 "events_json" s "[{\"seq\": 2, \"ts\": \"2026-09-11T15:27:42.309+00:00\", \"event_id\": \"kernel-8ba7588b-323f-4831-a5ad-0b8db27f6d6c-213973078954594-6-2892896\", \"agent_id\": \"com.bianbu.runtime\", \"worker_agent_id\": \"com.bianbu.c6f40f30a6e5\", \"instance_id\": \"com.bianbu.c6f40f30a6e5-98c5145a5f414465a10181055e02b1ea\", \"lease_id\": \"14bb52e26b8c457f9f4b411abb1d414a\", \"pid\": 2892896, \"cgroup_id\": 1209158, \"arch\": \"riscv64\", \"syscall\": \"finit_module\", \"number\": 27
+
+[{"seq":2,"ts":"2026-09-11T15:27:42.309+00:00","event_id":"kernel-8ba7588b-323f-4831-a5ad-0b8db27f6d6c-213973078954594-6-2892896","agent_id":"com.bianbu.runtime","worker_agent_id":"com.bianbu.c6f40f30a6e5","instance_id":"com.bianbu.c6f40f30a6e5-98c5145a5f414465a10181055e02b1ea","lease_id":"14bb52e26b8c457f9f4b411abb1d414a","pid":2892896,"cgroup_id":1209158,"arch":"riscv64","syscall":"finit_module"
+### journal
+      1 runtime: 4 个 running 实例的进程已不存在，已标记 lost
+      1 runtime: 1 个 running 实例的进程已不存在，已标记 lost
+### final state
+a{sv} 4 "agent_id" s "com.bianbu.c6f40f30a6e5" "mode" s "yolo" "updated_at" s "2
+mode\": \"allow_all\"
+a{sv} 7 "agent_id" s "com.bianbu.c6f40f30a6e5" "unit" s "token" "on_exceed" s "pause_and_notify" "limit_per_conversation" s "0" "limit_per_day" s "0" "conv_used" s "141957" "day_used" s "1171191"
+2026-09-11T23:27:54+08:00

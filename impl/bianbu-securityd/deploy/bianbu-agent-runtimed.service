@@ -1,0 +1,41 @@
+[Unit]
+Description=Bianbu Agent Runtime (Security-integrated)
+Documentation=file:///usr/share/doc/bianbu/agent-runtimed-security-integration.md
+After=dbus.service bianbu-securityd.service
+Requires=dbus.service bianbu-securityd.service
+Before=bianbu-aihald.service
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/bianbu-securityd/venv/bin/python -m runtime.runtime_service
+WorkingDirectory=/usr/lib/bianbu-securityd
+Environment=PYTHONPATH=/usr/lib/bianbu-securityd:/usr/lib/bianbu-securityd/client
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONNOUSERSITE=1
+Environment=BIANBU_SEC_UDS=/run/bianbu/securityd.sock
+Restart=on-failure
+RestartSec=2s
+User=bianbu-runtime
+Group=bianbu-runtime
+SupplementaryGroups=bianbu-security
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+ReadWritePaths=/var/lib/bianbu/runtime /run/bianbu
+StateDirectory=bianbu/runtime
+RuntimeDirectory=bianbu-runtime
+RuntimeDirectoryMode=0750
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

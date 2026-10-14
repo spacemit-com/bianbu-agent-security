@@ -1,0 +1,380 @@
+bianbu-agent-security (0.1.41) resolute-porting; urgency=medium
+
+  * Replace the flat read/write path lists with include + exclude ranges. A
+    scope is now `{include: [...], exclude: [...]}`; excludes must sit inside
+    an include entry so a dead declaration cannot be saved. An excluded read
+    path becomes fully invisible (`InaccessiblePaths`), an excluded write path
+    stays readable but loses write access (`ReadOnlyPaths`).
+  * Drop the custom JSON group. Permission settings are only the structured
+    read, write and network scopes now, so a preset or policy reset has nothing
+    left to leak around.
+  * Derive the execution boundary instead of storing it. `securityd` decides
+    host or sandbox from the settings an Agent declares: any read, write,
+    network or syscall declaration needs a namespace, so it runs sandboxed;
+    nothing declared runs on the host. A missing trusted manifest still forces
+    the sandbox. An Agent can no longer name a side.
+  * Remove the syscall denylist baseline. `SECCOMP_DENYLIST` is empty, no entry
+    is mandatory, and the seccomp builder returns no policy file when the
+    effective denylist is empty so `--seccomp` is skipped entirely. Additions
+    are the only source of the filter.
+  * Stop replacing tool policies on re-registration. The client exposes
+    `get_capabilities` and the Runtime only registers rows securityd has not
+    seen, so an operator's tightening survives every restart.
+
+ -- liudecheng[bot] <decheng.liu@spacemit.com>  Wed, 14 Oct 2026 20:40:00 +0800
+
+bianbu-agent-security (0.1.40) resolute-porting; urgency=medium
+
+  * Default every tool policy to allow. The catalog shipped with `ask` as the
+    built-in default, so a fresh install prompted for almost every tool. Every
+    catalog entry, the unmapped fallback for tools outside the catalog and the
+    capability registry fallback for unregistered tools now resolve to
+    `allow`. The registry delegates to `capabilities.unmapped_policy()` so the
+    two defaults cannot drift apart again.
+  * Split the syscall denylist into its own WebUI page. It is a kernel seccomp
+    table rather than a filesystem or network scope, so it gets a dedicated
+    tab with its own agent and architecture selectors; the capability page
+    keeps the readable, writable, network and custom groups.
+  * Default the new-policy select and the tool-catalog hint to `allow`.
+
+ -- liudecheng[bot] <decheng.liu@spacemit.com>  Wed, 14 Oct 2026 18:25:00 +0800
+
+bianbu-agent-security (0.1.39) resolute-porting; urgency=medium
+
+  * Record the framework declared by a signed package. A package registers
+    through `install_package` / `register_capabilities`, and that path never
+    stored which framework's tool catalog the Agent is wired to, so the console
+    fell back to listing every known tool: `com.bianbu.runtime` reported the
+    runtime and hermes catalogs mixed together (81 tools) while a logical
+    Agent, which registers through `register_agent`, reported the correct 34.
+    The optional `[agent].framework` value is now parsed (an unknown value is
+    rejected instead of silently scoping to the wrong catalog), passed through
+    `record_manifest`, and stored in `agent_manifest`. A package that does not
+    declare it keeps whatever a caller already registered, so an upgrade cannot
+    blank the scope.
+
+ -- liudecheng[bot] <decheng.liu@spacemit.com>  Wed, 14 Oct 2026 15:10:00 +0800
+
+bianbu-agent-security (0.1.38) resolute-porting; urgency=medium
+
+  * Decode the D-Bus permission payload before validating it.
+    `SetPermissionGroup` takes its value as an `sss` string because D-Bus
+    cannot carry an arbitrary JSON value, and the client encodes arrays and
+    objects as JSON. The service forwarded that string straight to
+    `permissions.normalise`, so every `read`/`write` save failed with "read
+    需要是路径数组" and the control plane could not store a permission range at
+    all. The payload is decoded in the service layer now, and a payload that is
+    not valid JSON is rejected before it reaches the engine.
+
+ -- liudecheng[bot] <decheng.liu@spacemit.com>  Wed, 14 Oct 2026 13:05:00 +0800
+
+bianbu-agent-security (0.1.37) resolute-porting; urgency=medium
+
+  * Add missing columns when upgrading an existing database. The manifest
+    refresh failed with `sqlite3.OperationalError: no such column: framework`,
+    so the Runtime refused to start after the upgrade. `CREATE TABLE IF NOT
+    EXISTS` keeps an existing table as it is and never adds a column, and the
+    tool-schema migration only rebuilt `capability` and `session_trust`; the
+    `framework` column added to `agent_manifest` was left out. A column-level
+    migration now runs before the others and registers every column appended
+    after the first release, so an upgraded database reaches the same shape as
+    a fresh one.
+  * Resolve the tool catalog from the client's own install root.
+    `capability_catalog` imported `securityd.capabilities` with a bare import,
+    but callers only publish the `client` directory on `sys.path`; the
+    `securityd` package sits next to it, so the import failed and the function
+    silently returned an empty catalog. The console then fell back to the
+    per-Agent capabilities and both frameworks rendered the same rows, which
+    defeats the framework-scoped catalog.
+
+ -- liudecheng[bot] <decheng.liu@spacemit.com>  Wed, 14 Oct 2026 13:00:00 +0800
+
+bianbu-agent-security (0.1.36) resolute-porting; urgency=medium
+
+  * Replace the capability model with a three-state tool policy. A capability
+    used to carry four dimensions (domain, risk level, confirm strategy and
+    scope) that mostly restated what the tool name already implies. The policy
+    is now one dimension, the tool itself, with three states: allow, ask and
+    deny; the old ``capability``, ``scope`` and ``risk_level`` fields are gone
+    from the decision path and from the audit payload.
+  * Split the old scope into five structured permission groups: readable
+    range, writable range, network access, a syscall denylist and a custom
+    JSON group. ``permissions.py`` owns the groups and the engine aggregates
+    network and syscall on top of the read/write/custom core.
+  * Give DLP the same three states plus ``mask``, with a single
+    ``DEFAULT_ACTION = mask`` for every unset PII type, so a policy never has
+    to encode a per-type risk column.
+  * Keep the tool catalog per framework: a runtime agent is offered the
+    Runtime tools and a hermes agent the hermes tools, and an unknown tool
+    falls back to ``ask`` instead of a framework-wide default.
+  * Migrate the capability database in place. The legacy schema has no
+    ``tool`` column, so a plain ``CREATE TABLE IF NOT EXISTS`` kept the old
+    table and every insert failed with ``no column named tool``; the registry
+    drops and rebuilds ``capability`` and ``session_trust`` when it detects
+    the old layout.
+  * Remove the token budget feature end to end: the meter, the D-Bus getters
+    and setters, the runtime token guard and the runtime security consumer are
+    all gone.
+
+ -- liudecheng[bot] <decheng.liu@spacemit.com>  Wed, 14 Oct 2026 12:00:00 +0800
+
+bianbu-agent-security (0.1.34) resolute-porting; urgency=medium
+
+  * Make the `last_seen` column of the Agent page match the real activity time.
+    Two problems made it look wrong: the manifest installation time was used as
+    a fallback evidence, so an Agent that was installed but never ran appeared
+    as "recently active"; and `installed_at` was returned as the raw SQLite UTC
+    string while `last_seen` was ISO-8601 with an offset, so a renderer that
+    localized it shifted the value by one time zone. `last_seen` now merges
+    only real activity evidence (audit chain, syscall audit log, caller
+    binding) and stays empty when there is none, so the console can say "no
+    activity" instead of showing an installation timestamp. `installed_at` is
+    normalized to ISO-8601 UTC milliseconds like every other timestamp.
+
+ -- liudecheng <decheng.liu@spacemit.com>  Wed, 23 Sep 2026 15:10:00 +0800
+
+bianbu-agent-security (0.1.33) resolute-porting; urgency=medium
+
+  * Fill in `last_seen` in `ListAgents` so the Agent page of the security
+    console stops showing an empty "recent activity" column. The engine merges
+    the newest evidence from the audit chain, the syscall audit log, the caller
+    binding table and the manifest installation time, and normalizes every
+    timestamp to ISO-8601 UTC milliseconds. Agents that own capability rows but
+    no manifest no longer render the literal "None" for version, status and
+    installation time. New unit tests pin the four evidence sources and the
+    audit-chain shard backtracking.
+
+ -- liudecheng <decheng.liu@spacemit.com>  Wed, 23 Sep 2026 11:50:00 +0800
+
+bianbu-agent-security (0.1.32) resolute-porting; urgency=medium
+
+  * Fix launch-lease expiry to use the monotonic deadline recorded at issue
+    time instead of the wall clock. The first NTP sync on a cold-started K3
+    steps the wall clock forward (measured 1281.5s), which expired a 30s lease
+    issued only 1.4s earlier and blocked Agent Worker startup with
+    `lease 已过期`. Leases issued in a previous boot are treated as expired;
+    rows written before this change fall back to the wall clock. The atomic
+    one-shot consume in commit() and engine.sandbox_policy() share the same
+    predicate.
+
+ -- liudecheng <decheng.liu@spacemit.com>  Wed, 16 Sep 2026 19:15:00 +0800
+
+bianbu-agent-security (0.1.31) resolute-porting; urgency=medium
+
+  * Record the completed Runtime, plugin and native Desktop acceptance fixes.
+  * Document Worker validation, DLP enforcement, network-policy restart handling,
+    and the 10.0.90.243 acceptance evidence.
+
+ -- duancheng <cheng.duan@spacemit.com>  Tue, 15 Sep 2026 00:00:00 +0500
+
+bianbu-agent-security (0.1.30) resolute-porting; urgency=medium
+
+  * Improve Runtime network-policy error classification with effective Worker
+    startup-policy snapshots and actionable provider-domain diagnostics.
+  * Make the Security client lazy-load D-Bus so managed Workers can use the
+    lease-bound UDS data plane without a dbus-python import.
+  * Isolate audit database and WebUI token tests, and execute dedicated E2E
+    coverage in an independent D-Bus and data-root environment.
+  * Document the Runtime/Security acceptance fixes and reproducible validation
+    procedure.
+
+ -- duancheng <cheng.duan@spacemit.com>  Tue, 15 Sep 2026 00:00:00 +0500
+
+bianbu-agent-security (0.1.29) resolute-porting; urgency=medium
+
+  * Complete syscall denial auditing for managed Workers by correlating
+    privileged kernel seccomp events with live Runtime leases and cgroups.
+  * Generate versioned seccomp filters for logical Agents, expose audit
+    coverage degradation, and make syscall events queryable by logical Agent.
+  * Preserve syscall event identity, policy version, deduplication and hash
+    chain integrity across short-lived processes and collector restarts.
+  * Report live Worker enforcement state instead of stale policy-apply state,
+    including explicit unregistered-Agent and pending-restart diagnostics.
+  * Fix conversation-scoped token accounting, lease cleanup on StopInstance,
+    and Runtime authorization for network-policy administration.
+  * Fail closed when intervention handlers time out or raise errors instead of
+    silently allowing the protected operation.
+  * Update the end-to-end testkit and RISC-V acceptance evidence for syscall
+    blocking, interception audit, network policy and learning observations.
+
+ -- duancheng <cheng.duan@spacemit.com>  Sat, 12 Sep 2026 12:00:00 +0500
+
+bianbu-agent-security (0.1.28) resolute-porting; urgency=medium
+
+  * Add bianbu-agentic-security-reset to the administrative command path.
+  * Reset Security databases, audit records, Vault keys, leases, sandbox
+    artifacts and collector state while preserving installation assets,
+    trust keys and directory ownership and permissions.
+  * Stop Runtime workers and related services before cleanup, temporarily
+    block automatic activation and restore service settings afterward.
+  * Offer separate interactive confirmation to remove the Runtime user's
+    .bianbu-agent directory, including configuration and chat history;
+    preserve user data by default and during non-interactive execution.
+  * Add path and live-process safeguards, regression tests and real-device
+    reset and first-start validation on the RISC-V worker.
+  * Document the companion Runtime manifest recovery fix required after
+    resetting Security registration data.
+
+ -- duancheng <cheng.duan@spacemit.com>  Fri, 11 Sep 2026 08:48:26 +0500
+
+bianbu-agent-security (0.1.27) resolute-porting; urgency=medium
+
+  * Align the source changelog with release tags and document fixes already
+    included in bianbu/0.1.26.
+  * Record seccomp denials through the privileged kernel audit observer,
+    retaining short-lived process events and binding them to Worker leases.
+  * Preserve syscall audit integrity with event deduplication, serialized
+    chain appends, log rotation handling, and explicit collector degradation.
+  * Reconcile network policy status with active logical Worker leases and
+    verified systemd IP filters instead of stale update-time status.
+  * Handle legacy default policies and native, JSON, and historical string
+    encodings of network properties when reporting enforcement status.
+  * Add regression coverage and device acceptance reports for syscall audit
+    and network access control on the RISC-V worker.
+
+ -- duancheng <cheng.duan@spacemit.com>  Fri, 11 Sep 2026 06:11:29 +0500
+
+bianbu-agent-security (0.1.23) resolute-porting; urgency=medium
+
+  * Share canonical code-package digest calculation between the daemon and
+    standalone client, avoiding daemon imports in Runtime environments.
+  * Verify caller-local packages through the existing digest API when the
+    daemon cannot access home directories or private mount namespaces.
+
+ -- duancheng <cheng.duan@spacemit.com>  Thu, 10 Sep 2026 19:00:00 +0800
+
+bianbu-agent-security (0.1.22) resolute-porting; urgency=medium
+
+  * Default newly registered and installed Agents to YOLO mode while
+    preserving existing operator-selected security modes.
+  * Apply the manifest network mode and allowed domains on first install,
+    preserving operator-configured network policy across upgrades.
+  * Validate manifest network modes and retain whitelist semantics for
+    legacy manifests that specify allowed domains without an explicit mode.
+
+ -- duancheng <cheng.duan@spacemit.com>  Wed, 09 Sep 2026 18:14:41 +0500
+
+bianbu-agent-security (0.1.21) resolute-porting; urgency=medium
+
+  * Report unlimited effective token quotas in YOLO mode while retaining
+    normal-mode limits and validated usage accounting.
+  * Preserve accumulated usage when switching back to normal security mode.
+
+ -- duancheng <cheng.duan@spacemit.com>  Wed, 09 Sep 2026 17:08:57 +0800
+
+bianbu-agent-security (0.1.20) resolute-porting; urgency=medium
+
+  * Honor explicit Host mode for signed Runtime workers with a fixed entrypoint.
+  * Keep automatic high-risk and untrusted execution sandboxed.
+
+ -- duancheng <cheng.duan@spacemit.com>  Tue, 08 Sep 2026 22:52:32 +0800
+
+bianbu-agent-security (0.1.17) resolute-porting; urgency=medium
+
+  * Forward the Runtime security principal on managed Worker DLP requests.
+    This preserves lease authorization while using the logical Agent ID for
+    DLP policy and audit operations.
+
+ -- duancheng <cheng.duan@spacemit.com>  Tue, 08 Sep 2026 13:00:00 +0800
+
+bianbu-agent-security (0.1.12) resolute-porting; urgency=medium
+
+  * Harden Runtime lease and audit integration while retaining digest-free lease contracts.
+  * Improve securityd packaging and desktop admin-group setup.
+
+ -- duancheng <cheng.duan@spacemit.com>  Fri, 04 Sep 2026 13:00:00 +0800
+
+bianbu-agent-security (0.1.11) resolute-porting; urgency=medium
+
+  * Remove Runtime package, configuration and policy digest binding from the
+    manifest, D-Bus, policy, lease and process-attestation contracts.
+  * Recreate obsolete transient lease state and retain signed entrypoints,
+    capability-risk mode selection and kernel-backed process checks.
+
+ -- duancheng <cheng.duan@spacemit.com>  Thu, 03 Sep 2026 19:30:00 +0800
+
+bianbu-agent-security (0.1.10) resolute-porting; urgency=medium
+
+  * Allow an explicit development-only digest binding bypass for source
+    checkout Runtime integration while retaining capability and policy checks.
+  * Keep production digest binding fail-closed unless the development escape
+    hatch is explicitly enabled.
+
+ -- duancheng[Agent] <cheng.duan@spacemit.com>  Thu, 03 Sep 2026 13:10:00 +0500
+
+bianbu-agent-security (0.1.9) resolute-porting; urgency=medium
+
+  * Enable remote WebUI access on 0.0.0.0:8787 by default.
+  * Make Bearer-token authentication opt-in via BIANBU_WEBUI_AUTH=1.
+  * Add local browser auto-authentication using HttpOnly session cookies.
+  * Add securityd heartbeat reconnect and WebUI service auto-start handling.
+
+ -- duancheng[Agent] <cheng.duan@spacemit.com>  Wed, 02 Sep 2026 17:00:00 +0500
+
+bianbu-agent-security (0.1.8) resolute-porting; urgency=medium
+
+  * Add logical Agent registration and unregistration lifecycle APIs over D-Bus.
+  * Add atomic replacement synchronization for Agent capabilities, including
+    validation, audit records and cleanup of stale session trust on removal.
+  * Integrate Runtime Agent registration with capability declarations from
+    permissions, tools, skills, MCPs and hooks.
+  * Add WebUI/D-Bus policy entries and client wrappers for the lifecycle APIs.
+
+ -- duancheng[Agent] <cheng.duan@spacemit.com>  Wed, 02 Sep 2026 14:30:00 +0500
+
+bianbu-agent-security (0.1.7) resolute-porting; urgency=medium
+
+  * Use session-aware CheckPermissionV2 calls when Runtime hooks provide a
+    complete session and Run context.
+  * Reuse once-per-session trust after Runtime HITL approval instead of
+    requesting confirmation again for each tool invocation in the same Run.
+  * Document and test local plugin versus MCP capability mapping semantics.
+
+ -- duancheng <cheng.duan@spacemit.com>  Thu, 27 Aug 2026 15:16:02 +0500
+
+bianbu-agent-security (0.1.6) resolute-porting; urgency=medium
+
+  * Add an audited administrator-only ResetAgentBinding operation for Runtime
+    package upgrades so stale caller identities are removed without editing
+    capabilities.db directly.
+  * Set the production Security UDS group to bianbu-security for the dedicated
+    Agent Runtime service.
+
+ -- duancheng <cheng.duan@spacemit.com>  Wed, 26 Aug 2026 16:00:00 +0500
+
+bianbu-agent-security (0.1.5) resolute-porting; urgency=medium
+
+  * Disable WebUI Bearer-token startup and request authentication for the
+    development/demo package through a dedicated systemd drop-in.
+  * Retain the production token, role and CSRF implementation for product
+    releases.
+
+ -- duancheng <cheng.duan@spacemit.com>  Wed, 26 Aug 2026 14:00:00 +0500
+
+bianbu-agent-security (0.1.4) resolute-porting; urgency=medium
+
+  * Publish the current DEB as a development/demo delivery.
+  * Disable package code-signing verification through a package-only systemd
+    drop-in while retaining the production implementation and base policy.
+  * Start securityd without requiring a release trust key.
+
+ -- duancheng <cheng.duan@spacemit.com>  Wed, 26 Aug 2026 12:00:00 +0500
+
+bianbu-agent-security (0.1.3) resolute-porting; urgency=medium
+
+  * Align SecurityD package installation and runtime startup handling.
+
+ -- duancheng <cheng.duan@spacemit.com>  Tue, 25 Aug 2026 00:00:00 +0500
+
+bianbu-agent-security (0.1.1) resolute-porting; urgency=medium
+
+  * Prepare the first CI release tag for the SecurityD DEB package.
+
+ -- duancheng <cheng.duan@spacemit.com>  Mon, 24 Aug 2026 22:10:00 +0800
+
+bianbu-agent-security (0.1.0) resolute-porting; urgency=medium
+
+  * Add the initial Bianbu 4.0 native DEB packaging for SecurityD.
+  * Install the D-Bus service, systemd unit and locked Python runtime.
+
+ -- duancheng <cheng.duan@spacemit.com>  Mon, 24 Aug 2026 20:30:00 +0800

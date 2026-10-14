@@ -1,0 +1,10 @@
+### SC-01 seccomp deny — session cc-sc01-1789125741 events (2026-09-11 19:22–19:24 CST), run c70e4947-9a0b-4122-9880-39ef045dd1ab
+Worker: host-process backend, agent mode yolo; terminal tool child inherits seccomp filter.
+
+assistant/message.end | {"has_tool_calls": true}
+tool/call.started | {"call_id": "call_01a090347da97cd29edce443", "name": "terminal", "arguments": {"command": "python3 -c 'import ctypes,os; l=ctypes.CDLL(None,use_errno=True); r=l.syscall(273,0,0,0); e=ctypes.get_errno(); print(\"finit_module\", r, e, os.strerror(e)); r2=l.syscall(172); print(\"getpid\", r2); print(\"Seccomp\", open(\"/proc/self/status\").read().split(\"Seccomp:\")[1].split()[0])'"}, "round": 1}
+tool/call.completed | {"call_id": "call_01a090347da97cd29edce443", "name": "terminal", "result": "{\"output\": \"finit_module -1 1 Operation not permitted\\ngetpid 2718172\\nSeccomp 2\\n\", \"exit_code\": 0, \"status\": \"completed\"}", "status": "success", "round": 1}
+run/completed | {"status": "completed", "content": "\n\n\n\n```\nfinit_module -1 1 Operation not permitted\ngetpid 2718172\nSeccomp 2\n```", "usage": {"input_tokens": 37708, "output_tokens": 1472, "total_tokens": 39180, "metadata": {"events": 2}}, "error": null, "result": {"request_id": "c70e4947-9a0b-4122-9880-39ef045dd1ab", "status": "completed", "content": "\n\n\n\n```\nfinit_module -1 1 Operation not permitted\ngetpid 2718172\nSeccomp 2\n```", "usage": {"input_tokens": 37708, "output_tokens": 1472, "total_tokens": 39180, "metadata": {"events": 2}}, "error": null, "metadata": {"bianbu.memory": {"memory_backend": "agent-memory", "memory_recent_context_count": 13, "memory_recall_count": 0}, "bianbu.securit
+
+### securityd audit for the run (see manual-probes-1-sc01.log seq 742-755): check_permission system.execute:<shell> -> decision=ALLOW;mode=yolo ; terminal executed ok
+### GetSyscallAuditEvents after run: [] ; GetSyscallAuditStatus: status=active backend=ebpf-seccomp coverage=deny-only events=0 ; /run/bianbu-syscall-audit/events.jsonl: 0 lines

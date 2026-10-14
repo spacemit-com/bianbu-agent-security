@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+state_dir=/var/lib/bianbu-agent-securityd
+state_file=$state_dir/upgrade-state
+install -d -m 0750 "$state_dir"
+if [ "$1" = upgrade ] || [ "$1" = install ]; then
+    if systemctl is-active --quiet bianbu-securityd.service 2>/dev/null; then
+        printf '%s\n' active >"$state_file"
+        systemctl stop bianbu-securityd.service || true
+    else
+        printf '%s\n' new >"$state_file"
+    fi
+fi
+exit 0

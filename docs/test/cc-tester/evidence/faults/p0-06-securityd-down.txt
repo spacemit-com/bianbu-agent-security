@@ -1,0 +1,91 @@
+### P0-06 securityd stop -> fail-closed -> recover
+2026-09-11T19:31:58+08:00
+== before
+active
+active
+active
+2665040 /usr/lib/bianbu-agent-runtime/venv/bin/python /usr/l
+old instance com.bianbu.c6f40f30a6e5-60da742702894898be101e51ed5791c1
+== stop securityd
+[sudo: authenticate] 密码： 
+== states after stop
+inactive
+inactive
+inactive
+== HTTP 9899 during outage
+curl: (7) Failed to connect to 127.0.0.1 port 9899 after 0 ms: Could not connect to server
+http=000
+connection refused/timeout (fail-closed by Requires=)
+== UDS
+ls: cannot access '/run/bianbu/securityd.sock': No such file or directory
+== bus name
+1
+== runtime journal tail
+2026-09-11T19:31:58+08:00 bianbu-spacemitk3deb1 systemd[1]: Stopping bianbu-agent-runtime@bianbu.service - Bianbu Agent Runtime for bianbu...
+2026-09-11T19:31:59+08:00 bianbu-spacemitk3deb1 runtime-user-entrypoint[2664857]: INFO:     Shutting down
+2026-09-11T19:31:59+08:00 bianbu-spacemitk3deb1 runtime-user-entrypoint[2664857]: INFO:     Waiting for application shutdown.
+2026-09-11T19:31:59+08:00 bianbu-spacemitk3deb1 runtime-user-entrypoint[2664857]: INFO:     Application shutdown complete.
+2026-09-11T19:31:59+08:00 bianbu-spacemitk3deb1 runtime-user-entrypoint[2664857]: INFO:     Finished server process [2664857]
+2026-09-11T19:31:59+08:00 bianbu-spacemitk3deb1 systemd[1]: bianbu-agent-runtime@bianbu.service: Deactivated successfully.
+2026-09-11T19:31:59+08:00 bianbu-spacemitk3deb1 systemd[1]: Stopped bianbu-agent-runtime@bianbu.service - Bianbu Agent Runtime for bianbu.
+2026-09-11T19:31:59+08:00 bianbu-spacemitk3deb1 systemd[1]: bianbu-agent-runtime@bianbu.service: Consumed 2min 31.874s CPU time over 1h 27min 22.208s wall clock time, 150.9M memory peak.
+== WebUI health during outage
+curl: (7) Failed to connect to 127.0.0.1 port 8788 after 0 ms: Could not connect to server
+
+== start services
+== states after start
+active
+active
+active
+active
+== agents
+{"data":[{"id":"com.bianbu.c6f40f30a6e5","origin":"system","name":"BibitEdgeAssistant","zh_name":"Bibit端侧智能助手","avatar":"🤖","description":"Edge-first assistant powered by Bibit Intent for device operations and general tasks","soul":"你是 Bibit 端侧优先智能助手，负责在 Bi
+new worker pid 2725611
+new instance com.bianbu.c6f40f30a6e5-2c7f160ea8f04fc8986c22b38484c063 (old com.bianbu.c6f40f30a6e5-60da742702894898be101e51ed5791c1) changed=yes
+NoNewPrivs:	1
+Seccomp:	2
+0::/system.slice/bianbu-agent-com.bianbu.runtime-22b38484c063.scope
+== lease instances state
+('com.bianbu.c6f40f30a6e5-2c7f160ea8f04fc8986c22b38484c063', 'running', 2725611, 1789126345)
+('com.bianbu.c6f40f30a6e5-60da742702894898be101e51ed5791c1', 'running', 2665040, 1789121096)
+('com.bianbu.c6f40f30a6e5-85cc4cc0557f460ba21e1a337d894ccb', 'running', 2663960, 1789121019)
+('com.bianbu.c6f40f30a6e5-50c165c1b24c48fa801efff655f0f43e', 'running', 2389566, 1789097742)
+('ab55b329f2ca4920b33668fb7624fd3d', 'committed', '用户显式选择 host，已登记可信 manifest 与固定启动程序')
+('5d22c17f9871459aa579c098f4cc0a16', 'committed', '用户显式选择 host，已登记可信 manifest 与固定启动程序')
+('9dbc75c8a2d94752b94e442000d59a3e', 'committed', '用户显式选择 host，已登记可信 manifest 与固定启动程序')
+('d4a705266f2b4e1dbd8434ba5edc418c', 'committed', '用户显式选择 host，已登记可信 manifest 与固定启动程序')
+== seccomp policy applied version
+policy_version\": 2, \"applied_policy_version\": 0, \"pending_restart\": true
+== smoke run
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "<stdin>", line 4, in http
+  File "/usr/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 493, in open
+    response = meth(req, response)
+  File "/usr/lib/python3.14/urllib/request.py", line 602, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python3.14/urllib/request.py", line 531, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.14/urllib/request.py", line 611, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 422: Unprocessable Content
+== securityd journal after restart
+Stopped bianbu-securityd.service - Bianbu Next Security Daemon (io.bianbu.Security).
+bianbu-securityd.service: Consumed 33.077s CPU time over 1h 27min 23.318s wall clock time, 34.1M memory peak.
+Started bianbu-securityd.service - Bianbu Next Security Daemon (io.bianbu.Security).
+socket chmod 失败：[Errno 1] Operation not permitted: '/run/bianbu'
+bianbu-securityd started on system bus as io.bianbu.Security; uds=/run/bianbu/securityd.sock
+== audit runtime rows
+(891, '2026-09-11T11:31:59.173+00:00', 'com.bianbu.c6f40f30a6e5', 'runtime.worker_stop', 'control runtime close')
+(898, '2026-09-11T11:32:23.041+00:00', 'com.bianbu.runtime', 'runtime_prepare_start', '用户显式选择 host，已登记可信 manifest 与固定启动程序')
+(899, '2026-09-11T11:32:25.121+00:00', 'com.bianbu.runtime', 'runtime_commit_start', 'success')
+(900, '2026-09-11T11:32:25.134+00:00', 'com.bianbu.c6f40f30a6e5', 'runtime.worker_spawn', 'pid=2725611;backend=host-process')
+2026-09-11T19:32:35+08:00
+### DONE

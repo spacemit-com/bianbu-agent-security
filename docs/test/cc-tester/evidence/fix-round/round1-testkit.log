@@ -1,0 +1,17 @@
+hook security.demo 未签名（digest=204e6079b19cf968…）—— 当前策略 warn 放行
+MCP server nosuch.server 的 mcp.json 未找到，按「远端出境」从严处理；如为本地 stdio server 请确认安装完整
+[bianbu-security] Skill 'leaky' 的文本含受限敏感信息（phone），已拒绝载入 system prompt
+已注册 37 个测试项，全部运行
+
+==============================================================
+总计 37 | 通过 34 | 失败 1 | 错误 2 | 耗时 54.3s
+报告: /var/tmp/bnsec-cc-fix-20260911/evidence/testkit-run1/report.json
+==============================================================
+
+未通过的测试项：
+  [ERROR ] HOOK-04    MCP 工具一律进入判权（不落 DEFAULT_ALLOW）
+             → ImportError: cannot import name 'DEFAULT_ALLOW' from 'lib.mapping' (/var/tmp/bnsec-cc-fix-20260911/runtime/.bianbu-agent/plugins/bianbu.security/lib/mapping.py)
+  [FAILED] TOKEN-03   normal 模式下 Token 超限 on_exceed=deny 真实拒绝 run（TOK-01 端到端）
+             → 超限 run 被拒绝（status=failed）: 实际 completed; 错误码 TOKEN_BUDGET_EXCEEDED: 实际 None: None; securityd 审计 quota_denied: 无 quota_denied —— 拒绝未经 securityd 留痕
+  [ERROR ] CAP-04     未映射工具默认交用户确认，不静默放行
+             → AttributeError: module 'lib.mapping' has no attribute 'DEFAULT_ALLOW'

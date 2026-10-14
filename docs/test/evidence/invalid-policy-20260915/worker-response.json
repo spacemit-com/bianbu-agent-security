@@ -1,0 +1,10 @@
+{
+  "protocolVersion": 1,
+  "requestId": "invalid-policy-fixed",
+  "ok": false,
+  "error": {
+    "code": "invalid_request",
+    "message": "风险等级 L4 不允许 confirm=trusted；请选择 always 或 once_per_session。",
+    "retryable": false
+  }
+}

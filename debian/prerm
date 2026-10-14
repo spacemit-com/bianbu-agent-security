@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+if [ "$1" = remove ] || [ "$1" = upgrade ]; then
+    if command -v systemctl >/dev/null 2>&1; then
+        systemctl stop bianbu-syscall-observer.service >/dev/null 2>&1 || true
+        systemctl stop bianbu-securityd.service >/dev/null 2>&1 || true
+    fi
+fi
+exit 0

@@ -1,0 +1,29 @@
+[19:22:21] ### SC-01 seccomp deny inside real Worker via terminal tool
+[19:22:21] mode: yolo
+[19:22:21] audit status before: a{sv} 1 "status_json" s "{\"status\": \"active\", \"backend\": \"ebpf-seccomp\", \"coverage\": \"deny-only\", \"events\": 0, \"chain_valid\": true, \"collectors\": 1, \"reason\": \"\"}"
+[19:22:21] run_id=c70e4947-9a0b-4122-9880-39ef045dd1ab session=cc-sc01-1789125741
+[19:24:51] terminal: {"type": null, "status": null, "error": null, "content": ""}
+[19:24:54]    audit seq=742 hook:agent_startup ALLOW -> dlp_startup@0.0=ALLOW
+[19:24:54]    audit seq=743 hook:input ALLOW -> dlp_input@1.2=ALLOW
+[19:24:54]    audit seq=744 hook:pre_model_call ALLOW -> dlp_pre_model@1.2=ALLOW
+[19:24:54]    audit seq=745 quota_checked c70e4947-9a0b-4122-9880-39ef045dd1ab -> bypassed:mode=yolo
+[19:24:54]    audit seq=746 quota_checked c70e4947-9a0b-4122-9880-39ef045dd1ab -> bypassed:mode=yolo
+[19:24:54]    audit seq=747 token_meter conv:19521 -> within_limit;mode=yolo
+[19:24:54]    audit seq=748 token_metered 01a09034-4de5-7d82-a6ef-3f1dc73d8fb7 -> 19521;mode=yolo
+[19:24:54]    audit seq=749 check_permission system.execute:<shell> -> decision=ALLOW;mode=yolo
+[19:24:54]    audit seq=750 hook:pre_tool_call ALLOW -> sec_capability@3.3=ALLOW,dlp_pre_tool@0.8=ALLOW
+[19:24:54]    audit seq=751 terminal executed -> ok
+[19:24:54]    audit seq=752 quota_checked c70e4947-9a0b-4122-9880-39ef045dd1ab -> bypassed:mode=yolo
+[19:24:54]    audit seq=753 token_meter conv:19659 -> within_limit;mode=yolo
+[19:24:54]    audit seq=754 token_metered 01a09034-7ffe-77d1-b783-17b4b9d7968b -> 19659;mode=yolo
+[19:24:54]    audit seq=755 hook:agent_shutdown ALLOW -> dlp_shutdown@0.0=ALLOW
+[19:24:54] syscall audit events: a{sv} 1 "events_json" s "[]"
+[19:24:54] audit status after: a{sv} 1 "status_json" s "{\"status\": \"active\", \"backend\": \"ebpf-seccomp\", \"coverage\": \"deny-only\", \"events\": 0, \"chain_valid\": true, \"collectors\": 1, \"reason\": \"\"}"
+[19:24:54] kernel spool: {"status": "active", "backend": "ebpf-seccomp", "pid": 2662696, "updated_at": 1789125894.5953255}0
+[19:24:54] observer journal: 
+[19:24:54] ### CAP-02 CONFIRM -> HITL approvals (normal mode)
+[19:24:54] system.execute before: {'capability': 'system.execute', 'domain': 'execute', 'risk_level': 'L4', 'confirm': 'always', 'granted': '1'}
+[19:24:54] mode -> normal
+[19:24:54] real budget: {'agent_id': 'com.bianbu.c6f40f30a6e5', 'unit': 'token', 'on_exceed': 'pause_and_notify', 'limit_per_conversation': '100000', 'limit_per_day': '500000', 'conv_used': '373672', 'day_used': '599261'}
+[19:24:54] -- decision=reject
+[19:24:55] run_id=e15ab7c9-efcc-4584-93a5-e326aa998502 session=cc-confirm-reject-1789125894

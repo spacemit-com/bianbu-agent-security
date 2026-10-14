@@ -1,0 +1,43 @@
+{
+  "GetNetworkPolicy": {
+    "agent_id": "com.bianbu.c6f40f30a6e5",
+    "mode": "learning",
+    "domains": [],
+    "rules_path": "/run/bianbu/sandbox/com.bianbu.c6f40f30a6e5/netfilter.rules",
+    "exists": true,
+    "version": 4,
+    "enforcement": {
+      "agent_id": "com.bianbu.c6f40f30a6e5",
+      "mode": "systemd",
+      "enforced": true,
+      "backends": [
+        "nft",
+        "iptables"
+      ],
+      "reason": ""
+    },
+    "apply": {
+      "requested": true,
+      "active_instances": 1,
+      "applied_instances": 1,
+      "failed_instances": 0,
+      "effective": true,
+      "restart_required": false,
+      "restart_required_instances": 0
+    }
+  },
+  "GetNetworkLearningStatus": {
+    "agent_id": "com.bianbu.c6f40f30a6e5",
+    "state": "active",
+    "reason": "",
+    "active_instances": 1,
+    "reported_instances": 1,
+    "updated_at": 1789144196.3506353
+  },
+  "GetNetworkLearningEvents": {
+    "agent_id": "com.bianbu.c6f40f30a6e5",
+    "events": [],
+    "total": 0,
+    "next_cursor": null
+  }
+}

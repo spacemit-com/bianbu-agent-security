@@ -1,0 +1,43 @@
+Source: bianbu-agent-security
+Section: admin
+Priority: optional
+Maintainer: Decheng Liu <decheng.liu@spacemit.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ python3.14,
+ python3-pip,
+ python3-venv,
+ python3-dbus,
+ python3-gi,
+ python3-cryptography,
+ systemd,
+ ca-certificates,
+Standards-Version: 4.6.2
+Homepage: https://gitlab.dc.com/bianbu/ai/bianbu-agent-security
+Rules-Requires-Root: no
+Vcs-Git: https://gitlab.dc.com/bianbu/ai/bianbu-agent-security.git
+Vcs-Browser: https://gitlab.dc.com/bianbu/ai/bianbu-agent-security
+
+Package: bianbu-agent-securityd
+Architecture: any
+Depends:
+ python3.14,
+ python3-dbus,
+ python3-gi,
+ python3-cryptography,
+ systemd,
+ ca-certificates,
+ dbus,
+ bpftrace (>= 0.25),
+ adduser,
+ init-system-helpers (>= 1.52),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Bianbu AgentOS security daemon
+ Security policy, D-Bus authorization, audit, DLP, sandbox and
+ code-signing services for the Bianbu AgentOS runtime.
+ .
+ This development/demo delivery disables Agent code-package signature
+ verification by default. The implementation remains available for product
+ releases. The bundled WebUI also runs without Bearer-token authentication
+ in demo mode; product releases retain and enforce the authentication code.

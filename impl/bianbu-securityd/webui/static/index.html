@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>bianbu-security 配置台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="login-overlay" class="login-overlay" hidden>
+  <form id="login-form" class="login-card" autocomplete="off">
+    <h2>登录 bianbu-security</h2>
+    <p class="login-hint">本机访问将自动认证；远程访问请输入 WebUI 管理员 Token。</p>
+    <label for="login-token">管理员 Token</label>
+    <input id="login-token" name="token" type="password" required
+           autocomplete="current-password" spellcheck="false">
+    <button type="submit" class="ok">登录</button>
+    <div id="login-error" class="login-error" role="alert" hidden></div>
+  </form>
+</div>
+<header>
+  <h1>🔒 bianbu-security 配置台</h1>
+  <span id="conn" class="conn">连接中…</span>
+</header>
+
+<nav id="tabs">
+  <button data-tab="agents"  class="active">📋 Agent</button>
+  <button data-tab="caps">🔑 能力管理</button>
+  <button data-tab="permissions">🔐 安全权限设置</button>
+  <button data-tab="syscalls">🛡️ 系统调用黑名单</button>
+  <button data-tab="dlp">🛡️ DLP / 个人信息</button>
+  <button data-tab="audit">📜 审计</button>
+</nav>
+
+<main>
+<!-- ① Agent 列表 -->
+<section id="tab-agents" class="tab active">
+  <div class="bar"><h2>已注册 Agent</h2><button onclick="refreshAgents()">刷新</button></div>
+  <table id="agents-table">
+    <thead><tr><th>Agent ID</th><th>名称</th><th>版本</th><th>状态</th><th>能力数</th><th>操作</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <hr>
+  <div class="bar"><h3>📥 安装 Agent 包</h3></div>
+  <div class="form-row">
+    <input id="install-path" type="text" placeholder="Agent 包目录路径（含 manifest.toml）" size="55">
+    <button onclick="installAgent()">验签并安装</button>
+  </div>
+  <pre id="install-result"></pre>
+</section>
+
+<!-- ② 能力管理 -->
+<section id="tab-caps" class="tab">
+  <div class="bar">
+    <h2>能力管理</h2>
+    <select id="caps-agent" onchange="loadCaps()"></select>
+    <select id="caps-framework" onchange="loadMapping()">
+      <option value="">全部框架</option>
+      <option value="runtime">runtime</option>
+      <option value="hermes">hermes</option>
+    </select>
+    <button onclick="loadCaps()">刷新</button>
+  </div>
+  <p class="dim">每个工具一条策略：allow 放行 / ask 确认 / deny 拒绝。对接 runtime 的 Agent 显示 runtime 工具，对接 hermes 的显示 hermes 工具。</p>
+  <div id="caps-mode-card" class="mode-card">
+    <div class="mode-card__body">
+      <h4>🛡 安全模式 <span id="caps-mode-badge" class="badge">标准模式</span></h4>
+      <p id="caps-mode-desc" class="dim">按每个工具的 allow / ask / deny 策略执行。</p>
+    </div>
+    <div class="mode-card__action">
+      <button id="caps-mode-toggle" class="ok">启用 YOLO</button>
+    </div>
+  </div>
+  <table id="caps-table">
+    <thead><tr><th>工具</th><th>策略</th><th>框架</th><th>操作</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <hr>
+  <div class="bar"><h3>➕ 新增 / 编辑工具策略</h3>
+    <span class="dim">工具名取自下方目录，策略三选一</span>
+  </div>
+  <div class="form-row">
+    <label class="capability-picker-label">工具名
+      <div id="capability-picker" class="capability-picker">
+        <input id="cap-name" type="text" autocomplete="off" required
+               placeholder="输入关键词搜索工具">
+        <div id="cap-options" class="cap-options" hidden></div>
+      </div>
+    </label>
+    <label>策略
+      <select id="cap-policy">
+        <option value="allow" selected>allow</option>
+        <option value="ask">ask</option>
+        <option value="deny">deny</option>
+      </select>
+    </label>
+    <button onclick="addCap()" class="ok">保存策略</button>
+  </div>
+  <div id="cap-add-result" class="dim"></div>
+
+  <hr>
+  <details>
+    <summary style="cursor:pointer;font-weight:600">📖 工具目录（按框架，点击展开）</summary>
+    <p class="dim">每个工具一条策略；未在目录中声明的工具走 unmapped 默认策略。</p>
+    <div id="mapping-box" class="code-box">加载中…</div>
+  </details>
+
+</section>
+
+<!-- ②b 安全权限设置（调用之后能碰什么）-->
+<section id="tab-permissions" class="tab">
+  <div class="bar">
+    <h2>🔐 安全权限设置</h2>
+    <select id="perm-agent" onchange="loadPermissions()"></select>
+    <button onclick="loadPermissions()">刷新</button>
+  </div>
+  <p class="dim">能力管理决定「这个 tool 能不能调」；这里决定「调用之后能碰什么」。
+     执行模式由这些设置推导：声明了任何一项就走 sandbox，否则走 host（不是人指定的开关）。
+     可读/可写范围都是「包含 + 排除」：
+     包含项列出允许触碰的目录（每条一行），排除项列出要从其中挖掉的子目录；
+     可读排除＝完全不可见，可写排除＝仍可读但不可写。网络访问范围是出站域名，
+     系统调用黑名单是内核 seccomp 拒绝表，已独立成页。</p>
+
+  <div class="mode-card" id="perm-exec-card">
+    <div class="mode-card__body">
+      <h4>🧱 执行模式 <span id="perm-exec-badge" class="badge">host</span></h4>
+      <p id="perm-exec-desc" class="dim">在宿主上以受约束的 systemd 单元运行。</p>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <label>可读范围 · 包含<textarea id="perm-read-include" rows="4" placeholder="/opt/data"></textarea></label>
+    <label>可读范围 · 排除<textarea id="perm-read-exclude" rows="4" placeholder="/opt/data/secret"></textarea></label>
+    <button onclick="savePermissionGroup('read')" class="ok">保存可读范围</button>
+  </div>
+  <div class="form-row">
+    <label>可写范围 · 包含<textarea id="perm-write-include" rows="4" placeholder="/var/lib/app"></textarea></label>
+    <label>可写范围 · 排除<textarea id="perm-write-exclude" rows="4" placeholder="/var/lib/app/cache"></textarea></label>
+    <button onclick="savePermissionGroup('write')" class="ok">保存可写范围</button>
+  </div>
+  <div class="form-row">
+    <label>网络访问范围
+      <select id="perm-net-mode">
+        <option value="allow_all">允许全部</option>
+        <option value="whitelist">白名单</option>
+        <option value="deny_all">全部拒绝</option>
+        <option value="learning">学习模式</option>
+      </select>
+      <textarea id="perm-net-domains" rows="4" placeholder="api.example.com"></textarea>
+    </label>
+    <button onclick="savePermissionGroup('network')" class="ok">保存网络范围</button>
+  </div>
+  <div id="perm-result" class="hint"></div>
+
+</section>
+
+<!-- ③ 系统调用黑名单（内核 seccomp 拒绝表）-->
+<section id="tab-syscalls" class="tab">
+  <div class="bar"><h2>🛡️ 系统调用黑名单</h2><select id="sc-agent" onchange="loadSyscallPolicy()"></select><select id="sc-arch"><option>x86_64</option><option>riscv64</option></select><button onclick="loadSyscallPolicy()">刷新</button><button onclick="saveSyscallPolicy()" class="ok">保存（重启 Worker 生效）</button></div>
+  <p class="dim">默认不限制：勾选即拦截，没有强制基线。改动仅对该 Agent 生效，且需重启 Worker（并进入沙箱）才装载过滤器。</p>
+  <div id="sc-list" class="code-box">加载中…</div><div id="sc-status" class="hint"></div>
+</section>
+
+<!-- ③ DLP / PII 策略（DLP-10）-->
+<section id="tab-dlp" class="tab">
+  <div class="bar">
+    <h2>DLP / PII 策略</h2>
+    <select id="dlp-agent"></select>
+    <button onclick="loadDlp()">查询</button>
+    <span id="dlp-hint" class="hint"></span>
+  </div>
+
+  <h3>策略矩阵（Agent × PII 类型）</h3>
+  <table id="dlp-matrix">
+    <thead><tr>
+      <th>PII 类型</th><th>生效动作</th><th>来源</th><th>修改</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table>
+  <p class="hint">
+    动作语义：<b>allow</b> 放行 · <b>ask</b> 需确认 · <b>deny</b> 拒绝 ·
+    <b>mask</b> 脱敏后继续。未显式配置时统一按兜底动作处置。
+  </p>
+
+  <h3>试扫（验证策略生效后的处置）</h3>
+  <div class="bar">
+    <textarea id="dlp-test-text" rows="3"
+      placeholder="粘贴一段文本，看当前策略会怎么处置。"></textarea>
+    <button onclick="dlpScan()">试扫</button>
+  </div>
+  <table id="dlp-scan-result">
+    <thead><tr>
+      <th>类型</th><th>命中值</th><th>置信度</th><th>检测器</th><th>该 Agent 处置</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table>
+  <pre id="dlp-masked" class="hint"></pre>
+
+  <h3>触发统计（来自审计链）</h3>
+  <div id="dlp-stats" class="hint"></div>
+</section>
+
+<!-- ④ 审计日志 -->
+<section id="tab-audit" class="tab">
+  <div class="bar">
+    <h2>审计日志</h2>
+    <select id="audit-agent"></select>
+    <button onclick="loadAudit()">查询</button>
+    <span id="audit-chain"></span>
+  </div>
+  <table id="audit-table">
+    <thead><tr><th>seq</th><th>时间</th><th>操作</th><th>目标</th><th>结果</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</section>
+</main>
+
+<script src="app.js?v=auth-login-2"></script>
+</body>
+</html>

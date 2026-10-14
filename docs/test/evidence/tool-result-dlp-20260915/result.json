@@ -1,0 +1,248 @@
+[
+  {
+    "mode": "normal",
+    "action": "mask",
+    "run": {
+      "request_id": "03d897c7-6945-4221-a39f-d8c1ba1e53f0",
+      "status": "completed",
+      "content": "Kernel probe finished.",
+      "usage": {
+        "input_tokens": 4,
+        "output_tokens": 4,
+        "total_tokens": 8,
+        "metadata": {
+          "events": 2
+        }
+      },
+      "error": null,
+      "metadata": {
+        "bianbu.security": {}
+      },
+      "result": {
+        "request_id": "03d897c7-6945-4221-a39f-d8c1ba1e53f0",
+        "status": "completed",
+        "content": "Kernel probe finished.",
+        "usage": {
+          "input_tokens": 4,
+          "output_tokens": 4,
+          "total_tokens": 8,
+          "metadata": {
+            "events": 2
+          }
+        },
+        "error": null,
+        "metadata": {
+          "bianbu.security": {}
+        }
+      },
+      "run_id": "03d897c7-6945-4221-a39f-d8c1ba1e53f0",
+      "session_id": "t-c763cd5d73"
+    },
+    "requests": [
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-e2c768dc2493\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.594852b1b1b8\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Run the fixed local test command.",
+          "role": "user"
+        }
+      ],
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-e2c768dc2493\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.594852b1b1b8\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Run the fixed local test command.",
+          "role": "user"
+        },
+        {
+          "content": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "type": "function",
+              "id": "call_kernel_probe",
+              "function": {
+                "name": "terminal",
+                "arguments": "{\"command\": \"python3 -c 'print(\\\"138\\\"+\\\"2468\\\"+\\\"1357\\\")'\"}"
+              }
+            }
+          ]
+        },
+        {
+          "content": "{\"output\": \"[PII-手机号-001]\\n\", \"exit_code\": 0, \"status\": \"completed\"}",
+          "role": "tool",
+          "tool_call_id": "call_kernel_probe"
+        }
+      ]
+    ]
+  },
+  {
+    "mode": "normal",
+    "action": "block",
+    "run": {
+      "request_id": "0528ab68-e8e3-4424-82c8-3ac3fbc636f8",
+      "status": "failed",
+      "content": "",
+      "usage": null,
+      "error": {
+        "code": "run_failed",
+        "message": "[bianbu-security] terminal 的返回值含受限敏感信息（phone），已阻止进入上下文",
+        "details": {}
+      },
+      "metadata": {},
+      "result": {
+        "request_id": "0528ab68-e8e3-4424-82c8-3ac3fbc636f8",
+        "status": "failed",
+        "content": "",
+        "usage": null,
+        "error": {
+          "code": "run_failed",
+          "message": "[bianbu-security] terminal 的返回值含受限敏感信息（phone），已阻止进入上下文",
+          "details": {}
+        },
+        "metadata": {}
+      },
+      "run_id": "0528ab68-e8e3-4424-82c8-3ac3fbc636f8",
+      "session_id": "t-694f737b3a"
+    },
+    "requests": [
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-e2c768dc2493\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.594852b1b1b8\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Run the fixed local test command.",
+          "role": "user"
+        }
+      ]
+    ]
+  },
+  {
+    "mode": "yolo",
+    "action": "mask",
+    "run": {
+      "request_id": "7bfb8c45-8978-4bc0-bc86-10fbbc4722b7",
+      "status": "completed",
+      "content": "Kernel probe finished.",
+      "usage": {
+        "input_tokens": 4,
+        "output_tokens": 4,
+        "total_tokens": 8,
+        "metadata": {
+          "events": 2
+        }
+      },
+      "error": null,
+      "metadata": {
+        "bianbu.security": {}
+      },
+      "result": {
+        "request_id": "7bfb8c45-8978-4bc0-bc86-10fbbc4722b7",
+        "status": "completed",
+        "content": "Kernel probe finished.",
+        "usage": {
+          "input_tokens": 4,
+          "output_tokens": 4,
+          "total_tokens": 8,
+          "metadata": {
+            "events": 2
+          }
+        },
+        "error": null,
+        "metadata": {
+          "bianbu.security": {}
+        }
+      },
+      "run_id": "7bfb8c45-8978-4bc0-bc86-10fbbc4722b7",
+      "session_id": "t-19d18de478"
+    },
+    "requests": [
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-e2c768dc2493\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.594852b1b1b8\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Run the fixed local test command.",
+          "role": "user"
+        }
+      ],
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-e2c768dc2493\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.594852b1b1b8\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Run the fixed local test command.",
+          "role": "user"
+        },
+        {
+          "content": null,
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "type": "function",
+              "id": "call_kernel_probe",
+              "function": {
+                "name": "terminal",
+                "arguments": "{\"command\": \"python3 -c 'print(\\\"138\\\"+\\\"2468\\\"+\\\"1357\\\")'\"}"
+              }
+            }
+          ]
+        },
+        {
+          "content": "{\"output\": \"[PII-手机号-001]\\n\", \"exit_code\": 0, \"status\": \"completed\"}",
+          "role": "tool",
+          "tool_call_id": "call_kernel_probe"
+        }
+      ]
+    ]
+  },
+  {
+    "mode": "yolo",
+    "action": "block",
+    "run": {
+      "request_id": "8cb0b270-999c-424a-974d-d6357e68b744",
+      "status": "failed",
+      "content": "",
+      "usage": null,
+      "error": {
+        "code": "run_failed",
+        "message": "[bianbu-security] terminal 的返回值含受限敏感信息（phone），已阻止进入上下文",
+        "details": {}
+      },
+      "metadata": {},
+      "result": {
+        "request_id": "8cb0b270-999c-424a-974d-d6357e68b744",
+        "status": "failed",
+        "content": "",
+        "usage": null,
+        "error": {
+          "code": "run_failed",
+          "message": "[bianbu-security] terminal 的返回值含受限敏感信息（phone），已阻止进入上下文",
+          "details": {}
+        },
+        "metadata": {}
+      },
+      "run_id": "8cb0b270-999c-424a-974d-d6357e68b744",
+      "session_id": "t-ef68083d80"
+    },
+    "requests": [
+      [
+        {
+          "content": "## Agent Profile\n\nName: Tool DLP acceptance\nModel: kernel-probe\nModel provider ID: custom:tool-dlp-e2c768dc2493\n\n## Tool Policy\n\nAvailable tool names: terminal. Never call or invent a tool that is not in this list.\n\n## Runtime Security Context\n\nWorker kernel architecture: riscv64. Syscall numbers are architecture-specific. Security denylist catalog for this Worker: reboot=142, swapon=224, swapoff=225, kexec_load=104, kexec_file_load=294, init_module=105, finit_module=273, delete_module=106, mount=40, umount2=39, pivot_root=41, perf_event_open=241, ptrace=117, bpf=280, userfaultfd=282. When explaining a syscall result, use this catalog and the observed syscall number. Do not label a number with an x86_64 name when the Worker is riscv64 (or vice versa). EPERM alone is not proof of seccomp: distinguish seccomp audit evidence from capability, LSM, or kernel policy denial; state uncertainty when the evidence is unavailable.\n\n## Skill: security-guide\n\nApply least privilege and obtain approval before risky mutations.\n\n## Platform Context\n\nBibit / Bianbu Agent Runtime\nAgent ID: com.bianbu.594852b1b1b8\nArchitecture: riscv64\nOperating system: Linux\nIdentity does not grant tools, Skills, or permissions.",
+          "role": "system"
+        },
+        {
+          "content": "Run the fixed local test command.",
+          "role": "user"
+        }
+      ]
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "agent_id": "com.bianbu.4badf41ee5ef",
+  "mode": "deny_all",
+  "domains": [],
+  "rules_path": "/run/bianbu/sandbox/com.bianbu.4badf41ee5ef/netfilter.rules",
+  "exists": true,
+  "version": 3,
+  "enforcement": {
+    "agent_id": "com.bianbu.4badf41ee5ef",
+    "mode": "artifact_only",
+    "enforced": false,
+    "backends": [
+      "nft",
+      "iptables"
+    ],
+    "reason": "\u5f53\u524d\u7b56\u7565\u5c1a\u672a\u5728\u5168\u90e8\u8fd0\u884c\u5b9e\u4f8b\u4e0a\u9a8c\u8bc1\u751f\u6548"
+  },
+  "apply": {
+    "requested": true,
+    "active_instances": 1,
+    "applied_instances": 0,
+    "failed_instances": 0,
+    "effective": false,
+    "restart_required": true,
+    "restart_required_instances": 1
+  },
+  "runtime_learning": {
+    "restart_required": true,
+    "instances": 1
+  }
+}

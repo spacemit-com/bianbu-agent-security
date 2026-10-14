@@ -1,0 +1,1 @@
+{"before": {"pid": 623639, "fds": 1023, "dlp_fds": 996}, "worker_pid": 659317, "probe": "existing committed lease, diagnostic child in worker cgroup", "identity": {"ok": false, "error": "PermissionDenied: Worker 未通过已提交 Runtime lease 身份校验"}}

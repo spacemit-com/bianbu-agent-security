@@ -1,0 +1,14 @@
+name: bianbu-security
+version: "1.0.0"
+description: >
+  把 hermes agent 的工具调用接入 bianbu-securityd（io.bianbu.Security）安全子系统：
+  每次工具执行前经 CheckPermission 判权（DENY→拦截；CONFIRM→RequestConfirm 门禁，
+  拒绝则拦截），执行后经 AuditLog 写防篡改审计链；会话结束清理会话信任。
+  另提供 securityd-install CLI 命令做 Agent 包验签+能力注册的准备工作。
+  纯经 hermes 公开插件 API 接线，不修改/不复用 hermes 内部实现（AGENTS.md 复用边界）。
+author: Bianbu Next
+hooks:
+  - pre_tool_call        # 判权 + 确认门禁（可 block）
+  - post_tool_call       # 审计记账（观察者）
+  - on_session_start     # 按 BIANBU_SEC_APPROVAL_MODE 仲裁 hermes 自带 approval
+  - on_session_end       # 清理会话信任

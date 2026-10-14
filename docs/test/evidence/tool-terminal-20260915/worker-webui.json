@@ -1,0 +1,7 @@
+{
+  "status": "error",
+  "failed": 1,
+  "spinning": 0,
+  "cards": 1,
+  "text": "\n        \n        \n            \n                \n\n    \n        \n        read_file\n        \n    \n    \n        \n            Input\n            (none)\n        \n        \n        \n            Error\n            Capability revoked\n        \n    \n\n                \n                \n            \n        \n        \n            \n                \n                    \n                    操作被安全策略拦截\n                \n                Capability revoked\n                \n             所需能力\n             file.read\n         \n             范围\n             /etc/hostname\n         \n                这不是临时故障，重试不会改变结果。如确需此操作，请在 bianbu-security 配置台为该能力授权。\n            \n            \n                04:12 PM\n            \n        \n    \n            \n                04:12 PM\n                \n                    \n                \n            \n        \n    "
+}

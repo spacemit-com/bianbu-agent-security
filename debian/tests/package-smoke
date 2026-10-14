@@ -1,0 +1,29 @@
+#!/bin/sh
+set -eu
+
+test -x /usr/bin/bianbu-securityd
+test -x /usr/bin/bncli
+test -x /usr/lib/bianbu-securityd/venv/bin/python
+test -f /usr/lib/systemd/system/bianbu-securityd.service
+test -f /usr/lib/systemd/system/bianbu-security-webui.service
+test -f /usr/share/dbus-1/system-services/io.bianbu.Security.service
+test -f /etc/dbus-1/system.d/io.bianbu.Security.conf
+test -f /usr/share/polkit-1/actions/io.bianbu.security.policy
+securityd_demo_dropin=/usr/lib/systemd/system/bianbu-securityd.service.d/10-development-demo.conf
+webui_demo_dropin=/usr/lib/systemd/system/bianbu-security-webui.service.d/10-development-demo.conf
+if [ -e "$securityd_demo_dropin" ] || [ -e "$webui_demo_dropin" ]; then
+    test -f "$securityd_demo_dropin"
+    test -f "$webui_demo_dropin"
+    grep -Fxq 'Environment=BIANBU_SECURITY_CODESIGN=off' "$securityd_demo_dropin"
+    grep -Fxq 'Environment=BIANBU_WEBUI_DEMO=1' "$webui_demo_dropin"
+grep -Fxq 'Environment=BIANBU_WEBUI_AUTH=0' "$webui_demo_dropin"
+grep -Fxq 'UnsetEnvironment=BIANBU_WEBUI_TOKEN BIANBU_WEBUI_VIEWER_TOKEN' "$webui_demo_dropin"
+else
+    # Product builds intentionally omit both development overrides.
+    test ! -e "$securityd_demo_dropin"
+    test ! -e "$webui_demo_dropin"
+fi
+/usr/lib/bianbu-securityd/venv/bin/python -c 'import cryptography, dbus, gi, flask, flask_socketio, gunicorn'
+systemd-analyze verify /usr/lib/systemd/system/bianbu-securityd.service
+systemd-analyze verify /usr/lib/systemd/system/bianbu-security-webui.service
+echo "bianbu-agent-securityd package smoke test passed"

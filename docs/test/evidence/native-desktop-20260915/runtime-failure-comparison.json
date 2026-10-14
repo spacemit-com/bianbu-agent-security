@@ -1,0 +1,48 @@
+{
+  "baseline": [
+    "tests.e2e.test_sdk_full_console::test_sdk_console_retains_navigation_layouts_and_preferences",
+    "tests.sdk.api.test_inventory::test_application_exposes_exact_versioned_api_inventory",
+    "tests.sdk.console.test_browser_contract::test_deleting_last_session_enters_agent_chooser",
+    "tests.sdk.mcp.test_plugin::test_strict_generation_accepts_only_digest_backed_mcp_contributions",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_external_builtin_registry_and_deterministic_slot_maps_are_available",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_external_skills_knowledge_and_route_anchors_are_available",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_production_pipeline_builds_from_plugin_resources_and_environment",
+    "tests.sdk.test_dependency_boundary::test_runtime_control_paths_do_not_import_securityd_internals",
+    "tests.sdk.test_package_layout::test_security_implementation_is_owned_by_security_package",
+    "tests.test_api_docs::test_active_markdown_documents_do_not_describe_retired_flat_endpoints",
+    "tests.test_api_docs::test_api_guide_is_an_exact_inventory_of_the_final_openapi_contract",
+    "tests.test_api_docs::test_current_architecture_sources_do_not_name_removed_http_adapters",
+    "tests.test_file_resource_cli::test_offline_resource_lifecycles",
+    "tests.test_file_resource_cli::test_resource_list_without_execution_dependencies[model]"
+  ],
+  "verified-off": [
+    "tests.e2e.test_sdk_full_console::test_sdk_console_retains_navigation_layouts_and_preferences",
+    "tests.sdk.api.test_inventory::test_application_exposes_exact_versioned_api_inventory",
+    "tests.sdk.mcp.test_plugin::test_strict_generation_accepts_only_digest_backed_mcp_contributions",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_external_builtin_registry_and_deterministic_slot_maps_are_available",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_external_skills_knowledge_and_route_anchors_are_available",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_production_pipeline_builds_from_plugin_resources_and_environment",
+    "tests.sdk.test_dependency_boundary::test_runtime_control_paths_do_not_import_securityd_internals",
+    "tests.sdk.test_package_layout::test_security_implementation_is_owned_by_security_package",
+    "tests.test_api_docs::test_active_markdown_documents_do_not_describe_retired_flat_endpoints",
+    "tests.test_api_docs::test_api_guide_is_an_exact_inventory_of_the_final_openapi_contract",
+    "tests.test_api_docs::test_current_architecture_sources_do_not_name_removed_http_adapters",
+    "tests.test_file_resource_cli::test_offline_resource_lifecycles",
+    "tests.test_file_resource_cli::test_resource_list_without_execution_dependencies[model]"
+  ],
+  "verified-on": [
+    "tests.e2e.test_sdk_full_console::test_sdk_console_retains_navigation_layouts_and_preferences",
+    "tests.sdk.api.test_inventory::test_application_exposes_exact_versioned_api_inventory",
+    "tests.sdk.mcp.test_plugin::test_strict_generation_accepts_only_digest_backed_mcp_contributions",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_external_builtin_registry_and_deterministic_slot_maps_are_available",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_external_skills_knowledge_and_route_anchors_are_available",
+    "tests.sdk.plugins.test_bibit_intent_pipeline::test_production_pipeline_builds_from_plugin_resources_and_environment",
+    "tests.sdk.test_dependency_boundary::test_runtime_control_paths_do_not_import_securityd_internals",
+    "tests.sdk.test_package_layout::test_security_implementation_is_owned_by_security_package",
+    "tests.test_api_docs::test_active_markdown_documents_do_not_describe_retired_flat_endpoints",
+    "tests.test_api_docs::test_api_guide_is_an_exact_inventory_of_the_final_openapi_contract",
+    "tests.test_api_docs::test_current_architecture_sources_do_not_name_removed_http_adapters",
+    "tests.test_file_resource_cli::test_offline_resource_lifecycles",
+    "tests.test_file_resource_cli::test_resource_list_without_execution_dependencies[model]"
+  ]
+}

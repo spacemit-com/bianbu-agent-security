@@ -1,0 +1,76 @@
+### NET-01 via Runtime /security-api/invoke network-policy.update.v1 (product path)
+2026-09-11T19:31:36+08:00
+== before
+{"protocolVersion":1,"requestId":"net-0","ok":true,"result":{"agent_id":"com.bianbu.c6f40f30a6e5","mode":"allow_all","domains":[],"rules_path":"/run/bianbu/sandbox/com.bianbu.c6f40f30a6e5/netfilter.rules","exists":false,"version":1,"enforcement":{"agent_id":"com.bianbu.c6f40f30a6e5","mode":"systemd","enforced":true,"backends":["nft","iptables"],"reason":""},"apply":{"requested":true,"active_instan
+== update deny_all
+{"protocolVersion":1,"requestId":"net-1","ok":false,"error":{"code":"unavailable","message":"org.freedesktop.DBus.Python.securityd.errors.PermissionDenied: Traceback (most recent call last):\n  File \"/usr/lib/python3/dist-packages/dbus/service.py\", line 712, in _message_cb\n    retval = candidate_method(self, *args, **keywords)\n  File \"/usr/lib/bianbu-securityd/securityd/service.py\", line 767, in SetNetworkPolicy\n    ok = self.engine.set_network_policy(str(agent_id), [str(d) for d in domains], str(mode))\n  File \"/usr/lib/bianbu-securityd/securityd/engine.py\", line 601, in set_network_policy\n    raise PermissionDenied(str(result.get(\"reason\", \"网络策略热更新失败\")))\nse
+== after (expect rollback to allow_all)
+{"protocolVersion":1,"requestId":"net-2","ok":true,"result":{"agent_id":"com.bianbu.c6f40f30a6e5","mode":"allow_all","domains":[],"rules_path":"/run/bianbu/sandbox/com.bianbu.c6f40f30a6e5/netfilter.rules","exists":false,"version":1,"enforcement":{"agent_id":"com.bianbu.c6f40f30a6e5","mode":"systemd","enforced":true,"backends":["nft","iptables"],"reason":""},"apply":{"requested":true,"active_instan
+== scope props
+IPAddressAllow=
+IPAddressDeny=
+== registry
+[('com.bianbu.c6f40f30a6e5', 'allow_all', '[]', 1, '2026-09-11 11:31:36')]
+== learning mode (also hot-apply path)
+{"protocolVersion":1,"requestId":"net-3","ok":false,"error":{"code":"unavailable","message":"org.freedesktop.DBus.Python.securityd.errors.PermissionDenied: Traceback (most recent call last):\n  File \"/usr/lib/python3/dist-packages/dbus/service.py\", line 712, in _message_cb\n    retval = candidate_method(self, *args, **keywords)\n  File \"/usr/lib/bianbu-securityd/securityd/service.py\", line 767, in SetNetworkPolicy\n    ok = self.engine.set_network_policy(str(agent_id), [str(d) for d in domai
+== final
+{"protocolVersion":1,"requestId":"net-4","ok":true,"result":{"agent_id":"com.bianbu.c6f40f30a6e5","mode":"allow_all","domains":[],"rules_path":"/run/bianbu/sandbox/com.bianbu.c6f40f30a6e5/netfilter.ru
+== securityd polkit/systemctl capability: unit user & polkit rules for set-property
+User=bianbu-security
+Group=bianbu-security
+SupplementaryGroups=bianbu-admin bianbu
+NoNewPrivileges=yes
+
+/usr/share/polkit-1/rules.d/:
+10-systemd-logind-root-ignore-inhibitors.rules
+10-systemd-logind-root-ignore-inhibitors.rules.example
+49-ubuntu-admin.rules
+50-default.rules
+60-bianbu-agent-runtime.rules
+blueman.rules
+com.ubuntu.desktop.rules
+empower.rules
+org.freedesktop.NetworkManager.rules
+org.freedesktop.bolt.rules
+org.freedesktop.fwupd.rules
+org.freedesktop.packagekit.rules
+org.gtk.vfs.file-operations.rules
+systemd-networkd.rules
+/usr/share/polkit-1/rules.d/60-bianbu-agent-runtime.rules
+--- /usr/share/polkit-1/rules.d/60-bianbu-agent-runtime.rules
+// Permit only the packaged Runtime control-plane process to create/stop
+// per-Worker transient scopes.  A scope inherits the caller's already-dropped
+// identity and cannot carry User=/Group= properties.  Service units are not
+// allowed here: accepting them would let a compromised Worker request a
+// privileged transient service by adding a User= override to a valid unit.
+function bianbuRuntimeOwner(unit) {
+    var match = /^bianbu-agent-runtime@([A-Za-z_][A-Za-z0-9_.-]*)\.service$/.exec(unit || "");
+    return match ? match[1] : "";
+}
+
+polkit.addRule(function(action, subject) {
+    if (action.id !== "org.freedesktop.systemd1.manage-units") {
+        return polkit.Result.NOT_HANDLED;
+    }
+    var unit = action.lookup("unit") || "";
+    var verb = action.lookup("verb") || "";
+    var requestedOwner = bianbuRuntimeOwner(unit);
+    if (requestedOwner && requestedOwner === subject.user &&
+        (verb === "start" || verb === "stop" || verb === "restart")) {
+        return polkit.Result.YES;
+    }
+    var runtimeOwner = bianbuRuntimeOwner(subject.system_unit);
+    if (!subject.no_new_privileges || !runtimeOwner ||
+        runtimeOwner !== subject.user) {
+        return polkit.Result.NOT_HANDLED;
+    }
+    if (!/^bianbu-agent-[A-Za-z0-9_.-]+\.scope$/.test(unit)) {
+        return polkit.Result.NOT_HANDLED;
+    }
+    if (verb === "start" || verb === "stop" || verb === "kill" ||
+        verb === "restart" || verb === "reload" || verb === "reset-failed") {
+        return polkit.Result.YES;
+    }
+    return polkit.Result.NOT_HANDLED;
+});
+== securityd journal for set-property failure

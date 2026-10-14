@@ -1,0 +1,70 @@
+#!/bin/sh
+set -eu
+
+pkg=bianbu-agent-securityd
+state_dir=/var/lib/bianbu-agent-securityd
+state_file=$state_dir/upgrade-state
+lib_dir=/usr/lib/bianbu-securityd
+svc_user=bianbu-security
+svc_group=bianbu-security
+admin_group=bianbu-admin
+
+if [ "$1" = configure ]; then
+    getent group "$svc_group" >/dev/null 2>&1 || addgroup --system "$svc_group"
+    getent group "$admin_group" >/dev/null 2>&1 || addgroup --system "$admin_group"
+    if ! getent passwd "$svc_user" >/dev/null 2>&1; then
+        adduser --system --ingroup "$svc_group" --home "$lib_dir" \
+            --no-create-home --shell /usr/sbin/nologin "$svc_user"
+    fi
+    adduser "$svc_user" "$admin_group" >/dev/null 2>&1 || true
+    desktop_user=${SUDO_USER:-}
+    if [ -z "$desktop_user" ]; then desktop_user=$(getent passwd 1000 | cut -d: -f1 || true); fi
+    if [ "$desktop_user" != root ] && getent passwd "$desktop_user" >/dev/null 2>&1; then adduser "$desktop_user" "$admin_group" >/dev/null 2>&1 || true; fi
+    install -d -m 0750 -o "$svc_user" -g "$svc_group" /etc/bianbu
+    install -d -m 0700 -o "$svc_user" -g "$svc_group" /etc/bianbu/keys
+    install -d -m 0750 -o root -g "$svc_group" /etc/bianbu/codesign-keys
+    install -d -m 0750 -o "$svc_user" -g "$svc_group" /var/log/bianbu
+    install -d -m 0750 -o "$svc_user" -g "$svc_group" /var/log/bianbu/audit
+    install -d -m 0770 -o "$svc_user" -g "$svc_group" /run/bianbu
+    install -d -m 0750 -o "$svc_user" -g "$svc_group" /run/bianbu/sandbox
+    install -d -m 0750 -o "$svc_user" -g "$svc_group" /var/lib/bianbu/agents
+    touch /etc/bianbu/codesign-keys/revoked.list
+    chown root:"$svc_group" /etc/bianbu/codesign-keys/revoked.list
+    chmod 0640 /etc/bianbu/codesign-keys/revoked.list
+    chown -R "$svc_user:$svc_group" /etc/bianbu/keys /var/log/bianbu /var/lib/bianbu/agents
+    chown "$svc_user:$svc_group" /run/bianbu /run/bianbu/sandbox
+    chmod 0770 /run/bianbu
+    chmod 0755 /run/bianbu/sandbox
+    if command -v systemctl >/dev/null 2>&1; then
+        systemctl daemon-reload || true
+    fi
+    systemctl reload dbus.service 2>/dev/null || true
+    previous=inactive
+    [ -r "$state_file" ] && previous=$(sed -n '1p' "$state_file")
+    echo "$pkg: development/demo delivery; Agent manifest and code-package signature verification is disabled" >&2
+    if command -v systemctl >/dev/null 2>&1; then
+        systemctl enable bianbu-syscall-observer.service >/dev/null 2>&1 || true
+        systemctl restart bianbu-syscall-observer.service || true
+        systemctl unmask bianbu-securityd.service >/dev/null 2>&1 || true
+        systemctl enable bianbu-securityd.service >/dev/null 2>&1 || true
+        if [ "$previous" = active ] || [ "$previous" = new ] || [ ! -e "$state_file" ]; then
+            systemctl start bianbu-securityd.service || {
+                echo "$pkg: service failed to start; inspect journalctl -u bianbu-securityd" >&2
+                exit 1
+            }
+        fi
+        # WebUI is part of the installed management surface: enable it for
+        # boot and start it immediately.  It has an internal one-second
+        # securityd heartbeat, so a daemon that is temporarily unavailable
+        # does not make package configuration fail.
+        systemctl enable bianbu-security-webui.service >/dev/null 2>&1 || true
+        systemctl start bianbu-security-webui.service || {
+            echo "$pkg: WebUI failed to start; inspect journalctl -u bianbu-security-webui" >&2
+            exit 1
+        }
+    fi
+    rm -f "$state_file"
+fi
+
+#DEBHELPER#
+exit 0

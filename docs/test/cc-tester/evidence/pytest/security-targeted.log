@@ -1,0 +1,45 @@
+...................................FF....                                [100%]
+=================================== FAILURES ===================================
+____________ test_installed_auditctl_does_not_imply_active_observer ____________
+
+sec_root = PosixPath('/tmp/bnsec_test_todhcy2j')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x3f80d28bb0>
+tmp_path = PosixPath('/tmp/pytest-of-bianbu/pytest-22/test_installed_auditctl_does_n0')
+
+    def test_installed_auditctl_does_not_imply_active_observer(sec_root, monkeypatch, tmp_path):
+        import securityd.syscall_audit as module
+        monkeypatch.setattr(module.shutil, 'which', lambda _: '/usr/sbin/auditctl')
+        monkeypatch.setattr(module, 'COLLECTOR_STATUS_DIR', tmp_path / 'absent', raising=False)
+        status = module.SyscallAuditStore().status()
+>       assert status['status'] == 'unavailable'
+E       AssertionError: assert 'active' == 'unavailable'
+E         
+E         - unavailable
+E         + active
+
+impl/bianbu-securityd/tests/test_syscall_audit.py:44: AssertionError
+___________ test_observer_heartbeat_must_be_fresh_and_process_alive ____________
+
+sec_root = PosixPath('/tmp/bnsec_test_ifomipr9')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x3f80a0fb90>
+tmp_path = PosixPath('/tmp/pytest-of-bianbu/pytest-22/test_observer_heartbeat_must_b0')
+
+    def test_observer_heartbeat_must_be_fresh_and_process_alive(sec_root, monkeypatch, tmp_path):
+        import json, os, time
+        import securityd.syscall_audit as module
+        monkeypatch.setattr(module, 'COLLECTOR_STATUS_DIR', tmp_path, raising=False)
+        path = tmp_path / 'worker.json'
+        path.write_text(json.dumps({'pid': os.getpid(), 'updated_at': time.time(),
+                                   'status': 'active', 'backend': 'auditd-seccomp'}))
+        store = module.SyscallAuditStore()
+>       assert store.status()['status'] == 'degraded'
+E       AssertionError: assert 'active' == 'degraded'
+E         
+E         - degraded
+E         + active
+
+impl/bianbu-securityd/tests/test_syscall_audit.py:56: AssertionError
+=========================== short test summary info ============================
+FAILED impl/bianbu-securityd/tests/test_syscall_audit.py::test_installed_auditctl_does_not_imply_active_observer
+FAILED impl/bianbu-securityd/tests/test_syscall_audit.py::test_observer_heartbeat_must_be_fresh_and_process_alive
+2 failed, 39 passed in 1.69s
